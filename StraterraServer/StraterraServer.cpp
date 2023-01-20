@@ -3,17 +3,23 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
+#include <thread>
 
 
 using namespace boost::asio;
 using namespace boost::asio::ip;
 
-int readBytes(unsigned char* data, tcp::socket* socket);
+int readBytes(unsigned char* data, tcp::socket* socket, io_context* iocontext);
+
+void handleSocket(tcp::socket* socket, int threadId, io_context* iocontext);
+
+void handleRead(const boost::system::error_code& err, std::size_t);
 
 int main()
 {
 
     io_context iocontext;
+    int threadId = 0;
 
     try
     {
@@ -25,48 +31,23 @@ int main()
 
         std::cout << "ACCEPTOR" << std::endl;
 
-        tcp::socket socket(iocontext);
 
-        std::cout << "SOCKET" << std::endl;
-
-        //tcp::endpoint endp = socket.local_endpoint();
-
-        //iocontext.run();
-
-        std::cout << "ENDPOINT" << std::endl;
-
-        acceptor.accept(socket);
-
-        std::cout << "ACCEPT" << std::endl;
-
-
-        unsigned char dataData[256];
-
-        int bytesRead = readBytes(dataData, &socket);
-
-        std::cout << "Bytes read: " << bytesRead << std::endl;
-
-        char text[64];
-
-        char* in = text;
-        unsigned char* out = dataData;
-        
-        std::cout << "BEGIN MESSAGE: \"";
-
-        for (int i = 0; i < bytesRead; ++i)
+        for (;;)
         {
-            std::cout << std::hex << (int)*out;
-            *in = (char)*out;
-            in++;
-            out++;
+            tcp::socket socket(iocontext);
+
+            std::cout << "SOCKET" << std::endl;
+
+            acceptor.accept(socket);
+            
+            std::cout << "HANDLE: " << &socket << std::endl;
+
+            std::cout << "ACCEPT" << std::endl;
+
+            std::thread(handleSocket, &socket, threadId, &iocontext).detach();
+            threadId++;
+            
         }
-        std::cout << "\"" << std::endl;
-
-        *in = '\0';
-
-        std::cout << text << std::endl;
-
-        socket.close();
     }
     catch (const std::exception& ex)
     {
@@ -74,18 +55,82 @@ int main()
     }
 }
 
-int readBytes(unsigned char* data, tcp::socket* socket)
+void handleRead(const boost::system::error_code& err, std::size_t)
+{
+
+}
+
+void handleSocket(tcp::socket* socket, int threadId, io_context* iocontext)
+{
+    try
+    {
+        std::cout << "[" << threadId << "]" << "HANDLING SOCKET" << std::endl;
+        unsigned char dataData[256];
+        int bytesRead;
+        char text[256];
+
+        std::cout << "[" << threadId << "]" << "HANDLE: " << socket << std::endl;
+
+        for (;;)
+        {
+            std::cout << "[" << threadId << "]" << "READING" << std::endl;
+            bytesRead = readBytes(dataData, socket, iocontext);
+
+            std::cout << "Bytes read: " << bytesRead << std::endl;
+
+            char* in = text;
+            unsigned char* out = dataData;
+
+            std::cout << "BEGIN MESSAGE: \"";
+
+            for (int i = 0; i < bytesRead; ++i)
+            {
+                std::cout << std::hex << (int)*out;
+                *in = (char)*out;
+                in++;
+                out++;
+            }
+            std::cout << "\"" << std::endl;
+
+            if (text == "end")
+            {
+                break;
+            }
+
+            *in = '\0';
+
+            std::cout << text << std::endl;
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "[" << threadId << "]" << ex.what() << std::endl;
+    }
+    (*socket).close();
+}
+
+int readBytes(unsigned char* data, tcp::socket* socket, io_context* iocontext)
 {
     streambuf readBuf;
     unsigned char* rBuf;
     unsigned char* out;
+    int bRead = 0;
 
-    int bRead = read(*socket, readBuf, transfer_exactly(4));
+    int* bReadP = &bRead;
+
+    unsigned char buf[256];
+
+    async_read(*socket, buffer(buf, 256), transfer_exactly(4), [bReadP](const boost::system::error_code& err, std::size_t size) {
+        std::cout << "Async got " << size << " bytes" << std::endl;
+        std::cout << "Read result: " << err << " - " << err.message() << std::endl;
+        *bReadP = size;
+        });
+
+    (*iocontext).run();
 
     std::cout << "bRead: " << bRead << std::endl;
 
-    rBuf = (unsigned char*)(readBuf.data().data());
-    out = rBuf;
+    out = buf;
 
     int size = (*(out) << 0 | *(out + 1) << 8 | *(out + 2) << 16 | *(out + 3) << 24);
 
@@ -93,14 +138,14 @@ int readBytes(unsigned char* data, tcp::socket* socket)
 
     size -= 4;
 
-    readBuf.consume(bRead);
-
-    bRead = read(*socket, readBuf, transfer_exactly(size));
+    async_read(*socket, buffer(buf, 256), transfer_exactly(size), [bReadP](const boost::system::error_code& err, std::size_t size) {
+        std::cout << "Async got " << size << " bytes" << std::endl;
+        *bReadP = size;
+        });
 
     std::cout << "bRead: " << bRead << std::endl;
 
-    rBuf = (unsigned char*)(readBuf.data().data());
-    out = rBuf;
+    out = buf;
 
     unsigned char* in = data;
     
