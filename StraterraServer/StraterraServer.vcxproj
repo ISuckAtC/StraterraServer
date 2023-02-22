@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Http.cpp" />
     <ClCompile Include="StraterraServer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Http.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
