@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef HTTP_H
+#define HTTP_H
+
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
@@ -59,3 +64,4 @@ namespace Straterra
 		void http_server(tcp::acceptor& acceptor, tcp::socket& socket);
 	}
 }
+#endif

@@ -12,6 +12,9 @@
 #include <memory>
 #include <string>
 
+#include "Player.h"
+#include "Game.h"
+
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
@@ -151,6 +154,51 @@ namespace Straterra
 					// write content to stream
 					beast::ostream(response_.body())
 						<< _code++;
+				}
+				else if (method == "getSelfPlayer")
+				{
+					if (optionCount != 2)
+					{
+						// option count mismatch
+					}
+					std::string out = "";
+					int code = 0;
+					char token[sizeof(long long)];
+					strcpy_s(token, options[0].c_str());
+					Straterra::Player::getSelfPlayer(Straterra::Game::getTokenLong(token), &out, &code);
+					response_.set(http::field::content_type, "json");
+
+					beast::ostream(response_.body())
+						<< out;
+				}
+				else if (method == "createPlayer")
+				{
+					if (optionCount != 2)
+					{
+						// option count mismatch
+					}
+					std::string name = options[0];
+					std::string login = options[1];
+					Straterra::Player::createUser(name, login);
+					response_.set(http::field::content_type, "text");
+					beast::ostream(response_.body())
+						<< "Created user: \"" << name << "\" with login \"" << login << "\"";
+				}
+				else if (method == "login")
+				{
+					if (optionCount != 1)
+					{
+						// option count mismatch
+					}
+					std::string login = options[0];
+					std::string out = "";
+					int code = 0;
+					
+					Straterra::Player::login(&out, &code, login);
+					response_.set(http::field::content_type, "http");
+					beast::ostream(response_.body())
+						<< out;
+					
 				}
 				else
 				{

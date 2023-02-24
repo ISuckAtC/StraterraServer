@@ -1,0 +1,535 @@
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
+#include <boost/beast/version.hpp>
+#include <boost/asio.hpp>
+#include <chrono>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <memory>
+#include <string>
+
+
+#include "Game.h"
+#include "Definition.h"
+
+namespace Straterra
+{
+	namespace Game
+	{
+		using namespace Straterra::Definition;
+
+		static std::vector<User*> users;
+		static std::vector<Session*> sessions;
+		int userCount;
+		int usersOnline;
+		int tickInterval;
+		int timeOutSeconds;
+		std::thread updateThread;
+		std::thread slowUpdateThread;
+		
+		void addUser(User* user)
+		{
+			//std::cout << "user added: " << user->name;
+			users.insert(users.begin(), user);
+			//std::cout << " | p:" << users[userCount]->name << std::endl;
+			userCount++;
+		}
+		void addSession(Session* session)
+		{
+			sessions.insert(sessions.begin(), session);
+			usersOnline++;
+		}
+
+		User* getUser(int id)
+		{
+			int index = -1;
+			for (int i = 0; i < userCount; ++i)
+			{
+				if (users[i]->userId == id)
+				{
+					return users[i];
+				}
+			}
+			User p;
+			p.userId = -1;
+			return &p;
+		}
+
+		User* getUserAt(int index)
+		{
+			//std::cout << "getUserAt: " << std::to_string((long)users[index]) << std::endl;
+			return users[index];
+		}
+
+		int findUserBySession(long long token)
+		{
+			int id = -1;
+			for (int i = 0; i < usersOnline; ++i)
+			{
+				if (sessions[i]->token == token)
+				{
+					time_t now;
+					time(&now);
+					sessions[i]->lastSeen = now;
+					id = sessions[i]->playerId;
+				}
+			}
+			return id;
+		}
+
+		char* Session::tokenBytes()
+		{
+			return getTokenBytes(token);
+		}
+
+		char* getTokenBytes(long long token)
+		{
+			char tokenBytes[sizeof(long long)];
+			std::memcpy(&tokenBytes, &token, sizeof(long long));
+			return tokenBytes;
+		}
+
+		long long getTokenLong(char* tokenBytes)
+		{
+			long long token;
+			std::memcpy(&token, tokenBytes, sizeof(long long));
+			return token;
+		}
+
+		void update()
+		{
+			try
+			{
+				// update logic
+				Sleep(tickInterval);
+				update();
+			} catch (std::exception const& e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
+		}
+		void slowUpdate()
+		{
+			// slow update logic
+			Sleep(tickInterval * 100);
+			for (int i = 0; i < usersOnline; ++i)
+			{
+				time_t now;
+				time(&now);
+				if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
+				{
+					sessions.erase(sessions.begin() + i);
+					usersOnline--;
+					i--;
+				}
+			}
+		}
+
+		void start(int _tickInterval, int _timeOutSeconds)
+		{
+			userCount = 0;
+			usersOnline = 0;
+			tickInterval = _tickInterval;
+			timeOutSeconds = _timeOutSeconds;
+			// start logic
+			updateThread = std::thread{ update };
+			slowUpdateThread = std::thread{ slowUpdate };
+		}
+		
+
+		int getUserCount()
+		{
+			//std::cout << "getUserCount: " << userCount << " real count: " << users.size() << std::endl;
+			return userCount;
+		}
+
+		int getUserOnlineCount()
+		{
+			return usersOnline;
+		}
+
+		int Group::TakeDamage(int damage, Group* source, bool melee, bool counterable, bool verbose, bool trample)
+		{
+			Unit unit = getUnitDefinition(unitId);
+			Unit enemyUnit = getUnitDefinition(source->unitId);
+
+			int deaths = damage / unit.health;
+			int rest = damage % unit.health;
+			frontHealth -= rest;
+			if (frontHealth <= 0)
+			{
+				deaths++;
+				frontHealth = unit.health + frontHealth;
+			}
+
+			if (melee && counterable)
+			{
+				int counterDamage = GetDamage(0, source, true, trample);
+				if (verbose) std::cout << unit.id << " counters " << enemyUnit.id << " for " << counterDamage << " damage!" << std::endl;
+
+				int cDeaths = source->TakeDamage(counterDamage, this, true, false, verbose);
+
+				if (verbose) std::cout << "Counter caused " << cDeaths << " deaths" << std::endl;
+			}
+
+			count -= deaths;
+
+			if (count < 1)
+			{
+				deaths += count;
+
+				dead = true;
+			}
+
+			return deaths;
+		}
+
+		User::~User()
+		{
+			//std::cout << "User was destroyed, p" << std::to_string((long)this) << std::endl;
+		}
+
+		Session::Session(int playerId, long long token)
+		{
+			this->playerId = playerId;
+			this->token = token;
+			time_t now;
+			time(&now);
+			this->lastSeen = now;
+		}
+
+		int Group::GetDamage(int range, Group* enemy, bool counter, bool trampleCounter)
+		{
+			Unit unit = getUnitDefinition(unitId);
+			Unit enemyUnit = getUnitDefinition(enemy->unitId);
+
+			int damage = 0;
+
+			int attackCount = count;
+
+			if (range > 0)
+			{
+				// Ranged
+				damage += unit.rangeAttack;
+				damage -= enemyUnit.rangeDefence;
+			}
+			else
+			{
+				// Melee
+				damage += unit.meleeAttack;
+				if (counter) damage += unit.counterBonus;
+				damage -= enemyUnit.meleeDefence;
+
+			}
+
+			if (trampleCounter && damage > 1) damage = 1;
+
+			damage += unit.GetBonusDamage(enemyUnit.unitType);
+
+			if (range == 0)
+			{
+				if (attackCount > (enemy->count * 2.5)) attackCount = (int)(enemy->count * 2.5);
+			}
+
+			if (damage < 1) damage = 1;
+
+
+			return damage * attackCount;
+		}
+
+		Group::Group(int _count, int _unitId)
+		{
+			count = _count;
+			unitId = _unitId;
+			frontHealth = getUnitDefinition(unitId).health;
+			position = 0;
+			target = -1;
+			right = false;
+			dead = false;
+		}
+
+		bool Group::operator==(Group other)
+		{
+			return unitId == other.unitId;
+		}
+
+
+
+		bool Fight(std::vector<Group>* unitsLeft, std::string* output, std::vector<Group*> defender, std::vector<Group*> attacker, bool verbose)
+		{
+			std::sort(defender.begin(), defender.end(),
+				[](const Group* a, const Group* b) -> bool
+				{
+					return a->unitId < b->unitId;
+				});
+			std::sort(attacker.begin(), attacker.end(),
+				[](const Group* a, const Group* b) -> bool
+				{
+					return a->unitId < b->unitId;
+				});
+
+
+			int leftRange = 0;
+			for (int i = 0; i < defender.size(); ++i)
+			{
+				int range = getUnitDefinition(defender[i]->unitId).range;
+				if (range > leftRange) leftRange = range;
+			}
+
+			int rightRange = 0;
+			for (int i = 0; i < attacker.size(); ++i)
+			{
+				int range = getUnitDefinition(attacker[i]->unitId).range;
+				if (range > rightRange) rightRange = range;
+			}
+
+
+			for (int i = 0; i < defender.size(); ++i)
+			{
+				defender[i]->position = -leftRange;
+				defender[i]->right = false;
+				//std::cout << defender[i] << " | " << defender[i]->position << " | " << defender[i]->dead << " | " << defender[i]->right << std::endl;
+			}
+
+			for (int i = 0; i < attacker.size(); ++i)
+			{
+				attacker[i]->position = rightRange;
+				attacker[i]->right = true;
+				//std::cout << attacker[i] << " | " << attacker[i]->position << " | " << attacker[i]->dead << " | " << attacker[i]->right << std::endl;
+			}
+
+
+
+			std::vector<Group*> all;
+			std::vector<Group*>::iterator it = all.begin();
+			all.insert(it, defender.begin(), defender.end());
+			it = all.begin();
+			all.insert(it, attacker.begin(), attacker.end());
+
+			*output = "";
+			*output += "Green Team\n";
+			for (int i = 0; i < defender.size(); ++i)
+			{
+				Unit unit = getUnitDefinition(defender[i]->unitId);
+				*output += std::to_string(unit.id) + " LV" + std::to_string(unit.level) + " (" + std::to_string(defender[i]->count) + ")\n";
+			}
+			*output += "Red Team\n";
+			for (int i = 0; i < attacker.size(); ++i)
+			{
+				Unit unit = getUnitDefinition(attacker[i]->unitId);
+				*output += std::to_string(unit.id) + " LV" + std::to_string(unit.level) + " (" + std::to_string(attacker[i]->count) + ")\n";
+			}
+
+
+
+			std::sort(all.begin(), all.end(),
+				[](const Group* a, const Group* b) -> bool
+				{
+					return getUnitDefinition(a->unitId).speed + (a->right ? 0.5f : 0) > getUnitDefinition(b->unitId).speed + (b->right ? 0.5f : 0);
+				});
+
+			if (verbose)
+			{
+				std::cout << "Fight starting..." << std::endl << "Participants:" << std::endl;
+				for (int i = 0; i < all.size(); ++i)
+				{
+					std::cout << all[i] << " | " << all[i]->position << " | " << all[i]->dead << " | " << all[i]->right << std::endl;
+					std::cout << "UnitId: " << all[i]->unitId << " | Count: " << all[i]->count << " | Team: " << (all[i]->right ? "Attacker" : "Defender") << std::endl;
+				}
+			}
+
+			bool combat = true;
+			int turn = 0;
+			int totalTurns = 0;
+
+
+
+			while (combat)
+			{
+				totalTurns++;
+				//Console.ReadLine();
+
+				if (turn == all.size()) turn = 0;
+
+				Group* group = all[turn];
+				if (group->dead)
+				{
+					std::cout << "Turn index " << turn << " is dead, skipping." << std::endl;
+					turn++;
+					continue;
+				}
+
+				std::vector<Group*> enemyArmy = (group->right ? defender : attacker);
+
+
+				if (verbose)
+				{
+					std::cout << "__________________________________________________" << std::endl;
+					std::cout << "__________________________________________________" << std::endl;
+					std::cout <<
+						"[" << totalTurns << "]" << "Turn start: Team: " << (group->right ? 2 : 1) <<
+						" | UnitId: " << group->unitId <<
+						" | Unit Type: " << getUnitDefinition(group->unitId).id <<
+						" | Count: " << group->count <<
+						" | Front Health: " << group->frontHealth <<
+						" | Position: " << group->position <<
+						std::endl;
+				}
+
+				//std::cout << group->target << std::endl;
+				//std::cout << 
+
+				if (group->target < 0 || enemyArmy[group->target]->dead)
+				{
+					int index = -1;
+					std::vector<Group*> aliveTargets;
+					for (int i = 0; i < enemyArmy.size(); ++i)
+					{
+						if (!enemyArmy[i]->dead)
+						{
+							it = aliveTargets.begin();
+							aliveTargets.insert(it, enemyArmy[i]);
+						}
+					}
+					std::sort(aliveTargets.begin(), aliveTargets.end(),
+						[group](const Group* a, const Group* b) -> bool
+						{
+							return std::abs(group->position - a->position) > std::abs(group->position - b->position);
+						});
+					std::vector<Group*> preferredTargets;
+					for (int i = 0; i < aliveTargets.size(); ++i)
+					{
+						if (getUnitDefinition(aliveTargets[i]->unitId).unitType == getUnitDefinition(group->unitId).preference)
+						{
+							it = preferredTargets.begin();
+							preferredTargets.insert(it, aliveTargets[i]);
+						}
+					}
+					std::reverse(preferredTargets.begin(), preferredTargets.end());
+
+					//std::cout << "EnemyArmyCount: " << enemyArmy.size() << " | AliveTargetCount: " << aliveTargets.size() << std::endl;
+
+					if (aliveTargets.size() == 0)
+					{
+						// Winner
+						if (verbose) std::cout << (group->right ? "Right wins" : "Left wins") << " in " << totalTurns << " turns!" << std::endl;
+
+						*output += "\n\nWinning Team: " + std::string(group->right ? "Red" : "Green") + "\nRemaining Units\n";
+
+						std::vector<Group*> winningTeam = (group->right ? attacker : defender);
+						std::vector<Group> remains;
+						for (int i = 0; i < winningTeam.size(); ++i)
+						{
+							if (!winningTeam[i]->dead)
+							{
+								std::vector<Group>::iterator itnp = remains.begin();
+								remains.insert(itnp, *winningTeam[i]);
+								Unit unit = getUnitDefinition(winningTeam[i]->unitId);
+								*output += std::to_string(unit.id) +
+									" LV" + std::to_string(unit.level) +
+									" (" + std::to_string(remains[0].count) + ")\n";
+							}
+						}
+						unitsLeft = &remains;
+						return group->right;
+					}
+					if (preferredTargets.size() > 0)
+					{
+						for (int i = 0; i < enemyArmy.size(); ++i)
+						{
+							if (enemyArmy[i] == preferredTargets[0])
+							{
+								index = i;
+								break;
+							}
+						}
+					}
+					else
+					{
+						for (int i = 0; i < enemyArmy.size(); ++i)
+						{
+							if (enemyArmy[i] == aliveTargets[0])
+							{
+								index = i;
+								break;
+							}
+						}
+					}
+
+					group->target = index;
+
+					if (verbose) std::cout << group->unitId << " chose target " << enemyArmy[group->target]->unitId << std::endl;
+				}
+
+				Group* enemy = enemyArmy[group->target];
+
+				int distance = std::abs(enemy->position - group->position);
+
+				if (distance > getUnitDefinition(group->unitId).range)
+				{
+					int move = getUnitDefinition(group->unitId).speed;
+					if (move >= distance)
+					{
+						move = distance;
+						distance = 0;
+					}
+					int direction = 1;
+					if (group->position > enemy->position)
+					{
+						direction = -1;
+					}
+					if (getUnitDefinition(group->unitId).unitType == CAVALRY)
+					{
+						// Trample
+						for (int i = 0; i < move; ++i)
+						{
+							std::vector<Group*> tramples;
+							for (int j = 0; j < enemyArmy.size(); ++j)
+							{
+								if (enemyArmy[j]->position == (group->position + (j * direction)))
+								{
+									it = tramples.begin();
+									tramples.insert(it, enemyArmy[j]);
+								}
+							}
+							for (int k = 0; k < tramples.size(); ++k)
+							{
+								Group* trampleEnemy = tramples[k];
+								// Attack
+								int damage = group->GetDamage(distance, trampleEnemy) / 5;
+
+								if (verbose) std::cout << group->unitId << " tramples " << trampleEnemy->unitId << " for " << damage << " damage!" << std::endl;
+
+								int deaths = trampleEnemy->TakeDamage(damage, group, true, verbose, true);
+
+								if (verbose) std::cout << "Trample caused " << deaths << " deaths" << std::endl;
+							}
+						}
+					}
+
+
+					group->position += move * direction;
+
+					if (verbose) std::cout << group->unitId << " moves " << move << " units" << std::endl;
+				}
+
+				if (distance <= getUnitDefinition(group->unitId).range)
+				{
+					// Attack
+					int damage = group->GetDamage(distance, enemy);
+
+					if (verbose) std::cout << group->unitId << " attacks " << enemy->unitId << " for " << damage << " damage!" << std::endl;
+
+					int deaths = enemy->TakeDamage(damage, group, distance == 0, true, verbose);
+
+					if (verbose) std::cout << "Attack caused " << deaths << " deaths" << std::endl;
+				}
+
+				turn++;
+			}
+			std::cout << "Something wrong happened in fight, returning default." << std::endl;
+			return false;
+		}
+	}
+}
