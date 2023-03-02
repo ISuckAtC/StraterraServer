@@ -60,7 +60,7 @@ int main()
 	{
 		Straterra::Game::start(1000, 60000);
 
-		auto const address = net::ip::make_address_v4("0.0.0.0");
+		auto const address = net::ip::make_address_v4("18.216.109.151");
 		unsigned short port = 80;
 
 		net::io_context ioc{ 1 };
