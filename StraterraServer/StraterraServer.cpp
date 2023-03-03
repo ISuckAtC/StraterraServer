@@ -11,6 +11,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <fstream>
 #include "Http.h"
 #include "Definition.h"
 #include "Game.h"
@@ -19,11 +20,11 @@ namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
-//using namespace Straterra;
+using namespace Straterra;
 
 
 
-int main()
+int main(int argc, char** argv)
 {
 	Straterra::Definition::DefineUnits();
 	/*
@@ -54,11 +55,56 @@ int main()
 	std::cout << output << std::endl;
 	*/
 	
+	if (argc != 2)
+	{
+		std::cout << "Argument count invalid, excepted 2, is " << std::to_string(argc) << std::endl;
+		return 1;
+	}
+
+	int lines = 0;
+	std::ifstream data{ argv[1] };
+	std::string line;
+	while (std::getline(data, line))
+	{
+		int index = line.find_first_of(';');
+		Game::User* u = new Game::User();
+		u->userId = std::stoi(line.substr(0, index));
+
+		line = line.substr(index + 1);
+		index = line.find_first_of(';');
+		u->login = line.substr(0, index);
+
+		line = line.substr(index + 1);
+		index = line.find_first_of(';');
+		u->name = line.substr(0, index);
+
+		line = line.substr(index + 1);
+		index = line.find_first_of(';');
+		u->cityLocation = std::stoi(line.substr(0, index));
+
+		line = line.substr(index + 1);
+		index = line.find_first_of(';');
+		u->color = std::stoi(line.substr(0, index));
+
+		line = line.substr(index + 1);
+		index = line.find_first_of(';');
+		u->allianceId = std::stoi(line.substr(0, index));
+
+		for (int i = 0; i < 8; ++i)
+		{
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
+		}
+
+
+		addUser(u);
+	}
 	
 
 	try
 	{
-		Straterra::Game::start(1000, 60000);
+		Straterra::Game::start(std::stoi(argv[0]), 60000);
 
 		auto const address = net::ip::make_address_v4("0.0.0.0");
 		unsigned short port = 80;

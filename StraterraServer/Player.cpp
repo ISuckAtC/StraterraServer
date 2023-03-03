@@ -104,8 +104,8 @@ namespace Straterra
 
 			std::ostringstream oss;
 			oss << "{" <<
-				"\"playerName\":\"" << playerName << "\"," <<
-				"\"playerColor\":\"" << std::to_string(color) << "\"," <<
+				"\"userId\":\"" << playerName << "\"," <<
+				"\"\":\"" << std::to_string(color) << "\"," <<
 				"\"allianceId\":\"" << std::to_string(alliance) << "\"," <<
 				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"}";
 			*out = oss.str();
