@@ -70,6 +70,8 @@ int main(int argc, char** argv)
 	int lines = 0;
 	std::ifstream data{ argv[2] };
 	std::string line;
+
+	std::cout << std::endl << "Loading users: ";
 	while (std::getline(data, line))
 	{
 		int index = line.find_first_of(';');
@@ -103,10 +105,10 @@ int main(int argc, char** argv)
 			u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
 		}
 
-
+		std::cout << ".";
 		addUser(u);
 	}
-	
+	std::cout << std::endl;
 
 	try
 	{
