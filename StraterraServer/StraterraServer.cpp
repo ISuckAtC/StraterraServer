@@ -61,14 +61,14 @@ int main(int argc, char** argv)
 	}
 	std::cout << std::endl;
 	
-	if (argc != 2)
+	if (argc != 3)
 	{
 		std::cout << "Argument count invalid, excepted 2, is " << std::to_string(argc) << std::endl;
 		return 1;
 	}
 
 	int lines = 0;
-	std::ifstream data{ argv[1] };
+	std::ifstream data{ argv[2] };
 	std::string line;
 	while (std::getline(data, line))
 	{
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		Straterra::Game::start(std::stoi(argv[0]), 60000);
+		Straterra::Game::start(std::stoi(argv[1]), 60000);
 
 		auto const address = net::ip::make_address_v4("0.0.0.0");
 		unsigned short port = 80;
