@@ -80,37 +80,37 @@ int main(int argc, char** argv)
 			std::string currentValue = "";
 			Game::User* u = new Game::User();
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << currentValue;
+			//std::cout << std::endl << currentValue;
 			u->userId = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << currentValue;
+			//std::cout << std::endl << currentValue;
 			u->login = line.substr(0, index);
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << currentValue;
+			//std::cout << std::endl << currentValue;
 			u->name = line.substr(0, index);
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << currentValue;
+			//std::cout << std::endl << currentValue;
 			u->cityLocation = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << currentValue;
+			//std::cout << std::endl << currentValue;
 			u->color = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << currentValue;
+			//std::cout << std::endl << currentValue;
 			u->allianceId = std::stoi(line.substr(0, index));
 
 			for (int i = 0; i < 8; ++i)
@@ -118,14 +118,14 @@ int main(int argc, char** argv)
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
 			}
 
 			std::cout << ".";
-			addUser(u);
+			Game::addUser(u);
 		}
-		std::cout << std::endl;
+		std::cout << std::endl << "total users: " << std::to_string(Game::getUserCount()) << std::endl;
 	}
 	catch (std::exception const& e)
 	{
