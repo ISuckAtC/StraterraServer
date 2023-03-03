@@ -45,7 +45,7 @@ namespace Straterra
 			long long token;
 			time_t lastSeen;
 
-			char* tokenBytes();
+			std::string tokenBytes();
 		};
 
 		User* getUserAt(int index);
@@ -53,8 +53,8 @@ namespace Straterra
 		int getUserOnlineCount();
 		int findUserBySession(long long token);
 		User* getUser(int id);
-		char* getTokenBytes(long long token);
-		long long getTokenLong(char* tokenBytes);
+		std::string getTokenString(long long token);
+		long long getTokenLong(std::string tokenBytes);
 		void addSession(Session* session);
 		void addUser(User* user);
 

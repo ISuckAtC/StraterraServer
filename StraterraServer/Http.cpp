@@ -107,7 +107,7 @@ namespace Straterra
 			void create_response()
 			{
 				// target location requested by client
-				std::string target = request_.target().to_string();
+				std::string target = request_.target();
 				std::cout << "Target: \"" << target << "\"" << std::endl;
 
 				int optionCount = 0;
@@ -157,15 +157,14 @@ namespace Straterra
 				}
 				else if (method == "getSelfPlayer")
 				{
-					if (optionCount != 2)
+					std::cout << "getSelfPlayer" << std::endl;
+					if (optionCount != 1)
 					{
 						// option count mismatch
 					}
 					std::string out = "";
 					int code = 0;
-					char token[sizeof(long long)];
-					strcpy_s(token, options[0].c_str());
-					Straterra::Player::getSelfPlayer(Straterra::Game::getTokenLong(token), &out, &code);
+					Straterra::Player::getSelfPlayer(Straterra::Game::getTokenLong(options[0]), &out, &code);
 					response_.set(http::field::content_type, "json");
 
 					beast::ostream(response_.body())
@@ -193,6 +192,8 @@ namespace Straterra
 					std::string login = options[0];
 					std::string out = "";
 					int code = 0;
+
+					std::cout << "login: " << login << std::endl;
 					
 					Straterra::Player::login(&out, &code, login);
 					response_.set(http::field::content_type, "http");

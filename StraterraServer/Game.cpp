@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <iomanip>
 
 
 #include "Game.h"
@@ -65,8 +66,11 @@ namespace Straterra
 		int findUserBySession(long long token)
 		{
 			int id = -1;
+			std::cout << "usersOnline: " << std::to_string(usersOnline) << std::endl;
+			std::cout << token << std::endl;
 			for (int i = 0; i < usersOnline; ++i)
 			{
+				std::cout << sessions[i]->token << std::endl;
 				if (sessions[i]->token == token)
 				{
 					time_t now;
@@ -78,22 +82,38 @@ namespace Straterra
 			return id;
 		}
 
-		char* Session::tokenBytes()
+		std::string Session::tokenBytes()
 		{
-			return getTokenBytes(token);
+			return getTokenString(token);
 		}
 
-		char* getTokenBytes(long long token)
+		std::string getTokenString(long long token)
 		{
-			char tokenBytes[sizeof(long long)];
-			std::memcpy(&tokenBytes, &token, sizeof(long long));
-			return tokenBytes;
-		}
+			return std::to_string(token);
+			std::cout << "getTokenString: " << std::to_string(token) << std::endl;
+			std::stringstream ss;
+			ss << std::hex;
 
-		long long getTokenLong(char* tokenBytes)
+			for (int i = 0; i < sizeof(long long); ++i)
+			{
+				uint8_t byte = *((uint8_t*)(&token + i));
+				std::cout << "|" << std::to_string(byte);
+				ss << std::setw(2) << std::setfill('0') << (int)byte;
+			}
+			std::cout << std::endl << ss.str() << std::endl;
+			return ss.str();
+		}	
+
+		long long getTokenLong(std::string tokenBytes)
 		{
-			long long token;
-			std::memcpy(&token, tokenBytes, sizeof(long long));
+			return std::stoll(tokenBytes);
+			long long token = 0;
+			uint8_t bytes[8];
+			for (int i = 0; i < 16; i += 2)
+			{
+				std::string part = tokenBytes.substr(i, 2);
+				token |= (uint8_t)strtol(part.c_str(), NULL, 16) << (i * 4);
+			}
 			return token;
 		}
 

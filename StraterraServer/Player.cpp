@@ -31,13 +31,7 @@ namespace Straterra
 			long long token = 0;
 			do
 			{
-				std::cout << "X";
-				int rand1 = rand();
-				int rand2 = rand();
-				std::cout << "Y";
-				memcpy_s((&token), sizeof(int), &rand1, sizeof(int));
-				memcpy_s((&token) + 4, sizeof(int), &rand2, sizeof(int));
-				std::cout << "Z";
+				token = rand();
 			} while (findUserBySession(token) != -1);
 			return token;
 		}
@@ -65,21 +59,28 @@ namespace Straterra
 				std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
 				try
 				{
-					std::cout << "a" << std::endl;
+					std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
+					std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
 					if (u->login == loginInfo)
 					{
 						long long token = createSessionToken();
+						std::cout << token << std::endl;
 						Session* s = new Session(u->userId, token);
 						addSession(s);
 
+						std::cout << "session token created: " << s->token << " (" << token << ")" << std::endl;
+						std::cout << "token string: " << getTokenString(token) << std::endl;	
+						std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
+
 						*code = 0;
-						*out = getTokenBytes(token);
+						*out = getTokenString(token);
+						return;
 					}
 					std::cout << "b" << std::endl;
 				}
 				catch (std::exception const& e)
 				{
-					std::cerr << e.what() << std::endl;
+					std::cerr << "ERROR: " << e.what() << std::endl;
 				}
 			}
 			*code = 2;
@@ -87,6 +88,7 @@ namespace Straterra
 		}
 		void getSelfPlayer(long long token, std::string* out, int* code)
 		{
+			std::cout << "getSelfPlayer m" << std::endl;
 			int id = findUserBySession(token);
 			if (id == -1)
 			{
@@ -103,9 +105,9 @@ namespace Straterra
 			std::ostringstream oss;
 			oss << "{" <<
 				"\"playerName\":\"" << playerName << "\"," <<
-				"\"playerColor\":\"" << static_cast<char*>(static_cast<void*>(&color)) << "\"," <<
-				"\"allianceId\":\"" << static_cast<char*>(static_cast<void*>(&alliance)) << "\"," <<
-				"\"cityLocation\":\"" << static_cast<char*>(static_cast<void*>(&cityLocation)) << "\"}";
+				"\"playerColor\":\"" << std::to_string(color) << "\"," <<
+				"\"allianceId\":\"" << std::to_string(alliance) << "\"," <<
+				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"}";
 			*out = oss.str();
 			*code = 0;
 		}
