@@ -68,47 +68,55 @@ int main(int argc, char** argv)
 	}
 
 	int lines = 0;
-	std::ifstream data{ argv[2] };
-	std::string line;
-
-	std::cout << std::endl << "Loading users: ";
-	while (std::getline(data, line))
+	try
 	{
-		int index = line.find_first_of(';');
-		Game::User* u = new Game::User();
-		u->userId = std::stoi(line.substr(0, index));
+		std::ifstream data{ argv[2] };
+		std::string line;
 
-		line = line.substr(index + 1);
-		index = line.find_first_of(';');
-		u->login = line.substr(0, index);
-
-		line = line.substr(index + 1);
-		index = line.find_first_of(';');
-		u->name = line.substr(0, index);
-
-		line = line.substr(index + 1);
-		index = line.find_first_of(';');
-		u->cityLocation = std::stoi(line.substr(0, index));
-
-		line = line.substr(index + 1);
-		index = line.find_first_of(';');
-		u->color = std::stoi(line.substr(0, index));
-
-		line = line.substr(index + 1);
-		index = line.find_first_of(';');
-		u->allianceId = std::stoi(line.substr(0, index));
-
-		for (int i = 0; i < 8; ++i)
+		std::cout << std::endl << "Loading users: ";
+		while (std::getline(data, line))
 		{
+			int index = line.find_first_of(';');
+			Game::User* u = new Game::User();
+			u->userId = std::stoi(line.substr(0, index));
+
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
-			u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
-		}
+			u->login = line.substr(0, index);
 
-		std::cout << ".";
-		addUser(u);
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->name = line.substr(0, index);
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->cityLocation = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->color = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->allianceId = std::stoi(line.substr(0, index));
+
+			for (int i = 0; i < 8; ++i)
+			{
+				line = line.substr(index + 1);
+				index = line.find_first_of(';');
+				u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
+			}
+
+			std::cout << ".";
+			addUser(u);
+		}
+		std::cout << std::endl;
 	}
-	std::cout << std::endl;
+	catch (std::exception const& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
 
 	try
 	{
