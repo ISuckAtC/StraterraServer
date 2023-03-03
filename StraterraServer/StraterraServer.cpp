@@ -67,6 +67,8 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	Straterra::Game::start(std::stoi(argv[1]), 60000);
+
 	int lines = 0;
 	try
 	{
@@ -135,7 +137,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		Straterra::Game::start(std::stoi(argv[1]), 60000);
+		
 
 		auto const address = net::ip::make_address_v4("0.0.0.0");
 		unsigned short port = 80;
