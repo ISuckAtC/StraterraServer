@@ -77,27 +77,40 @@ int main(int argc, char** argv)
 		while (std::getline(data, line))
 		{
 			int index = line.find_first_of(';');
+			std::string currentValue = "";
 			Game::User* u = new Game::User();
+			currentValue = line.substr(0, index);
+			std::cout << std::endl << currentValue;
 			u->userId = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			std::cout << std::endl << currentValue;
 			u->login = line.substr(0, index);
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			std::cout << std::endl << currentValue;
 			u->name = line.substr(0, index);
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			std::cout << std::endl << currentValue;
 			u->cityLocation = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			std::cout << std::endl << currentValue;
 			u->color = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			std::cout << std::endl << currentValue;
 			u->allianceId = std::stoi(line.substr(0, index));
 
 			for (int i = 0; i < 8; ++i)
