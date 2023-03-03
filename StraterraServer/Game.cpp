@@ -207,7 +207,7 @@ namespace Straterra
 
 		User::~User()
 		{
-			//std::cout << "User was destroyed, p" << std::to_string((long)this) << std::endl;
+			std::cout << "User was destroyed, p" << std::to_string((long)this) << std::endl;
 		}
 
 		Session::Session(int playerId, long long token)

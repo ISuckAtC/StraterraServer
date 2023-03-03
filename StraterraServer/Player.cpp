@@ -58,7 +58,7 @@ namespace Straterra
 				std::cout << std::to_string((long)u) << " | ";
 				std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
 				try
-				{
+				{	
 					std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
 					std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
 					if (u->login == loginInfo)
