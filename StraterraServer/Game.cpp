@@ -34,7 +34,7 @@ namespace Straterra
 			//std::cout << "user added: " << user->name;
 			users.insert(users.begin(), user);
 			//std::cout << " | p:" << users[userCount]->name << std::endl;
-			std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
+			//std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
 			userCount++;
 		}
 		void addSession(Session* session)
@@ -161,8 +161,8 @@ namespace Straterra
 
 		int getUserCount()
 		{
-			std::cout << "getUserCount: " << userCount << " real count: " << users.size() << std::endl;
-			std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
+			//std::cout << "getUserCount: " << userCount << " real count: " << users.size() << std::endl;
+			//std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
 			return userCount;
 		}
 
