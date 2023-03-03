@@ -160,7 +160,7 @@ namespace Straterra
 
 		int getUserCount()
 		{
-			//std::cout << "getUserCount: " << userCount << " real count: " << users.size() << std::endl;
+			std::cout << "getUserCount: " << userCount << " real count: " << users.size() << std::endl;
 			return userCount;
 		}
 
