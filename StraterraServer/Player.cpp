@@ -101,13 +101,25 @@ namespace Straterra
 			int color = user->color;
 			int alliance = user->allianceId;
 			int cityLocation = user->cityLocation;
+			BYTE* citySlots = user->cityBuildingSlots;
 
 			std::ostringstream oss;
 			oss << "{" <<
 				"\"userId\":\"" << playerName << "\"," <<
-				"\"\":\"" << std::to_string(color) << "\"," <<
+				"\"color\":\"" << std::to_string(color) << "\"," <<
 				"\"allianceId\":\"" << std::to_string(alliance) << "\"," <<
-				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"}";
+				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"," <<
+				"\"citySlots\":" << "[" <<
+					"\"" << std::to_string(citySlots[0]) << "\"," <<
+					"\"" << std::to_string(citySlots[1]) << "\"," <<
+					"\"" << std::to_string(citySlots[2]) << "\"," <<
+					"\"" << std::to_string(citySlots[3]) << "\"," <<
+					"\"" << std::to_string(citySlots[4]) << "\"," <<
+					"\"" << std::to_string(citySlots[5]) << "\"," <<
+					"\"" << std::to_string(citySlots[6]) << "\"," <<
+					"\"" << std::to_string(citySlots[7]) << "\"," <<
+				"]" <<
+				"}";
 			*out = oss.str();
 			*code = 0;
 		}
