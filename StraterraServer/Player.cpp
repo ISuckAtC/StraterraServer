@@ -205,7 +205,7 @@ namespace Straterra
 			}
 			
 			std::ostringstream oss;
-			oss << "[";
+			oss << "{\"players\":[";
 			for (int i = 0; i < getUserCount(); ++i)
 			{
 				User* user = getUserAt(i);
@@ -214,7 +214,7 @@ namespace Straterra
 					<< "\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"}";
 				if (i < getUserCount() - 1) oss << ",";
 			}
-			oss << "]";
+			oss << "]}";
 			*out = oss.str();
 			*code = 0;
 		}
