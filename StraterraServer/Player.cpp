@@ -236,11 +236,11 @@ namespace Straterra
 			std::ostringstream oss;
 			oss << "{" <<
 				"\"userId\":\"" << std::to_string(id) << "\"," <<
-				"\"userName\":\"" << user->name << "\"," <<
+				"\"name\":\"" << user->name << "\"," <<
 				"\"color\":\"" << std::to_string(user->color) << "\"," <<
 				"\"allianceId\":\"" << std::to_string(user->allianceId) << "\"," <<
 				"\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"," <<
-				"\"citySlots\":" << "[" <<
+				"\"cityBuildingSlots\":" << "[" <<
 				"\"" << std::to_string(user->cityBuildingSlots[0]) << "\"," <<
 				"\"" << std::to_string(user->cityBuildingSlots[1]) << "\"," <<
 				"\"" << std::to_string(user->cityBuildingSlots[2]) << "\"," <<
