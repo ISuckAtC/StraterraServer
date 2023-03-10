@@ -152,7 +152,7 @@ namespace Straterra
 			//std::cout << token << std::endl;
 			for (int i = 0; i < usersOnline; ++i)
 			{
-				std::cout << sessions[i]->token << std::endl;
+				//std::cout << sessions[i]->token << std::endl;
 				if (sessions[i]->token == token)
 				{
 					time_t now;

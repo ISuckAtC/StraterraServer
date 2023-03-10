@@ -219,7 +219,7 @@ namespace Straterra
 
 		void http_server(tcp::acceptor& acceptor, tcp::socket& socket)
 		{
-			std::cout << "Waiting for connection..." << std::endl;
+			//std::cout << "Waiting for connection..." << std::endl;
 			acceptor.async_accept(socket,
 				[&](beast::error_code ec)
 				{
