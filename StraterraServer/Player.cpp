@@ -156,6 +156,8 @@ namespace Straterra
 						std::cout << "token string: " << getTokenString(token) << std::endl;	
 						std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
 
+
+						std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
 						*code = 0;
 						*out = "{\"success\":\"true\",\"message\":\"" + getTokenString(token) + "\"}";
 						return;
@@ -167,7 +169,7 @@ namespace Straterra
 					std::cerr << "ERROR: " << e.what() << std::endl;
 				}
 			}
-			std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
+			
 			*code = 2;
 			*out = "{\"success\":\"false\",\"message\":\"No player with that login\"}";
 		}
