@@ -180,6 +180,7 @@ namespace Straterra
 				return;
 			}
 			User* user = getUserById(userId);
+			std::cout << "getResources VALUE: id: " << std::to_string(user->userId) << std::to_string(user->food) << std::endl;
 			if (user->userId == -1)
 			{
 				*out = "{\"error\":\"No user with that id\"}";
