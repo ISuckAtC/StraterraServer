@@ -148,7 +148,8 @@ namespace Straterra
 				response_.set(http::field::content_type, "json");
 				std::string out = "";
 				int code = 0;
-				long long token = Straterra::Game::getTokenLong(options[0]);
+				long long token = 0;
+				if (method != "login" && method != "createPlayer") token = Straterra::Game::getTokenLong(options[0]);
 				if (method == "getResources")
 					Straterra::Player::getResources(token, std::stoi(options[1]), &out, &code);
 				else if (method == "getSelfPlayer")
