@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			std::cout << std::endl << line;
+			std::cout << std::endl << currentValue;
 			u->name = line.substr(0, index);
 
 
