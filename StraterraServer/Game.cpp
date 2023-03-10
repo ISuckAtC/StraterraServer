@@ -47,7 +47,7 @@ namespace Straterra
 			//std::cout << "user added: " << user->name;
 			users.insert(users.begin(), user);
 
-			EventHub::subcribeOnTick(boost::bind(&User::addResources, *user));
+			EventHub::subcribeOnTick(boost::bind(&User::addResources, user));
 			//std::cout << " | p:" << users[userCount]->name << std::endl;
 			//std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
 			userCount++;

@@ -202,7 +202,7 @@ int main(int argc, char** argv)
 			u->metalMultiplier = 1.;
 			u->orderMultiplier = 1.;
 
-			std::cout << ".";
+			std::cout << "Added user: " << (long)u << " id: " << u->userId << std::endl;
 			Game::addUser(u);
 		}
 		std::cout << std::endl << "total users: " << std::to_string(Game::getUserCount()) << std::endl;
