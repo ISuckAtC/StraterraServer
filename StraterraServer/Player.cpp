@@ -211,7 +211,7 @@ namespace Straterra
 				User* user = getUserAt(i);
 				oss << "{\"userId\":\"" << std::to_string(user->userId) << "\","
 					<< "\"name\":\"" << user->name << "\","
-					<< "\"cityLocation\"" << std::to_string(user->cityLocation) << "\"}";
+					<< "\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"}";
 				if (i < getUserCount() - 1) oss << ",";
 			}
 			oss << "]}";
