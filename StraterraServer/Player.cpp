@@ -135,7 +135,7 @@ namespace Straterra
 		}
 		void login(std::string* out, int* code, std::string loginInfo)
 		{
-			std::cout << getUserCount() << std::endl;
+			std::cout << "Users total: " << getUserCount() << std::endl;
 			for (int i = 0; i < getUserCount(); ++i)
 			{
 				User* u = getUserAt(i);
@@ -167,6 +167,7 @@ namespace Straterra
 					std::cerr << "ERROR: " << e.what() << std::endl;
 				}
 			}
+			std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
 			*code = 2;
 			*out = "{\"success\":\"false\",\"message\":\"No player with that login\"}";
 		}
