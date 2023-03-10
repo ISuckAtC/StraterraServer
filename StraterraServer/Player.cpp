@@ -155,7 +155,7 @@ namespace Straterra
 						std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
 
 						*code = 0;
-						*out = getTokenString(token);
+						*out = "{\"success\":\"true\",\"message\":\"" + getTokenString(token) + "\"}";
 						return;
 					}
 					std::cout << "b" << std::endl;
@@ -166,7 +166,7 @@ namespace Straterra
 				}
 			}
 			*code = 2;
-			*out = "No player with that login";
+			*out = "{\"success\":\"false\",\"message\":\"No player with that login\"}";
 		}
 		void getResources(long long token, int userId, std::string* out, int* code)
 		{
