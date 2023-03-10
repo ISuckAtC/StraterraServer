@@ -145,84 +145,25 @@ namespace Straterra
 				//	std::cout << options[i] << std::endl;
 				//}
 
-
-				if (method == "a")
-				{
-					// set content type (http is binary)
-					response_.set(http::field::content_type, "http");
-
-					// write content to stream
-					beast::ostream(response_.body())
-						<< _code++;
-				}
-				else if (method == "getResources")
-				{
-					if (optionCount != 1)
-					{
-						// option count mismatch
-					}
-					std::cout << "getResources" << std::endl;
-					std::string out = "";
-					int code = 0;
-
-					Straterra::Player::getResources(Straterra::Game::getTokenLong(options[0]), &out, &code);
-
-					response_.set(http::field::content_type, "json");
-					beast::ostream(response_.body())
-						<< out;
-				}
+				response_.set(http::field::content_type, "json");
+				std::string out = "";
+				int code = 0;
+				long long token = Straterra::Game::getTokenLong(options[0]);
+				if (method == "getResources")
+					Straterra::Player::getResources(token, std::stoi(options[1]), &out, &code);
 				else if (method == "getSelfPlayer")
-				{
-					std::cout << "getSelfPlayer" << std::endl;
-					if (optionCount != 1)
-					{
-						// option count mismatch
-					}
-					std::string out = "";
-					int code = 0;
-					Straterra::Player::getSelfPlayer(Straterra::Game::getTokenLong(options[0]), &out, &code);
-					response_.set(http::field::content_type, "json");
-
-					beast::ostream(response_.body())
-						<< out;
-				}
+					Straterra::Player::getSelfPlayer(token, &out, &code);
 				else if (method == "createPlayer")
-				{
-					if (optionCount != 2)
-					{
-						// option count mismatch
-					}
-					std::string name = options[0];
-					std::string login = options[1];
-					Straterra::Player::createUser(name, login);
-					response_.set(http::field::content_type, "text");
-					beast::ostream(response_.body())
-						<< "Created user: \"" << name << "\" with login \"" << login << "\"";
-				}
+					Straterra::Player::createUser(options[0], options[1]);
 				else if (method == "login")
-				{
-					if (optionCount != 1)
-					{
-						// option count mismatch
-					}
-					std::string login = options[0];
-					std::string out = "";
-					int code = 0;
-
-					std::cout << "login: " << login << std::endl;
-					
-					Straterra::Player::login(&out, &code, login);
-					response_.set(http::field::content_type, "http");
-					beast::ostream(response_.body())
-						<< out;
-					
-				}
+					Straterra::Player::login(&out, &code, options[0]);
+				else if (method == "getPlayers")
+					Straterra::Player::getPlayers(token, &out, &code);
+				else if (method == "getUser")
+					Straterra::Player::getUser(token, std::stoi(options[1]), &out, &code);
 				else
-				{
-					response_.set(http::field::content_type, "http");
-					beast::ostream(response_.body())
-						<< 0x01;
-				}
+					out = "unknown method";
+				beast::ostream(response_.body()) << out;
 			}
 
 			// async send response

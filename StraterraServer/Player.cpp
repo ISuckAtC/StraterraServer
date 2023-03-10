@@ -86,7 +86,7 @@ namespace Straterra
 			do
 			{
 				id = rand();
-			} while (getUser(id)->userId != -1);
+			} while (getUserById(id)->userId != -1);
 			return id;
 		}
 		long long createSessionToken()
@@ -168,23 +168,90 @@ namespace Straterra
 			*code = 2;
 			*out = "No player with that login";
 		}
-		void getResources(long long token, std::string* out, int* code)
+		void getResources(long long token, int userId, std::string* out, int* code)
 		{
 			int id = findUserBySession(token);
 			if (id == -1)
 			{
 				*code = 2;
-				*out = "No session found";
+				*out = "{\"error\":\"Session invalid\"}";
 				return;
 			}
-			User* user = getUser(id);
+			User* user = getUserById(userId);
+			if (user->userId == -1)
+			{
+				*out = "{\"error\":\"No user with that id\"}";
+				*code = 2;
+				return;
+			}
 			std::ostringstream oss;
 			oss << "{" <<
 				"\"food\":\"" << std::to_string(user->food) << "\"," <<
 				"\"wood\":\"" << std::to_string(user->wood) << "\"," <<
 				"\"metal\":\"" << std::to_string(user->metal) << "\"," <<
-				"\"order\":\"" << std::to_string(user->order) << "\"," <<
+				"\"order\":\"" << std::to_string(user->order) << "\"" <<
 				"}";
+			*out = oss.str();
+			*code = 0;
+		}
+		void getPlayers(long long token, std::string* out, int* code)
+		{
+			int id = findUserBySession(token);
+			if (id == -1)
+			{
+				*code = 2;
+				*out = "{\"error\":\"Session invalid\"}";
+				return;
+			}
+			
+			std::ostringstream oss;
+			oss << "{\"players\":[";
+			for (int i = 0; i < getUserCount(); ++i)
+			{
+				User* user = getUserAt(i);
+				oss << "{\"userId\":\"" << std::to_string(user->userId) << "\","
+					<< "\"name\":\"" << user->name << "\","
+					<< "\"cityLocation\"" << std::to_string(user->cityLocation) << "\"}";
+				if (i < getUserCount() - 1) oss << ",";
+			}
+			oss << "]}";
+			*out = oss.str();
+			*code = 0;
+		}
+		void getUser(long long token, int userId, std::string* out, int* code)
+		{
+			int id = findUserBySession(token);
+			if (id == -1)
+			{
+				*code = 2;
+				*out = "{\"error\":\"Session invalid\"}";
+				return;
+			}
+			User* user = getUserAt(userId);
+			if (user->userId == -1)
+			{
+				*code = 3;
+				*out = "{\"error\":\"No user with that id\"}";
+			}
+			std::ostringstream oss;
+			oss << "{" <<
+				"\"userId\":\"" << std::to_string(id) << "\"," <<
+				"\"userName\":\"" << user->name << "\"," <<
+				"\"color\":\"" << std::to_string(user->color) << "\"," <<
+				"\"allianceId\":\"" << std::to_string(user->allianceId) << "\"," <<
+				"\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"," <<
+				"\"citySlots\":" << "[" <<
+				"\"" << std::to_string(user->cityBuildingSlots[0]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[1]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[2]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[3]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[4]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[5]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[6]) << "\"," <<
+				"\"" << std::to_string(user->cityBuildingSlots[7]) << "\"" <<
+				"]" <<
+				"}";
+
 			*out = oss.str();
 			*code = 0;
 		}
@@ -198,7 +265,7 @@ namespace Straterra
 				*out = "No session found";
 				return;
 			}
-			User* user = getUser(id);
+			User* user = getUserById(id);
 			std::string playerName = user->name;
 			int color = user->color;
 			int alliance = user->allianceId;

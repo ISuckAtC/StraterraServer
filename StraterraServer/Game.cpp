@@ -123,7 +123,7 @@ namespace Straterra
 			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << getUser(owner)->homeArmy[unitId] << ")" << std::endl;
 		}
 
-		User* getUser(int id)
+		User* getUserById(int id)
 		{
 			int index = -1;
 			for (int i = 0; i < userCount; ++i)

@@ -21,7 +21,9 @@ namespace Straterra
 	}
 	namespace Player
 	{
-		void getResources(long long token, std::string* out, int* code);
+		void getUser(long long token, int userId, std::string* out, int* code);
+		void getResources(long long token, int userId, std::string* out, int* code);
+		void getPlayers(long long token, std::string* out, int* code);
 		void getSelfPlayer(long long token, std::string* out, int* code);
 		void login(std::string* out, int* code, std::string loginInfo);
 		//long long createSessionToken();

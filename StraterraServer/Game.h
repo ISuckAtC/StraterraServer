@@ -68,7 +68,7 @@ namespace Straterra
 		int getUserCount();
 		int getUserOnlineCount();
 		int findUserBySession(long long token);
-		Straterra::Player::User* getUser(int id);
+		Straterra::Player::User* getUserById(int id);
 		std::string getTokenString(long long token);
 		long long getTokenLong(std::string tokenBytes);
 		void addSession(Session* session);
