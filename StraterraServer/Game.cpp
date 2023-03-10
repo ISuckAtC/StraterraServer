@@ -9,16 +9,20 @@
 #include <memory>
 #include <string>
 #include <iomanip>
-
+#include <boost/signals2/signal.hpp>
+#include <boost/bind/bind.hpp>
 
 #include "Game.h"
 #include "Definition.h"
+#include "EventHub.h"
+#include "Player.h"
 
 namespace Straterra
 {
 	namespace Game
 	{
 		using namespace Straterra::Definition;
+		using namespace Straterra::Player;
 
 		static std::vector<User*> users;
 		static std::vector<Session*> sessions;
@@ -28,19 +32,95 @@ namespace Straterra
 		int timeOutSeconds;
 		std::thread updateThread;
 		std::thread slowUpdateThread;
+
+		int getTickInterval()
+		{
+			return tickInterval;
+		}
+		int getTicksPerHour()
+		{
+			return 3600000 / getTickInterval();
+		}
 		
 		void addUser(User* user)
 		{
 			//std::cout << "user added: " << user->name;
 			users.insert(users.begin(), user);
+
+			EventHub::subcribeOnTick(boost::bind(&User::addResources, *user));
 			//std::cout << " | p:" << users[userCount]->name << std::endl;
 			//std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
 			userCount++;
+
+			std::cout << "Added user " << std::to_string(user->userId) << std::endl;
 		}
 		void addSession(Session* session)
 		{
 			sessions.insert(sessions.begin(), session);
 			usersOnline++;
+		}
+
+
+
+		ScheduledEvent::ScheduledEvent(int secondsTotal, int owner, bool runImmediately)
+		{
+			this->secondsTotal = secondsTotal;
+			this->secondsLeft = secondsTotal;
+			this->owner = owner;
+			this->ownerEvents = &(getUser(owner)->activeEvents);
+			if (runImmediately)
+			{
+				std::cout << "Creating scheduled event" << std::endl;
+				auto a = boost::bind(& ScheduledEvent::Tick, this);
+				EventHub::subcribeOnTick(a);
+				this->running = true;
+			}
+			else
+			{
+				this->running = false;
+			}
+			ownerEvents->insert(ownerEvents->begin(), this);
+		}
+
+		void ScheduledEvent::Run()
+		{
+			running = true;
+			EventHub::subcribeOnTick(boost::bind(& ScheduledEvent::Tick, this));
+		}
+
+		void ScheduledEvent::Tick()
+		{
+			std::cout << std::to_string((long)this) << " had Tick called" << std::endl;
+			if (secondsLeft-- == 0) Complete();
+		}
+
+		void ScheduledEvent::Complete()
+		{
+			// unsubcribe to tick event here
+			// 
+			// find iterator for own position and remove it from the vector
+			ownerEvents->erase(std::find(ownerEvents->begin(), ownerEvents->end(), this));
+		}
+
+		ScheduledUnitProductionEvent::ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
+		{
+			this->unitId = unitId;
+			this->amount = amount;
+		}
+
+		void ScheduledUnitProductionEvent::Complete()
+		{
+			ScheduledEvent::Complete();
+			std::vector<ScheduledUnitProductionEvent*> prodEvents;
+			//std::copy_if(ownerEvents->begin(), ownerEvents->end(), prodEvents, [&](ScheduledEvent* e) {
+			//	return ((dynamic_cast<ScheduledUnitProductionEvent*>(e) != nullptr) && !e->running);
+			//	});
+			if (prodEvents.size() > 0)
+			{
+				prodEvents[0]->Run();
+			}
+			getUser(owner)->homeArmy[unitId] += amount;
+			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << getUser(owner)->homeArmy[unitId] << ")" << std::endl;
 		}
 
 		User* getUser(int id)
@@ -53,6 +133,7 @@ namespace Straterra
 					return users[i];
 				}
 			}
+			std::cout << "getUser: user not found (id: " << id << ")" << std::endl;
 			User p;
 			p.userId = -1;
 			return &p;
@@ -123,7 +204,8 @@ namespace Straterra
 			try
 			{
 				// update logic
-				Sleep(tickInterval);
+				EventHub::fireOnTick();
+				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval));
 				update();
 			} catch (std::exception const& e)
 			{
@@ -133,7 +215,7 @@ namespace Straterra
 		void slowUpdate()
 		{
 			// slow update logic
-			Sleep(tickInterval * 100);
+			std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
 			for (int i = 0; i < usersOnline; ++i)
 			{
 				time_t now;
@@ -156,6 +238,7 @@ namespace Straterra
 			// start logic
 			updateThread = std::thread{ update };
 			slowUpdateThread = std::thread{ slowUpdate };
+			std::cout << "Game Started" << std::endl;
 		}
 		
 
@@ -207,10 +290,7 @@ namespace Straterra
 			return deaths;
 		}
 
-		User::~User()
-		{
-			std::cout << "User was destroyed, p" << std::to_string((long)this) << std::endl;
-		}
+		
 
 		Session::Session(int playerId, long long token)
 		{

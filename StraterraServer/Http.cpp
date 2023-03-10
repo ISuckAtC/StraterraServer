@@ -107,7 +107,7 @@ namespace Straterra
 			void create_response()
 			{
 				// target location requested by client
-				std::string target = request_.target();
+				std::string target{ request_.target() };
 				std::cout << "Target: \"" << target << "\"" << std::endl;
 
 				int optionCount = 0;
@@ -154,6 +154,22 @@ namespace Straterra
 					// write content to stream
 					beast::ostream(response_.body())
 						<< _code++;
+				}
+				else if (method == "getResources")
+				{
+					if (optionCount != 1)
+					{
+						// option count mismatch
+					}
+					std::cout << "getResources" << std::endl;
+					std::string out = "";
+					int code = 0;
+
+					Straterra::Player::getResources(Straterra::Game::getTokenLong(options[0]), &out, &code);
+
+					response_.set(http::field::content_type, "json");
+					beast::ostream(response_.body())
+						<< out;
 				}
 				else if (method == "getSelfPlayer")
 				{

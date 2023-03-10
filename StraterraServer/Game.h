@@ -13,28 +13,44 @@
 #include <string>
 
 
+
+
 namespace Straterra
 {
+	namespace Player
+	{
+		class User;
+	}
 	namespace Game
 	{
-		class User
+		int getTickInterval();
+		int getTicksPerHour();
+
+		class ScheduledEvent
 		{
 		public:
-			std::string name;
-			std::string login;
-			int userId;
-			int color;
-			int allianceId;
-			int cityLocation;
-			BYTE cityBuildingSlots[8];
-			BYTE swordLevel;
-			BYTE archerLevel;
-			BYTE cavalryLevel;
-			BYTE spearmanLevel;
-			~User();
-
+			int secondsLeft;
+			int secondsTotal;
+			bool running;
+			int owner;
+			ScheduledEvent(int secondsTotal, int owner, bool runImmediately = true);
+			void Run();
+			void Tick();
+			virtual void Complete();
+		protected:
+			std::vector<ScheduledEvent*>* ownerEvents;
 		private:
 
+		};
+
+
+		class ScheduledUnitProductionEvent : ScheduledEvent
+		{
+		public:
+			int unitId;
+			int amount;
+			ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately = true);
+			void Complete();
 		};
 
 		class Session
@@ -48,15 +64,15 @@ namespace Straterra
 			std::string tokenBytes();
 		};
 
-		User* getUserAt(int index);
+		Straterra::Player::User* getUserAt(int index);
 		int getUserCount();
 		int getUserOnlineCount();
 		int findUserBySession(long long token);
-		User* getUser(int id);
+		Straterra::Player::User* getUser(int id);
 		std::string getTokenString(long long token);
 		long long getTokenLong(std::string tokenBytes);
 		void addSession(Session* session);
-		void addUser(User* user);
+		void addUser(Player::User* user);
 
 		void start(int _tickInterval, int _timeOutSeconds);
 		

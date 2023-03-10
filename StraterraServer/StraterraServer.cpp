@@ -12,9 +12,11 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include "EventHub.h"
 #include "Http.h"
 #include "Definition.h"
 #include "Game.h"
+#include "Player.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -69,6 +71,8 @@ int main(int argc, char** argv)
 
 	Straterra::Game::start(std::stoi(argv[1]), 60000);
 
+	
+
 	int lines = 0;
 	try
 	{
@@ -78,43 +82,112 @@ int main(int argc, char** argv)
 		std::cout << std::endl << "Loading users: ";
 		while (std::getline(data, line))
 		{
+
+			// userId
 			int index = line.find_first_of(';');
 			std::string currentValue = "";
-			Game::User* u = new Game::User();
+			Player::User* u = new Player::User();
 			currentValue = line.substr(0, index);
 			//std::cout << std::endl << currentValue;
 			u->userId = std::stoi(line.substr(0, index));
 
+
+			// login
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
 			//std::cout << std::endl << currentValue;
 			u->login = line.substr(0, index);
 
+
+			// name
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
 			//std::cout << std::endl << currentValue;
 			u->name = line.substr(0, index);
 
+
+			// cityLocation
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
 			//std::cout << std::endl << currentValue;
 			u->cityLocation = std::stoi(line.substr(0, index));
 
+
+			// color
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
 			//std::cout << std::endl << currentValue;
 			u->color = std::stoi(line.substr(0, index));
 
+
+			// allianceId
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
 			//std::cout << std::endl << currentValue;
 			u->allianceId = std::stoi(line.substr(0, index));
 
+			// food
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->food = std::stoi(line.substr(0, index));
+
+			// wood
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->wood = std::stoi(line.substr(0, index));
+
+			// metal
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->metal = std::stoi(line.substr(0, index));
+
+			// order
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->order = std::stoi(line.substr(0, index));
+
+			// foodGeneration
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->foodGeneration = std::stoi(line.substr(0, index));
+
+			// woodGeneration
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->woodGeneration = std::stoi(line.substr(0, index));
+
+			// metalGeneration
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->metalGeneration = std::stoi(line.substr(0, index));
+
+			// orderGeneration
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			currentValue = line.substr(0, index);
+			//std::cout << std::endl << currentValue;
+			u->orderGeneration = std::stoi(line.substr(0, index));
+
+			// cityBuildingSlots
 			for (int i = 0; i < 8; ++i)
 			{
 				line = line.substr(index + 1);
@@ -123,6 +196,11 @@ int main(int argc, char** argv)
 				//std::cout << std::endl << currentValue;
 				u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
 			}
+
+			u->foodMultiplier = 1.;
+			u->woodMultiplier = 1.;
+			u->metalMultiplier = 1.;
+			u->orderMultiplier = 1.;
 
 			std::cout << ".";
 			Game::addUser(u);
@@ -134,6 +212,8 @@ int main(int argc, char** argv)
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
+
+	Game::ScheduledEvent sEvent{ 60, 69, true };
 
 	try
 	{

@@ -10,6 +10,8 @@
 #include <string>
 
 #include "Game.h"
+#include "EventHub.h"
+#include "Player.h"
 
 using namespace Straterra::Game;
 
@@ -17,6 +19,67 @@ namespace Straterra
 {
 	namespace Player
 	{
+		User userFromFile()
+		{
+
+		}
+		User::User()
+		{
+			
+		}
+		int User::getFoodTickValue()
+		{
+			restFood += (int)(foodGeneration * foodMultiplier);
+			int food = restFood / getTicksPerHour();
+			restFood = restFood % getTicksPerHour();
+
+			return food;
+		}
+		int User::getWoodTickValue()
+		{
+			restWood += (int)(woodGeneration * foodMultiplier);
+			int wood = restWood / getTicksPerHour();
+			restWood = restWood % getTicksPerHour();
+
+			return wood;
+		}
+		int User::getMetalTickValue()
+		{
+			restMetal += (int)(metalGeneration * metalMultiplier);
+			int metal = restMetal / getTicksPerHour();
+			restMetal = restMetal % getTicksPerHour();
+
+			return metal;
+		}
+		int User::getOrderTickValue()
+		{
+			restOrder += (int)(orderGeneration * orderMultiplier);
+			int order = restOrder / getTicksPerHour();
+			restOrder = restOrder % getTicksPerHour();
+
+			return order;
+		}
+
+		void User::addResources()
+		{
+			food += getFoodTickValue();
+			wood += getWoodTickValue();
+			metal += getMetalTickValue();
+			order += getOrderTickValue();
+
+			std::cout << "Resources added for user " << userId << " totals are now: " <<
+				std::to_string(food) << " | " <<
+				std::to_string(wood) << " | " <<
+				std::to_string(metal) << " | " <<
+				std::to_string(order) << " | " <<
+				std::endl;
+		}
+
+		User::~User()
+		{
+			std::cout << "User was destroyed, p" << std::to_string((long)this) << std::endl;
+		}
+
 		int createUserId()
 		{
 			int id;
@@ -47,6 +110,25 @@ namespace Straterra
 			u->cityBuildingSlots[0] = 0;
 			u->cityBuildingSlots[1] = 3;
 			u->userId = createUserId();
+
+			u->food = 1000;
+			u->wood = 1000;
+			u->metal = 500;
+			u->order = 50;
+
+			u->foodGeneration = 0;
+			u->woodGeneration = 0;
+			u->metalGeneration = 0;
+			u->orderGeneration = 0;
+			u->restFood = 0;
+			u->restWood = 0;
+			u->restMetal = 0;
+			u->restOrder = 0;
+			u->foodMultiplier = 1.;
+			u->woodMultiplier = 1.;
+			u->metalMultiplier = 1.;
+			u->orderMultiplier = 1.;
+
 			addUser(u);
 		}
 		void login(std::string* out, int* code, std::string loginInfo)
@@ -86,6 +168,26 @@ namespace Straterra
 			*code = 2;
 			*out = "No player with that login";
 		}
+		void getResources(long long token, std::string* out, int* code)
+		{
+			int id = findUserBySession(token);
+			if (id == -1)
+			{
+				*code = 2;
+				*out = "No session found";
+				return;
+			}
+			User* user = getUser(id);
+			std::ostringstream oss;
+			oss << "{" <<
+				"\"food\":\"" << std::to_string(user->food) << "\"," <<
+				"\"wood\":\"" << std::to_string(user->wood) << "\"," <<
+				"\"metal\":\"" << std::to_string(user->metal) << "\"," <<
+				"\"order\":\"" << std::to_string(user->order) << "\"," <<
+				"}";
+			*out = oss.str();
+			*code = 0;
+		}
 		void getSelfPlayer(long long token, std::string* out, int* code)
 		{
 			std::cout << "getSelfPlayer m" << std::endl;
@@ -96,7 +198,7 @@ namespace Straterra
 				*out = "No session found";
 				return;
 			}
-			Straterra::Game::User* user = getUser(id);
+			User* user = getUser(id);
 			std::string playerName = user->name;
 			int color = user->color;
 			int alliance = user->allianceId;
