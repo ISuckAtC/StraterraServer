@@ -67,6 +67,8 @@ namespace Straterra
 			metal += getMetalTickValue();
 			order += getOrderTickValue();
 
+
+			if (userId == 69) std::cout << food << std::endl;
 			//std::cout << "Resources added for user " << userId << " totals are now: " <<
 			//	std::to_string(food) << " | " <<
 			//	std::to_string(wood) << " | " <<
