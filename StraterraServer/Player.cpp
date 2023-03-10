@@ -205,7 +205,7 @@ namespace Straterra
 			}
 			
 			std::ostringstream oss;
-			oss << "{\"players\":[";
+			oss << "{[";
 			for (int i = 0; i < getUserCount(); ++i)
 			{
 				User* user = getUserAt(i);
