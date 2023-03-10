@@ -68,7 +68,7 @@ namespace Straterra
 			order += getOrderTickValue();
 
 
-			if (userId == 69) std::cout << food << std::endl;
+			if (userId == 69) std::cout << std::to_string((long)this) << "|" << food << std::endl;
 			//std::cout << "Resources added for user " << userId << " totals are now: " <<
 			//	std::to_string(food) << " | " <<
 			//	std::to_string(wood) << " | " <<
@@ -180,7 +180,7 @@ namespace Straterra
 				return;
 			}
 			User* user = getUserById(userId);
-			std::cout << "getResources VALUE: id: " << std::to_string(user->userId) << std::to_string(user->food) << std::endl;
+			std::cout << "getResources VALUE: id: " << std::to_string((long)user) << "|" << std::to_string(user->userId) << "|" << std::to_string(user->food) << std::endl;
 			if (user->userId == -1)
 			{
 				*out = "{\"error\":\"No user with that id\"}";
