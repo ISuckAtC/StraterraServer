@@ -213,7 +213,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	Game::ScheduledEvent sEvent{ 60, 69, true };
+	//Game::ScheduledEvent sEvent{ 60, 69, true };
 
 	try
 	{
