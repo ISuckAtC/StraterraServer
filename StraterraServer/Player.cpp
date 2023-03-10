@@ -67,12 +67,12 @@ namespace Straterra
 			metal += getMetalTickValue();
 			order += getOrderTickValue();
 
-			std::cout << "Resources added for user " << userId << " totals are now: " <<
-				std::to_string(food) << " | " <<
-				std::to_string(wood) << " | " <<
-				std::to_string(metal) << " | " <<
-				std::to_string(order) << " | " <<
-				std::endl;
+			//std::cout << "Resources added for user " << userId << " totals are now: " <<
+			//	std::to_string(food) << " | " <<
+			//	std::to_string(wood) << " | " <<
+			//	std::to_string(metal) << " | " <<
+			//	std::to_string(order) << " | " <<
+			//	std::endl;
 		}
 
 		User::~User()
