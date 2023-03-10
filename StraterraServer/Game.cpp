@@ -220,7 +220,7 @@ namespace Straterra
 			{
 				time_t now;
 				time(&now);
-				if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
+				if (std::difftime(now, sessions[i]->lastSeen) * 1000 > timeOutSeconds)
 				{
 					sessions.erase(sessions.begin() + i);
 					usersOnline--;
