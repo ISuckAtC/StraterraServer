@@ -67,7 +67,7 @@ namespace Straterra
 			this->secondsTotal = secondsTotal;
 			this->secondsLeft = secondsTotal;
 			this->owner = owner;
-			this->ownerEvents = &(getUser(owner)->activeEvents);
+			this->ownerEvents = &(getUserById(owner)->activeEvents);
 			if (runImmediately)
 			{
 				std::cout << "Creating scheduled event" << std::endl;
@@ -119,8 +119,8 @@ namespace Straterra
 			{
 				prodEvents[0]->Run();
 			}
-			getUser(owner)->homeArmy[unitId] += amount;
-			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << getUser(owner)->homeArmy[unitId] << ")" << std::endl;
+			getUserById(owner)->homeArmy[unitId] += amount;
+			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << getUserById(owner)->homeArmy[unitId] << ")" << std::endl;
 		}
 
 		User* getUserById(int id)
