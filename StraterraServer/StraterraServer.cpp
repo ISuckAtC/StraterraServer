@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 			std::string currentValue = "";
 			Player::User* u = new Player::User();
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->userId = std::stoi(line.substr(0, index));
 
 
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->cityLocation = std::stoi(line.substr(0, index));
 
 
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->color = std::stoi(line.substr(0, index));
 
 
@@ -128,63 +128,63 @@ int main(int argc, char** argv)
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->allianceId = std::stoi(line.substr(0, index));
 
 			// food
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->food = std::stoi(line.substr(0, index));
 
 			// wood
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->wood = std::stoi(line.substr(0, index));
 
 			// metal
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->metal = std::stoi(line.substr(0, index));
 
 			// order
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->order = std::stoi(line.substr(0, index));
 
 			// foodGeneration
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->foodGeneration = std::stoi(line.substr(0, index));
 
 			// woodGeneration
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->woodGeneration = std::stoi(line.substr(0, index));
 
 			// metalGeneration
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->metalGeneration = std::stoi(line.substr(0, index));
 
 			// orderGeneration
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			currentValue = line.substr(0, index);
-			//std::cout << std::endl << currentValue;
+			std::cout << std::endl << currentValue;
 			u->orderGeneration = std::stoi(line.substr(0, index));
 
 			// cityBuildingSlots
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				//std::cout << std::endl << currentValue;
+				std::cout << std::endl << currentValue;
 				u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
 			}
 
