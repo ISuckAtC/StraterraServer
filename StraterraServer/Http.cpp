@@ -152,13 +152,13 @@ namespace Straterra
 				if (method != "login" && method != "createPlayer") token = Straterra::Game::getTokenLong(options[0]);
 				if (method == "getResources")
 					Straterra::Player::getResources(token, std::stoi(options[1]), &out, &code);
-				else if (method == "getSelfPlayer")
+				else if (method == "getSelfUser")
 					Straterra::Player::getSelfPlayer(token, &out, &code);
 				else if (method == "createPlayer")
 					Straterra::Player::createUser(options[0], options[1]);
 				else if (method == "login")
 					Straterra::Player::login(&out, &code, options[0]);
-				else if (method == "getPlayers")
+				else if (method == "getUsers")
 					Straterra::Player::getPlayers(token, &out, &code);
 				else if (method == "getUser")
 					Straterra::Player::getUser(token, std::stoi(options[1]), &out, &code);
