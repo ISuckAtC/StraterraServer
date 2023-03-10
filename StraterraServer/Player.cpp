@@ -230,7 +230,7 @@ namespace Straterra
 				*out = "{\"error\":\"Session invalid\"}";
 				return;
 			}
-			User* user = getUserAt(userId);
+			User* user = getUserById(userId);
 			if (user->userId == -1)
 			{
 				*code = 3;
