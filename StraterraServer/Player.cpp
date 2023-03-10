@@ -260,7 +260,7 @@ namespace Straterra
 		}
 		void getSelfPlayer(long long token, std::string* out, int* code)
 		{
-			std::cout << "getSelfPlayer m" << std::endl;
+			//std::cout << "getSelfPlayer m" << std::endl;
 			int id = findUserBySession(token);
 			if (id == -1)
 			{

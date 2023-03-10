@@ -148,8 +148,8 @@ namespace Straterra
 		int findUserBySession(long long token)
 		{
 			int id = -1;
-			std::cout << "usersOnline: " << std::to_string(usersOnline) << std::endl;
-			std::cout << token << std::endl;
+			//std::cout << "usersOnline: " << std::to_string(usersOnline) << std::endl;
+			//std::cout << token << std::endl;
 			for (int i = 0; i < usersOnline; ++i)
 			{
 				std::cout << sessions[i]->token << std::endl;
@@ -172,17 +172,17 @@ namespace Straterra
 		std::string getTokenString(long long token)
 		{
 			return std::to_string(token);
-			std::cout << "getTokenString: " << std::to_string(token) << std::endl;
+			//std::cout << "getTokenString: " << std::to_string(token) << std::endl;
 			std::stringstream ss;
 			ss << std::hex;
 
 			for (int i = 0; i < sizeof(long long); ++i)
 			{
 				uint8_t byte = *((uint8_t*)(&token + i));
-				std::cout << "|" << std::to_string(byte);
+				//std::cout << "|" << std::to_string(byte);
 				ss << std::setw(2) << std::setfill('0') << (int)byte;
 			}
-			std::cout << std::endl << ss.str() << std::endl;
+			//std::cout << std::endl << ss.str() << std::endl;
 			return ss.str();
 		}	
 

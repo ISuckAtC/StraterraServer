@@ -108,7 +108,7 @@ namespace Straterra
 			{
 				// target location requested by client
 				std::string target{ request_.target() };
-				std::cout << "Target: \"" << target << "\"" << std::endl;
+				//std::cout << "Target: \"" << target << "\"" << std::endl;
 
 				int optionCount = 0;
 				std::string options[8];
