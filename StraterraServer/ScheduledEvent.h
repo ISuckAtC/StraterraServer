@@ -17,6 +17,7 @@ namespace Straterra
 {
 	namespace ScheduledEvents
 	{
+		int* getTestP();
 		enum EventType
 		{
 			GENERIC = 0,

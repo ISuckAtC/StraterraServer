@@ -22,11 +22,16 @@ namespace Straterra
 {
 	namespace ScheduledEvents
 	{
-
+		int* testP = 0;
+		int* getTestP()
+		{
+			return testP;
+		}
 		ScheduledEvent::ScheduledEvent(int secondsTotal, int owner, bool runImmediately)
 		{
 			this->secondsTotal = secondsTotal;
 			this->secondsLeft = secondsTotal;
+			testP = &(this->secondsLeft);
 			this->owner = owner;
 			this->ownerEvents = &(Game::getUserById(owner)->activeEvents);
 			this->type = GENERIC;
@@ -53,7 +58,6 @@ namespace Straterra
 		void ScheduledEvent::Tick()
 		{
 			std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << secondsLeft << ")" << std::endl;
-			if (secondsLeft > 1000 || secondsLeft < -1000) secondsLeft = 50;
 			if (secondsLeft-- == 0) Complete();
 		}
 
@@ -71,7 +75,7 @@ namespace Straterra
 			this->unitId = unitId;
 			this->amount = amount;
 			this->type = UNITPRODUCTION;
-			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIME: " << secondsLeft << std::endl;
+			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIME: " << *testP << std::endl;
 		}
 
 		void ScheduledUnitProductionEvent::Complete()

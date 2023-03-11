@@ -11,6 +11,7 @@
 #include <boost/signals2/signal.hpp>
 
 #include "Game.h"
+#include "ScheduledEvent.h"
 
 namespace Straterra
 {
@@ -27,6 +28,7 @@ namespace Straterra
 		}
 		void fireOnTick()
 		{
+			std::cout << "TESTP: " << *(ScheduledEvents::getTestP()) << std::endl;
 			onTick();
 		}
 	}
