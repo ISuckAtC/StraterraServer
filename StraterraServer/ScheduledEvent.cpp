@@ -82,7 +82,7 @@ namespace Straterra
 			this->unitId = unitId;
 			this->amount = amount;
 			this->type = UNITPRODUCTION;
-			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIME: " << secondsLeft << std::endl;
+			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIMEPOINTER: " << (long)(&(this->secondsLeft)) << "| UNITPRODTIME: " << this->secondsLeft << std::endl;
 		}
 
 		void ScheduledUnitProductionEvent::Complete()
