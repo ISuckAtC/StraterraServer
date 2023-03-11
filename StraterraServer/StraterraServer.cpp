@@ -75,7 +75,9 @@ int main(int argc, char** argv)
 
 	Straterra::Game::start(std::stoi(argv[1]), 60000);
 
-	ScheduledEvents::ScheduledEvent a{ 10, 0 };
+	ScheduledEvents::ScheduledEvent a{ 10, 69 };
+
+	std::cout << "JASHFJHSAF: " << a.secondsLeft << std::endl;
 
 	int lines = 0;
 	try

@@ -51,7 +51,7 @@ namespace Straterra
 			{
 				this->running = false;
 			}
-			ownerEvents->insert(ownerEvents->begin(), this);
+			this->ownerEvents->insert(this->ownerEvents->begin(), this);
 		}
 
 		void ScheduledEvent::Run()
