@@ -57,7 +57,7 @@ namespace Straterra
 
 		ScheduledEvent::~ScheduledEvent()
 		{
-			std::cout << "SCHEDULEDEVENT DECONSTRUCTED" << std::endl;
+			//std::cout << "SCHEDULEDEVENT DECONSTRUCTED" << std::endl;
 		}
 
 		void ScheduledEvent::Run()
@@ -68,7 +68,7 @@ namespace Straterra
 
 		void ScheduledEvent::Tick()
 		{
-			std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << this->secondsLeft << ")" << std::endl;
+			//std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << this->secondsLeft << ")" << std::endl;
 			//std::cout << "data on tick: " << this->owner << " | " << this->secondsTotal << " | " << this->secondsLeft << " | " << this->type << std::endl;
 			if (secondsLeft-- == 0) Complete();
 		}
