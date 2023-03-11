@@ -56,6 +56,11 @@ namespace Straterra
 			std::cout << "CONSTRUCTOR DONE" << std::endl;
 		}
 
+		ScheduledEvent::~ScheduledEvent()
+		{
+			std::cout << "SCHEDULEDEVENT DECONSTRUCTED" << std::endl;
+		}
+
 		void ScheduledEvent::Run()
 		{
 			running = true;

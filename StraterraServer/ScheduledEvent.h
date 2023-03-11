@@ -34,6 +34,7 @@ namespace Straterra
 			bool running;
 			int owner;
 			ScheduledEvent(int secondsTotal, int owner, bool runImmediately = true);
+			~ScheduledEvent();
 			void Run();
 			void Tick();
 			virtual void Complete();
