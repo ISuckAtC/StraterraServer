@@ -18,6 +18,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "Map.h"
+#include "ScheduledEvent.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -74,7 +75,7 @@ int main(int argc, char** argv)
 
 	Straterra::Game::start(std::stoi(argv[1]), 60000);
 
-	
+	ScheduledEvents::ScheduledEvent a{ 10, 0 };
 
 	int lines = 0;
 	try
