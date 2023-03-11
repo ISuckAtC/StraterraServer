@@ -44,8 +44,7 @@ namespace Straterra
 			if (runImmediately)
 			{
 				std::cout << "Creating scheduled event" << std::endl;
-				auto a = boost::bind(&ScheduledEvent::Tick, this);
-				EventHub::subcribeOnTick(a);
+				Run();
 				this->running = true;
 			}
 			else
