@@ -17,8 +17,8 @@ namespace Straterra
 {
 	namespace EventHub
 	{
-		void subcribeOnTick(const boost::signals2::slot<void(), boost::function<void()>>& f);
-		void unsubcribeOnTick(void* f);
+		boost::signals2::connection subcribeOnTick(const boost::signals2::slot<void(), boost::function<void()>>& f);
+		void unsubcribeOnTick(boost::signals2::connection* c);
 		void fireOnTick();
 	}
 }

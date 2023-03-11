@@ -26,33 +26,6 @@ namespace Straterra
 		int getTickInterval();
 		int getTicksPerHour();
 
-		class ScheduledEvent
-		{
-		public:
-			int secondsLeft;
-			int secondsTotal;
-			bool running;
-			int owner;
-			ScheduledEvent(int secondsTotal, int owner, bool runImmediately = true);
-			void Run();
-			void Tick();
-			virtual void Complete();
-		protected:
-			std::vector<ScheduledEvent*>* ownerEvents;
-		private:
-
-		};
-
-
-		class ScheduledUnitProductionEvent : ScheduledEvent
-		{
-		public:
-			int unitId;
-			int amount;
-			ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately = true);
-			void Complete();
-		};
-
 		class Session
 		{
 		public:
@@ -69,10 +42,13 @@ namespace Straterra
 		int getUserOnlineCount();
 		int findUserBySession(long long token);
 		Straterra::Player::User* getUserById(int id);
+		Straterra::Player::User* getUserBySession(long long token);
 		std::string getTokenString(long long token);
 		long long getTokenLong(std::string tokenBytes);
 		void addSession(Session* session);
 		void addUser(Player::User* user);
+		int createUserId();
+		long long createSessionToken();
 
 		void start(int _tickInterval, int _timeOutSeconds);
 		
@@ -118,4 +94,5 @@ namespace Straterra
 		bool Fight(std::vector<Group>* unitsLeft, std::string* output, std::vector<Group*> defender, std::vector<Group*> attacker, bool verbose = false);
 	}
 }
+
 #endif

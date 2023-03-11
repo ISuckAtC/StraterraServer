@@ -15,20 +15,12 @@
 
 namespace Straterra
 {
-	namespace Game
+	namespace ScheduledEvents
 	{
 		class ScheduledEvent;
 	}
 	namespace Player
 	{
-		void getUser(long long token, int userId, std::string* out, int* code);
-		void getResources(long long token, int userId, std::string* out, int* code);
-		void getPlayers(long long token, std::string* out, int* code);
-		void getSelfPlayer(long long token, std::string* out, int* code);
-		void login(std::string* out, int* code, std::string loginInfo);
-		//long long createSessionToken();
-		void createUser(std::string name, std::string loginInfo);
-
 		class User
 		{
 		public:
@@ -62,7 +54,7 @@ namespace Straterra
 			int orderGeneration;
 			float orderMultiplier;
 			int restOrder;
-			std::vector<Straterra::Game::ScheduledEvent*> activeEvents;
+			std::vector<Straterra::ScheduledEvents::ScheduledEvent*> activeEvents;
 			~User();
 			User();
 

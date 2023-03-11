@@ -33,6 +33,12 @@
     <ClCompile Include="EventHub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ScheduledEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserMethods.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Http.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventHub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScheduledEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

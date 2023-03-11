@@ -16,6 +16,39 @@ namespace Straterra
 {
 	namespace Definition
 	{
+		enum TOWNBUILDINGTYPE
+		{
+			TOWNHALL = 0,
+			BARRACKS = 1,
+			SMITHY = 2,
+			ACADEMY = 3,
+			TEMPLE = 4,
+			WORKSHOP = 5,
+			WAREHOUSE = 6,
+			WALL = 7,
+			MARKETPLACE = 8
+		};
+
+		struct TownBuilding
+		{
+			int id;
+			TOWNBUILDINGTYPE type;
+			int buildingTime;
+			std::string name;
+			int health;
+			BYTE level;
+			BYTE maxLevel;
+			int foodCost;
+			int woodCost;
+			int metalCost;
+			int orderCost;
+		};
+
+		TownBuilding getTownBuildingDefinition(int id);
+
+		void DefineTownBuildings();
+
+
 		enum UNITTYPE
 		{
 			TYPELESS = 0,

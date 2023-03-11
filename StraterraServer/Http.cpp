@@ -14,6 +14,7 @@
 
 #include "Player.h"
 #include "Game.h"
+#include "UserMethods.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -161,17 +162,19 @@ namespace Straterra
 					}
 				}
 				if (method == "getResources")
-					Straterra::Player::getResources(token, std::stoi(options[1]), &out, &code);
+					UserMethods::getResources(token, std::stoi(options[1]), &out, &code);
 				else if (method == "getSelfUser")
-					Straterra::Player::getSelfPlayer(token, &out, &code);
+					UserMethods::getSelfPlayer(token, &out, &code);
 				else if (method == "createPlayer")
-					Straterra::Player::createUser(options[0], options[1]);
+					UserMethods::createUser(options[0], options[1]);
 				else if (method == "login")
-					Straterra::Player::login(&out, &code, options[0]);
+					UserMethods::login(&out, &code, options[0]);
 				else if (method == "getUsers")
-					Straterra::Player::getPlayers(token, &out, &code);
+					UserMethods::getPlayers(token, &out, &code);
 				else if (method == "getUser")
-					Straterra::Player::getUser(token, std::stoi(options[1]), &out, &code);
+					UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
+				else if (method == "createBuilding")
+					UserMethods::createBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
 				else
 					out = "unknown method";
 				beast::ostream(response_.body()) << out;

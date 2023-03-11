@@ -33,6 +33,25 @@ namespace Straterra
 		std::thread updateThread;
 		std::thread slowUpdateThread;
 
+		int createUserId()
+		{
+			int id;
+			do
+			{
+				id = rand();
+			} while (getUserById(id)->userId != -1);
+			return id;
+		}
+		long long createSessionToken()
+		{
+			long long token = 0;
+			do
+			{
+				token = rand();
+			} while (findUserBySession(token) != -1);
+			return token;
+		}
+
 		int getTickInterval()
 		{
 			return tickInterval;
@@ -62,66 +81,7 @@ namespace Straterra
 
 
 
-		ScheduledEvent::ScheduledEvent(int secondsTotal, int owner, bool runImmediately)
-		{
-			this->secondsTotal = secondsTotal;
-			this->secondsLeft = secondsTotal;
-			this->owner = owner;
-			this->ownerEvents = &(getUserById(owner)->activeEvents);
-			if (runImmediately)
-			{
-				std::cout << "Creating scheduled event" << std::endl;
-				auto a = boost::bind(& ScheduledEvent::Tick, this);
-				EventHub::subcribeOnTick(a);
-				this->running = true;
-			}
-			else
-			{
-				this->running = false;
-			}
-			ownerEvents->insert(ownerEvents->begin(), this);
-		}
-
-		void ScheduledEvent::Run()
-		{
-			running = true;
-			EventHub::subcribeOnTick(boost::bind(& ScheduledEvent::Tick, this));
-		}
-
-		void ScheduledEvent::Tick()
-		{
-			std::cout << std::to_string((long)this) << " had Tick called" << std::endl;
-			if (secondsLeft-- == 0) Complete();
-		}
-
-		void ScheduledEvent::Complete()
-		{
-			// unsubcribe to tick event here
-			// 
-			// find iterator for own position and remove it from the vector
-			ownerEvents->erase(std::find(ownerEvents->begin(), ownerEvents->end(), this));
-		}
-
-		ScheduledUnitProductionEvent::ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
-		{
-			this->unitId = unitId;
-			this->amount = amount;
-		}
-
-		void ScheduledUnitProductionEvent::Complete()
-		{
-			ScheduledEvent::Complete();
-			std::vector<ScheduledUnitProductionEvent*> prodEvents;
-			//std::copy_if(ownerEvents->begin(), ownerEvents->end(), prodEvents, [&](ScheduledEvent* e) {
-			//	return ((dynamic_cast<ScheduledUnitProductionEvent*>(e) != nullptr) && !e->running);
-			//	});
-			if (prodEvents.size() > 0)
-			{
-				prodEvents[0]->Run();
-			}
-			getUserById(owner)->homeArmy[unitId] += amount;
-			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << getUserById(owner)->homeArmy[unitId] << ")" << std::endl;
-		}
+		
 
 		User* getUserById(int id)
 		{
@@ -143,6 +103,26 @@ namespace Straterra
 		{
 			//std::cout << "getUserAt: " << std::to_string((long)users[index]) << std::endl;
 			return users[index];
+		}
+
+		User* getUserBySession(long long token)
+		{
+			int id = -1;
+			for (int i = 0; i < usersOnline; ++i)
+			{
+				if (sessions[i]->token == token)
+				{
+					time_t now;
+					time(&now);
+					sessions[i]->lastSeen = now;
+					id = sessions[i]->playerId;
+					return getUserById(sessions[i]->playerId);
+				}
+			}
+			User nouser;
+			nouser.userId = -1;
+			User* nouserp = &nouser;
+			return nouserp;
 		}
 
 		int findUserBySession(long long token)
