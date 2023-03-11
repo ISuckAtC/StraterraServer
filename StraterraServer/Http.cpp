@@ -107,84 +107,93 @@ namespace Straterra
 
 			void create_response()
 			{
-				// target location requested by client
-				std::string target{ request_.target() };
-				//std::cout << "Target: \"" << target << "\"" << std::endl;
-
-				int optionCount = 0;
-				std::string options[8];
-
-				int queryIndex = target.find_first_of('?', 0);
-				std::string method;
-				if (queryIndex != std::string::npos)
-				{
-					method = target.substr(1, queryIndex - 1);
-					int currentIndex = queryIndex + 1;
-
-					int andIndex = target.find_first_of('&', currentIndex);
-
-					while (andIndex != std::string::npos)
-					{
-						options[optionCount] = target.substr(currentIndex, andIndex - currentIndex);
-						optionCount++;
-						currentIndex = andIndex + 1;
-						andIndex = target.find_first_of('&', currentIndex);
-					}
-
-					options[optionCount] = target.substr(currentIndex, target.find_first_of('\0'));
-					optionCount++;
-				}
-				else
-				{
-					method = target.substr(1);
-				}
-
-				std::cout << "Method: \"" << method << "\"" << std::endl;
-
-				//for (int i = 0; i < optionCount; ++i)
-				//{
-				//	std::cout << options[i] << std::endl;
-				//}
-
-				response_.set(http::field::content_type, "json");
 				std::string out = "";
 				int code = 0;
-				long long token = 0;
-				if (method != "login" && method != "createPlayer")
+				try
 				{
-					try
+					// target location requested by client
+					std::string target{ request_.target() };
+					//std::cout << "Target: \"" << target << "\"" << std::endl;
+
+					int optionCount = 0;
+					std::string options[8];
+
+					int queryIndex = target.find_first_of('?', 0);
+					std::string method;
+					if (queryIndex != std::string::npos)
 					{
-						token = Straterra::Game::getTokenLong(options[0]);
+						method = target.substr(1, queryIndex - 1);
+						int currentIndex = queryIndex + 1;
+
+						int andIndex = target.find_first_of('&', currentIndex);
+
+						while (andIndex != std::string::npos)
+						{
+							options[optionCount] = target.substr(currentIndex, andIndex - currentIndex);
+							optionCount++;
+							currentIndex = andIndex + 1;
+							andIndex = target.find_first_of('&', currentIndex);
+						}
+
+						options[optionCount] = target.substr(currentIndex, target.find_first_of('\0'));
+						optionCount++;
 					}
-					catch (std::exception const& e)
+					else
 					{
-						std::cerr << e.what() << std::endl;
+						method = target.substr(1);
 					}
+
+					std::cout << "Method: \"" << method << "\"" << std::endl;
+
+					//for (int i = 0; i < optionCount; ++i)
+					//{
+					//	std::cout << options[i] << std::endl;
+					//}
+
+					response_.set(http::field::content_type, "json");
+					
+					long long token = 0;
+					if (method != "login" && method != "createPlayer")
+					{
+						try
+						{
+							token = Straterra::Game::getTokenLong(options[0]);
+						}
+						catch (std::exception const& e)
+						{
+							std::cerr << e.what() << std::endl;
+						}
+					}
+					if (method == "getResources")
+						UserMethods::getResources(token, std::stoi(options[1]), &out, &code);
+					else if (method == "getSelfUser")
+						UserMethods::getSelfPlayer(token, &out, &code);
+					else if (method == "createPlayer")
+						UserMethods::createUser(options[0], options[1]);
+					else if (method == "login")
+						UserMethods::login(&out, &code, options[0]);
+					else if (method == "getUsers")
+						UserMethods::getPlayers(token, &out, &code);
+					else if (method == "getUser")
+						UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
+					else if (method == "createTownBuilding")
+						UserMethods::createTownBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+					else if (method == "getScheduledEvents")
+						UserMethods::getScheduledEvents(token, &out, &code);
+					else if (method == "createUnits")
+						UserMethods::createUnits(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+					else if (method == "createMapBuilding")
+						UserMethods::createMapBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+					else if (method == "getHomeUnits")
+						UserMethods::getHomeUnits(token, &out, &code);
+					else
+						out = "unknown method";
 				}
-				if (method == "getResources")
-					UserMethods::getResources(token, std::stoi(options[1]), &out, &code);
-				else if (method == "getSelfUser")
-					UserMethods::getSelfPlayer(token, &out, &code);
-				else if (method == "createPlayer")
-					UserMethods::createUser(options[0], options[1]);
-				else if (method == "login")
-					UserMethods::login(&out, &code, options[0]);
-				else if (method == "getUsers")
-					UserMethods::getPlayers(token, &out, &code);
-				else if (method == "getUser")
-					UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
-				else if (method == "createTownBuilding")
-					UserMethods::createTownBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
-				else if (method == "getScheduledEvents")
-					UserMethods::getScheduledEvents(token, &out, &code);
-				else if (method == "createUnits")
-					UserMethods::createUnits(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
-				else if (method == "createMapBuilding")
-					UserMethods::createMapBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
-				else if (method == "getHomeUnits")
-					UserMethods::getHomeUnits(token, &out, &code);
-				else
-					out = "unknown method";
+				catch (std::exception& e)
+				{
+					std::cout << e.what() << std::endl;
+					out = "error";
+				}
 				beast::ostream(response_.body()) << out;
 			}
 

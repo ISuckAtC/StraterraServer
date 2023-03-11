@@ -194,6 +194,13 @@ namespace Straterra
 
 			TownBuilding townBuilding = getTownBuildingDefinition(buildingId);
 
+			if (user->cityBuildingSlots[buildingSlot] != 255)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
+				*code = 4;
+				return;
+			}
+
 			if (townBuilding.foodCost > user->food ||
 				townBuilding.woodCost > user->wood ||
 				townBuilding.metalCost > user->metal ||
