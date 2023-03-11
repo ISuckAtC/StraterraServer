@@ -81,14 +81,14 @@ namespace Straterra
 				case UNITPRODUCTION:
 				{
 					ScheduledUnitProductionEvent* uProdEvent = (ScheduledUnitProductionEvent*)(user->activeEvents[i]);
-					oss << "\"unitId\":\"" << uProdEvent->unitId << "\"," <<
+					oss << ",\"unitId\":\"" << uProdEvent->unitId << "\"," <<
 						"\"amount\":\"" << uProdEvent->amount << "\"";
 					break;
 				}
 				case TOWNBUILDING:
 				{
 					ScheduledTownBuildingEvent* bEvent = (ScheduledTownBuildingEvent*)(user->activeEvents[i]);
-					oss << "\"buildingId\":\"" << bEvent->buildingId << "\"," <<
+					oss << ",\"buildingId\":\"" << bEvent->buildingId << "\"," <<
 						"\"buildingSlot\":\"" << bEvent->buildingSlot << "\"";
 					break;
 				}
