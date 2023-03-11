@@ -25,6 +25,11 @@ namespace Straterra
 		int* testP = 0;
 		int* getTestP()
 		{
+			if (testP == 0)
+			{
+				int a = 99999;
+				return &a;
+			}
 			return testP;
 		}
 		ScheduledEvent::ScheduledEvent(int secondsTotal, int owner, bool runImmediately)
