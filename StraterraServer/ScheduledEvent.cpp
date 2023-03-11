@@ -63,7 +63,7 @@ namespace Straterra
 
 		void ScheduledEvent::Tick()
 		{
-			std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << secondsLeft << ")" << std::endl;
+			std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << this->secondsLeft << ")" << std::endl;
 			if (secondsLeft-- == 0) Complete();
 		}
 
