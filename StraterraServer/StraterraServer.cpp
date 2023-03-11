@@ -223,7 +223,7 @@ int main(int argc, char** argv)
 		Map::Tile* testTile = Map::getTile(8888);
 		std::cout << "TESTTILE: " << testTile->id << " | " <<
 			testTile->owner << " | " <<
-			testTile->building << " | " <<
+			std::to_string(testTile->building) << " | " <<
 			testTile->travelCost << " | " <<
 			testTile->foodAmount << std::endl;
 

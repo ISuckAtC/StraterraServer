@@ -16,6 +16,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "EventHub.h"
+#include "Map.h"
 
 namespace Straterra
 {
@@ -95,6 +96,20 @@ namespace Straterra
 			ScheduledEvent::Complete();
 			Player::User* user = Game::getUserById(owner);
 			user->cityBuildingSlots[buildingSlot] = buildingId;
+		}
+
+		ScheduledMapBuildingEvent::ScheduledMapBuildingEvent(int secondsTotal, int buildingId, int position, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
+		{
+			this->buildingId = buildingId;
+			this->position = position;
+			this->type = MAPBUILDING;
+		}
+		void ScheduledMapBuildingEvent::Complete()
+		{
+			ScheduledEvent::Complete();
+			Map::Tile* tile = Map::getTile(position);
+
+			tile->building = buildingId;
 		}
 	}
 }

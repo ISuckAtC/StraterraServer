@@ -173,10 +173,16 @@ namespace Straterra
 					UserMethods::getPlayers(token, &out, &code);
 				else if (method == "getUser")
 					UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
-				else if (method == "createBuilding")
-					UserMethods::createBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+				else if (method == "createTownBuilding")
+					UserMethods::createTownBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
 				else if (method == "getScheduledEvents")
 					UserMethods::getScheduledEvents(token, &out, &code);
+				else if (method == "createUnits")
+					UserMethods::createUnits(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+				else if (method == "createMapBuilding")
+					UserMethods::createMapBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+				else if (method == "getHomeUnits")
+					UserMethods::getHomeUnits(token, &out, &code);
 				else
 					out = "unknown method";
 				beast::ostream(response_.body()) << out;

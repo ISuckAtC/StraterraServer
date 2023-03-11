@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "Definition.h"
 #include "ScheduledEvent.h"
+#include "Map.h"
 
 using namespace Straterra::Game;
 using namespace Straterra::Player;
@@ -27,6 +28,36 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void getHomeUnits(long long token, std::string* out, int* code)
+		{
+			User* user = getUserBySession(token);
+			if (user->userId == -1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+				*code = 2;
+				return;
+			}
+
+			std::ostringstream oss;
+			oss << "{\"units\":[";
+			int actualUnits = 0;
+			for (int i = 0; i < 256; ++i)
+			{
+				int amount = user->homeArmy[i];
+				if (amount > 0)
+				{
+					if (actualUnits > 0) oss << ",";
+					actualUnits++;
+					oss << "{\"unitId\":\"" << i << "\"," <<
+						"\"amount\":\"" << amount << "\"";
+					oss << "}";
+				}
+			}
+			oss << "]}";
+
+			*out = oss.str();
+			*code = 0;
+		}
 		void getScheduledEvents(long long token, std::string* out, int* code)
 		{
 			User* user = getUserBySession(token);
@@ -63,13 +94,90 @@ namespace Straterra
 				}
 				}
 				oss << "}";
+				if (i < user->activeEvents.size() - 1) oss << ",";
 			}
 			oss << "]}";
 
 			*out = oss.str();
 			*code = 0;
 		}
-		void createBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code)
+		void createMapBuilding(long long token, int buildingId, int position, std::string* out, int* code)
+		{
+			User* user = getUserBySession(token);
+			if (user->userId == -1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+				*code = 2;
+				return;
+			}
+
+			if (Map::getTile(position)->building != 0)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
+				*code = 4;
+				return;
+			}
+
+			MapBuilding mapBuilding = getMapBuildingDefinition(buildingId);
+
+			if (mapBuilding.foodCost > user->food ||
+				mapBuilding.woodCost > user->wood ||
+				mapBuilding.metalCost > user->metal ||
+				mapBuilding.orderCost > user->order)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Not enough resources\"}";
+				*code = 3;
+				return;
+			}
+
+			user->food -= mapBuilding.foodCost;
+			user->wood -= mapBuilding.woodCost;
+			user->metal -= mapBuilding.metalCost;
+			user->order -= mapBuilding.orderCost;
+
+			ScheduledMapBuildingEvent buildEvent{ mapBuilding.buildingTime, mapBuilding.id, position, user->userId };
+
+			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+			*code = 3;
+		}
+		void createUnits(long long token, int unitId, int amount, std::string* out, int* code)
+		{
+			User* user = getUserBySession(token);
+			if (user->userId == -1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+				*code = 2;
+				return;
+			}
+
+			Unit unit = getUnitDefinition(unitId);
+
+			int foodCost = amount * unit.foodCost;
+			int woodCost = amount * unit.woodCost;
+			int metalCost = amount * unit.metalCost;
+			int orderCost = amount * unit.orderCost;
+
+			if (foodCost > user->food ||
+				woodCost > user->wood ||
+				metalCost > user->metal ||
+				orderCost > user->order)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Not enough resources\"}";
+				*code = 3;
+				return;
+			}
+
+			user->food -= foodCost;
+			user->wood -= woodCost;
+			user->metal -= metalCost;
+			user->order -= orderCost;
+
+			ScheduledUnitProductionEvent unitProdEvent{ unit.trainingTime * amount, unit.id, amount, user->userId };
+
+			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+			*code = 3;
+		}
+		void createTownBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code)
 		{
 			User* user = getUserBySession(token);
 			if (user->userId == -1)

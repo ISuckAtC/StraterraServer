@@ -16,6 +16,36 @@ namespace Straterra
 {
 	namespace Definition
 	{
+		enum MAPBUILDINGTYPE
+		{
+			VILLAGE = 0,
+			FARM = 1,
+			WOOD = 2,
+			MINE = 3,
+			HOUSE = 4,
+			CASTLE = 5
+		};
+
+		struct MapBuilding
+		{
+			int id;
+			MAPBUILDINGTYPE type;
+			int buildingTime;
+			std::string name;
+			int health;
+			BYTE level;
+			BYTE maxLevel;
+			int foodCost;
+			int woodCost;
+			int metalCost;
+			int orderCost;
+			int baseProduction;
+		};
+
+		MapBuilding getMapBuildingDefinition(int id);
+
+		void DefineMapBuildings();
+
 		enum TOWNBUILDINGTYPE
 		{
 			TOWNHALL = 0,

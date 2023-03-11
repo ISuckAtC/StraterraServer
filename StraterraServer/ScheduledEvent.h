@@ -21,7 +21,8 @@ namespace Straterra
 		{
 			GENERIC = 0,
 			UNITPRODUCTION = 1,
-			TOWNBUILDING = 2
+			TOWNBUILDING = 2,
+			MAPBUILDING = 3
 		};
 		class ScheduledEvent
 		{
@@ -58,6 +59,15 @@ namespace Straterra
 			int buildingId;
 			int buildingSlot;
 			ScheduledTownBuildingEvent(int secondsTotal, int buildingId, int buildingSlot, int owner, bool runImmediately = true);
+			void Complete();
+		};
+
+		class ScheduledMapBuildingEvent : ScheduledEvent
+		{
+		public:
+			int buildingId;
+			int position;
+			ScheduledMapBuildingEvent(int secondsTotal, int buildingId, int posisition, int owner, bool runImmediately = true);
 			void Complete();
 		};
 	}
