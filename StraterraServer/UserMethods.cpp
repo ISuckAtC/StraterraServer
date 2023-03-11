@@ -174,7 +174,8 @@ namespace Straterra
 			user->metal -= metalCost;
 			user->order -= orderCost;
 
-			ScheduledUnitProductionEvent unitProdEvent{ unit.trainingTime * amount, unit.id, amount, user->userId };
+
+			new ScheduledUnitProductionEvent{ unit.trainingTime * amount, unit.id, amount, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
