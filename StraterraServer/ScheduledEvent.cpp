@@ -36,7 +36,7 @@ namespace Straterra
 		{
 			this->secondsTotal = secondsTotal;
 			this->secondsLeft = secondsTotal;
-			testP = &(this->secondsLeft);
+			std::cout << "CONSTRUCTOR VALUE: " << (long)(&(this->secondsLeft)) << std::endl;
 			this->owner = owner;
 			this->ownerEvents = &(Game::getUserById(owner)->activeEvents);
 			this->type = GENERIC;
