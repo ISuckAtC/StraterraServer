@@ -51,7 +51,7 @@ namespace Straterra
 
 		void ScheduledEvent::Tick()
 		{
-			std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << secondsLeft << ")" << std::endl;
+			std::cout << std::to_string((long)(&secondsLeft)) << " had Tick called (ticks left: " << secondsLeft << ")" << std::endl;
 			if (secondsLeft-- == 0) Complete();
 		}
 
@@ -69,7 +69,7 @@ namespace Straterra
 			this->unitId = unitId;
 			this->amount = amount;
 			this->type = UNITPRODUCTION;
-			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIME: " << secondsLeft << std::endl;
+			std::cout << "UNIT POINTER: " << (long)(& secondsLeft) << "| UNITPRODTIME: " << secondsLeft << std::endl;
 		}
 
 		void ScheduledUnitProductionEvent::Complete()
