@@ -69,8 +69,8 @@ namespace Straterra
 
 		void ScheduledEvent::Tick()
 		{
-			std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << this->secondsLeft << ") sLeftP: " << (long)(&(this->secondsLeft)) << std::endl;
-			std::cout << "data on tick: " << this->owner << " | " << this->secondsTotal << " | " << this->secondsLeft << " | " << this->type << std::endl;
+			//std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << this->secondsLeft << ") sLeftP: " << (long)(&(this->secondsLeft)) << std::endl;
+			//std::cout << "data on tick: " << this->owner << " | " << this->secondsTotal << " | " << this->secondsLeft << " | " << this->type << std::endl;
 			if (secondsLeft-- == 0) Complete();
 		}
 
@@ -79,8 +79,11 @@ namespace Straterra
 			// unsubcribe to tick event here
 			// 
 			// find iterator for own position and remove it from the vector
+
+			std::cout << "COMPLETE" << std::endl;
 			EventHub::unsubcribeOnTick(&subcription);
 			ownerEvents->erase(std::find(ownerEvents->begin(), ownerEvents->end(), this));
+			//delete this;
 		}
 
 		ScheduledUnitProductionEvent::ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)

@@ -28,7 +28,7 @@ namespace Straterra
 		}
 		void fireOnTick()
 		{
-			std::cout << "TESTP: " << *(ScheduledEvents::getTestP()) << std::endl;
+			//std::cout << "TESTP: " << *(ScheduledEvents::getTestP()) << std::endl;
 			onTick();
 		}
 	}

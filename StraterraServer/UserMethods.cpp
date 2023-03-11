@@ -135,7 +135,7 @@ namespace Straterra
 			user->metal -= mapBuilding.metalCost;
 			user->order -= mapBuilding.orderCost;
 
-			ScheduledMapBuildingEvent buildEvent{ mapBuilding.buildingTime, mapBuilding.id, position, user->userId };
+			new ScheduledMapBuildingEvent{ mapBuilding.buildingTime, mapBuilding.id, position, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
@@ -167,7 +167,7 @@ namespace Straterra
 				return;
 			}
 
-			std::cout << "UNITCREATION: unitTrainingTime: " << unit.trainingTime << " | amount: " << amount << std::endl;
+			//std::cout << "UNITCREATION: unitTrainingTime: " << unit.trainingTime << " | amount: " << amount << std::endl;
 
 			user->food -= foodCost;
 			user->wood -= woodCost;
@@ -209,7 +209,7 @@ namespace Straterra
 			user->metal -= townBuilding.metalCost;
 			user->order -= townBuilding.orderCost;
 
-			ScheduledTownBuildingEvent buildEvent{ townBuilding.buildingTime, townBuilding.id, buildingSlot, user->userId };
+			new ScheduledTownBuildingEvent{ townBuilding.buildingTime, townBuilding.id, buildingSlot, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
