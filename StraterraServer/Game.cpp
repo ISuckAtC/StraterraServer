@@ -195,12 +195,6 @@ namespace Straterra
 			try
 			{
 				// update logic
-				if (tickCount == 30)
-				{
-					User* u = getUserById(69);
-					ScheduledEvents::ScheduledEvent* ev = u->activeEvents[0];
-					std::cout << ev->secondsLeft << std::endl;
-				}
 				EventHub::fireOnTick();
 				tickCount++;
 				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval));
@@ -235,7 +229,7 @@ namespace Straterra
 			tickInterval = _tickInterval;
 			timeOutSeconds = _timeOutSeconds;
 			// start logic
-			//updateThread = std::thread{ update };
+			updateThread = std::thread{ update };
 			slowUpdateThread = std::thread{ slowUpdate };
 			std::cout << "Game Started" << std::endl;
 		}
