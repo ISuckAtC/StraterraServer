@@ -27,9 +27,9 @@ namespace Straterra
 		class ScheduledEvent
 		{
 		public:
-			EventType type;
 			int secondsLeft;
 			int secondsTotal;
+			EventType type;
 			bool running;
 			int owner;
 			ScheduledEvent(int secondsTotal, int owner, bool runImmediately = true);
