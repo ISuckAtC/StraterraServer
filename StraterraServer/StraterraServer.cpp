@@ -220,7 +220,12 @@ int main(int argc, char** argv)
 
 	try
 	{
-		
+		Map::Tile* testTile = Map::getTile(8888);
+		std::cout << "TESTTILE: " << testTile->id << " | " <<
+			testTile->owner << " | " <<
+			testTile->building << " | " <<
+			testTile->travelCost << " | " <<
+			testTile->foodAmount << std::endl;
 
 		auto const address = net::ip::make_address_v4("0.0.0.0");
 		unsigned short port = 80;
