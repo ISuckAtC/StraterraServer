@@ -167,6 +167,8 @@ namespace Straterra
 				return;
 			}
 
+			std::cout << "UNITCREATION: unitTrainingTime: " << unit.trainingTime << " | amount: " << amount << std::endl;
+
 			user->food -= foodCost;
 			user->wood -= woodCost;
 			user->metal -= metalCost;
