@@ -52,6 +52,7 @@ namespace Straterra
 				this->running = false;
 			}
 			this->ownerEvents->insert(this->ownerEvents->begin(), this);
+			std::cout << "CONSTRUCTOR DONE" << std::endl;
 		}
 
 		void ScheduledEvent::Run()
