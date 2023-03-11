@@ -27,7 +27,6 @@ namespace Straterra
 		{
 			this->secondsTotal = secondsTotal;
 			this->secondsLeft = secondsTotal;
-			std::cout << this->secondsLeft << "SDIJFHSDIJUHF" << std::endl;
 			this->owner = owner;
 			this->ownerEvents = &(Game::getUserById(owner)->activeEvents);
 			if (runImmediately)
@@ -70,6 +69,7 @@ namespace Straterra
 			this->unitId = unitId;
 			this->amount = amount;
 			this->type = UNITPRODUCTION;
+			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIME: " << secondsLeft << std::endl;
 		}
 
 		void ScheduledUnitProductionEvent::Complete()
