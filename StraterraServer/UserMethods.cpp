@@ -180,7 +180,7 @@ namespace Straterra
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
 
-			std::cout << "methodDONEDONEDONE" << std::endl;
+			//std::cout << "methodDONEDONEDONE" << std::endl;
 		}
 		void createTownBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code)
 		{

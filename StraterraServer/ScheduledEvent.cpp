@@ -37,13 +37,13 @@ namespace Straterra
 			this->secondsTotal = secondsTotal;
 			this->secondsLeft = secondsTotal;
 			testP = &(this->secondsLeft);
-			std::cout << "CONSTRUCTOR VALUE: " << (long)(&(this->secondsLeft)) << std::endl;
+			//std::cout << "CONSTRUCTOR VALUE: " << (long)(&(this->secondsLeft)) << std::endl;
 			this->owner = owner;
 			this->ownerEvents = &(Game::getUserById(owner)->activeEvents);
 			this->type = GENERIC;
 			if (runImmediately)
 			{
-				std::cout << "Creating scheduled event" << std::endl;
+				//std::cout << "Creating scheduled event" << std::endl;
 				Run();
 				this->running = true;
 			}
@@ -52,7 +52,7 @@ namespace Straterra
 				this->running = false;
 			}
 			this->ownerEvents->insert(this->ownerEvents->begin(), this);
-			std::cout << "CONSTRUCTOR DONE" << std::endl;
+			//std::cout << "CONSTRUCTOR DONE" << std::endl;
 		}
 
 		ScheduledEvent::~ScheduledEvent()
@@ -82,7 +82,7 @@ namespace Straterra
 			std::cout << "COMPLETE" << std::endl;
 			EventHub::unsubcribeOnTick(&subcription);
 			ownerEvents->erase(std::find(ownerEvents->begin(), ownerEvents->end(), this));
-			//delete this;
+			delete this;
 		}
 
 		ScheduledUnitProductionEvent::ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
@@ -90,7 +90,7 @@ namespace Straterra
 			this->unitId = unitId;
 			this->amount = amount;
 			this->type = UNITPRODUCTION;
-			std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIMEPOINTER: " << (long)(&(this->secondsLeft)) << "| UNITPRODTIME: " << this->secondsLeft << std::endl;
+			//std::cout << "UNIT POINTER: " << (long)this << "| UNITPRODTIMEPOINTER: " << (long)(&(this->secondsLeft)) << "| UNITPRODTIME: " << this->secondsLeft << std::endl;
 		}
 
 		void ScheduledUnitProductionEvent::Complete()
@@ -105,7 +105,7 @@ namespace Straterra
 				prodEvents[0]->Run();
 			}
 			Game::getUserById(owner)->homeArmy[unitId] += amount;
-			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << Game::getUserById(owner)->homeArmy[unitId] << ")" << std::endl;
+			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << std::to_string(Game::getUserById(owner)->homeArmy[unitId]) << ")" << std::endl;
 		}
 		ScheduledTownBuildingEvent::ScheduledTownBuildingEvent(int secondsTotal, int buildingId, int buildingSlot, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
 		{
