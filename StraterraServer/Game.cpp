@@ -95,6 +95,7 @@ namespace Straterra
 			int index = -1;
 			for (int i = 0; i < userCount; ++i)
 			{
+				std::cout << users[i]->userId << std::endl;
 				if (users[i]->userId == id)
 				{
 					return users[i];
