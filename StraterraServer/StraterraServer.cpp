@@ -221,9 +221,9 @@ int main(int argc, char** argv)
 
 	try
 	{
-		ScheduledEvents::ScheduledUnitProductionEvent ae{ 10, 0, 3, 69 };
+		//ScheduledEvents::ScheduledUnitProductionEvent ae{ 10, 0, 3, 69 };
 
-		std::cout << "JASHFJHSAF: " << ae.secondsLeft << std::endl;
+		//std::cout << "JASHFJHSAF: " << ae.secondsLeft << std::endl;
 
 		Map::Tile* testTile = Map::getTile(8888);
 		std::cout << "TESTTILE: " << testTile->id << " | " <<
