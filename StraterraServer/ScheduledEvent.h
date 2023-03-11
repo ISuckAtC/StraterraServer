@@ -45,7 +45,7 @@ namespace Straterra
 		};
 
 
-		class ScheduledUnitProductionEvent : ScheduledEvent
+		class ScheduledUnitProductionEvent : public ScheduledEvent
 		{
 		public:
 			int unitId;
@@ -54,7 +54,7 @@ namespace Straterra
 			void Complete();
 		};
 
-		class ScheduledTownBuildingEvent : ScheduledEvent
+		class ScheduledTownBuildingEvent : public ScheduledEvent
 		{
 		public:
 			int buildingId;
@@ -63,7 +63,7 @@ namespace Straterra
 			void Complete();
 		};
 
-		class ScheduledMapBuildingEvent : ScheduledEvent
+		class ScheduledMapBuildingEvent : public ScheduledEvent
 		{
 		public:
 			int buildingId;

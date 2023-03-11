@@ -221,7 +221,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		ScheduledEvents::ScheduledEvent ae{ 10, 69 };
+		ScheduledEvents::ScheduledUnitProductionEvent ae{ 10, 0, 3, 69 };
 
 		std::cout << "JASHFJHSAF: " << ae.secondsLeft << std::endl;
 
