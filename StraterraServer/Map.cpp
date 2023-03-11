@@ -104,6 +104,8 @@ namespace Straterra
 				map.push_back(tile);
 				tileCount++;
 			}
+
+			std::cout << "Loaded " << tileCount << " tiles" << std::endl;
 		}
 		Tile* getTile(int position)
 		{
