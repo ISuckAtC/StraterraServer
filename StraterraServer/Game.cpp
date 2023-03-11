@@ -236,7 +236,7 @@ namespace Straterra
 			timeOutSeconds = _timeOutSeconds;
 			// start logic
 			//updateThread = std::thread{ update };
-			//slowUpdateThread = std::thread{ slowUpdate };
+			slowUpdateThread = std::thread{ slowUpdate };
 			std::cout << "Game Started" << std::endl;
 		}
 		
