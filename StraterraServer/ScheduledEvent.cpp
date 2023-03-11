@@ -27,6 +27,7 @@ namespace Straterra
 		{
 			this->secondsTotal = secondsTotal;
 			this->secondsLeft = secondsTotal;
+			std::cout << this->secondsLeft << "SDIJFHSDIJUHF" << std::endl;
 			this->owner = owner;
 			this->ownerEvents = &(Game::getUserById(owner)->activeEvents);
 			if (runImmediately)
