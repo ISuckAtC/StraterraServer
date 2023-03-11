@@ -75,9 +75,7 @@ int main(int argc, char** argv)
 
 	Straterra::Game::start(std::stoi(argv[1]), 60000);
 
-	ScheduledEvents::ScheduledEvent a{ 10, 69 };
-
-	std::cout << "JASHFJHSAF: " << a.secondsLeft << std::endl;
+	
 
 	int lines = 0;
 	try
@@ -223,6 +221,10 @@ int main(int argc, char** argv)
 
 	try
 	{
+		ScheduledEvents::ScheduledEvent ae{ 10, 69 };
+
+		std::cout << "JASHFJHSAF: " << ae.secondsLeft << std::endl;
+
 		Map::Tile* testTile = Map::getTile(8888);
 		std::cout << "TESTTILE: " << testTile->id << " | " <<
 			testTile->owner << " | " <<
