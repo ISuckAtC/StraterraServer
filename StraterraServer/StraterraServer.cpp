@@ -17,6 +17,7 @@
 #include "Definition.h"
 #include "Game.h"
 #include "Player.h"
+#include "Map.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -63,11 +64,13 @@ int main(int argc, char** argv)
 	}
 	std::cout << std::endl;
 	
-	if (argc != 3)
+	if (argc != 4)
 	{
-		std::cout << "Argument count invalid, excepted 2, is " << std::to_string(argc) << std::endl;
+		std::cout << "Argument count invalid, excepted 4, is " << std::to_string(argc) << std::endl;
 		return 1;
 	}
+
+	Straterra::Map::loadMap(argv[3]);
 
 	Straterra::Game::start(std::stoi(argv[1]), 60000);
 

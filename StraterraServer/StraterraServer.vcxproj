@@ -157,6 +157,7 @@
     <ClCompile Include="EventHub.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Http.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScheduledEvent.cpp" />
     <ClCompile Include="StraterraServer.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="EventHub.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Http.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScheduledEvent.h" />
     <ClInclude Include="UserMethods.h" />

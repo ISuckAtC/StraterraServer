@@ -17,9 +17,16 @@ namespace Straterra
 {
 	namespace ScheduledEvents
 	{
+		enum EventType
+		{
+			GENERIC = 0,
+			UNITPRODUCTION = 1,
+			TOWNBUILDING = 2
+		};
 		class ScheduledEvent
 		{
 		public:
+			EventType type;
 			int secondsLeft;
 			int secondsTotal;
 			bool running;

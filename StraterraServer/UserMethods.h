@@ -25,7 +25,7 @@ namespace Straterra
 		//long long createSessionToken();
 		void createUser(std::string name, std::string loginInfo);
 		void createBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code);
-	
+		void getScheduledEvents(long long token, std::string* out, int* code);
 	}
 }
 

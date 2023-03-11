@@ -27,6 +27,48 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void getScheduledEvents(long long token, std::string* out, int* code)
+		{
+			User* user = getUserBySession(token);
+			if (user->userId == -1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+				*code = 2;
+				return;
+			}
+
+			std::ostringstream oss;
+			oss << "{\"events\":[";
+
+			for (int i = 0; i < user->activeEvents.size(); ++i)
+			{
+				oss << "{\"secondsLeft\":\"" << user->activeEvents[i]->secondsLeft << "\"," <<
+					"\"type\":\"" << user->activeEvents[i]->type << "\"," <<
+					"\"running\":\"" << user->activeEvents[i]->running << "\"";
+				switch (user->activeEvents[i]->type)
+				{
+				case UNITPRODUCTION:
+				{
+					ScheduledUnitProductionEvent* uProdEvent = (ScheduledUnitProductionEvent*)(user->activeEvents[i]);
+					oss << "\"unitId\":\"" << uProdEvent->unitId << "\"," <<
+						"\"amount\":\"" << uProdEvent->amount << "\"";
+					break;
+				}
+				case TOWNBUILDING:
+				{
+					ScheduledTownBuildingEvent* bEvent = (ScheduledTownBuildingEvent*)(user->activeEvents[i]);
+					oss << "\"buildingId\":\"" << bEvent->buildingId << "\"," <<
+						"\"buildingSlot\":\"" << bEvent->buildingSlot << "\"";
+					break;
+				}
+				}
+				oss << "}";
+			}
+			oss << "]}";
+
+			*out = oss.str();
+			*code = 0;
+		}
 		void createBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code)
 		{
 			User* user = getUserBySession(token);

@@ -175,6 +175,8 @@ namespace Straterra
 					UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
 				else if (method == "createBuilding")
 					UserMethods::createBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+				else if (method == "getScheduledEvents")
+					UserMethods::getScheduledEvents(token, &out, &code);
 				else
 					out = "unknown method";
 				beast::ostream(response_.body()) << out;
@@ -226,11 +228,13 @@ namespace Straterra
 			acceptor.async_accept(socket,
 				[&](beast::error_code ec)
 				{
+					
+
 					if (!ec)
 					{
-
 						std::make_shared<http_connection>(std::move(socket))->start();
 						http_server(acceptor, socket);
+						
 					}
 				});
 		}

@@ -67,6 +67,7 @@ namespace Straterra
 		{
 			this->unitId = unitId;
 			this->amount = amount;
+			this->type = UNITPRODUCTION;
 		}
 
 		void ScheduledUnitProductionEvent::Complete()
@@ -87,6 +88,7 @@ namespace Straterra
 		{
 			this->buildingId = buildingId;
 			this->buildingSlot = buildingSlot;
+			this->type = TOWNBUILDING;
 		}
 		void ScheduledTownBuildingEvent::Complete()
 		{
