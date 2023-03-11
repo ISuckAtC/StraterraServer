@@ -17,6 +17,7 @@
 #include "EventHub.h"
 #include "Player.h"
 #include "Map.h"
+#include "ScheduledEvent.h"
 
 namespace Straterra
 {
@@ -33,6 +34,8 @@ namespace Straterra
 		int timeOutSeconds;
 		std::thread updateThread;
 		std::thread slowUpdateThread;
+
+		int tickCount = 0;
 
 		int createUserId()
 		{
@@ -192,7 +195,14 @@ namespace Straterra
 			try
 			{
 				// update logic
+				if (tickCount == 30)
+				{
+					User* u = getUserById(69);
+					ScheduledEvents::ScheduledEvent* ev = u->activeEvents[0];
+					std::cout << ev->secondsLeft << std::endl;
+				}
 				EventHub::fireOnTick();
+				tickCount++;
 				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval));
 				update();
 			} catch (std::exception const& e)
