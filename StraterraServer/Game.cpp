@@ -235,8 +235,8 @@ namespace Straterra
 			tickInterval = _tickInterval;
 			timeOutSeconds = _timeOutSeconds;
 			// start logic
-			updateThread = std::thread{ update };
-			slowUpdateThread = std::thread{ slowUpdate };
+			//updateThread = std::thread{ update };
+			//slowUpdateThread = std::thread{ slowUpdate };
 			std::cout << "Game Started" << std::endl;
 		}
 		
