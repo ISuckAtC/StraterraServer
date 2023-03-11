@@ -35,70 +35,70 @@ namespace Straterra
 				// id
 				int index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->id = std::stoi(currentValue);
 
 				// travelCost
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->travelCost = std::stoi(currentValue);
 
 				// tileType
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->tileType = std::stoi(currentValue);
 
 				// building
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->building = std::stoi(currentValue);
 
 				// owner
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->owner = std::stoi(currentValue);
 
 				// foodAmount
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->foodAmount = std::stof(currentValue);
 
 				// woodAmount
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->woodAmount = std::stof(currentValue);
 
 				// metalAmount
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->metalAmount = std::stof(currentValue);
 
 				// chaosAmount
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->chaosAmount = std::stof(currentValue);
 
 				// corruption
 				line = line.substr(index + 1);
 				index = line.find_first_of(';');
 				currentValue = line.substr(0, index);
-				std::cout << std::endl << currentValue;
+				//std::cout << std::endl << currentValue;
 				tile->corruption = std::stof(currentValue);
 
 				map.push_back(tile);
