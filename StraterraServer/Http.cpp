@@ -166,26 +166,37 @@ namespace Straterra
 					}
 					if (method == "getResources")
 						UserMethods::getResources(token, std::stoi(options[1]), &out, &code);
+					
 					else if (method == "getSelfUser")
 						UserMethods::getSelfPlayer(token, &out, &code);
+					
 					else if (method == "createPlayer")
 						UserMethods::createUser(options[0], options[1]);
+					
 					else if (method == "login")
 						UserMethods::login(&out, &code, options[0]);
+					
 					else if (method == "getUsers")
 						UserMethods::getPlayers(token, &out, &code);
+					
 					else if (method == "getUser")
 						UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
+					
 					else if (method == "createTownBuilding")
 						UserMethods::createTownBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+					
 					else if (method == "getScheduledEvents")
 						UserMethods::getScheduledEvents(token, &out, &code);
+					
 					else if (method == "createUnits")
 						UserMethods::createUnits(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+					
 					else if (method == "createMapBuilding")
 						UserMethods::createMapBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+					
 					else if (method == "getHomeUnits")
 						UserMethods::getHomeUnits(token, &out, &code);
+					
 					else
 						out = "unknown method";
 				}
@@ -239,19 +250,27 @@ namespace Straterra
 
 		void http_server(tcp::acceptor& acceptor, tcp::socket& socket)
 		{
-			//std::cout << "Waiting for connection..." << std::endl;
-			acceptor.async_accept(socket,
-				[&](beast::error_code ec)
-				{
-					
-
-					if (!ec)
+			try
+			{
+				//std::cout << "Waiting for connection..." << std::endl;
+				acceptor.async_accept(socket,
+					[&](beast::error_code ec)
 					{
-						std::make_shared<http_connection>(std::move(socket))->start();
-						http_server(acceptor, socket);
-						
-					}
-				});
+
+
+						if (!ec)
+						{
+							std::make_shared<http_connection>(std::move(socket))->start();
+							http_server(acceptor, socket);
+
+						}
+						std::cout << "EC set, exiting listener loop: " << ec.message() << std::endl;
+					});
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 	}
 }

@@ -30,6 +30,7 @@ namespace Straterra
 	{
 		void getHomeUnits(long long token, std::string* out, int* code)
 		{
+			// Grab and verify user
 			User* user = getUserBySession(token);
 			if (user->userId == -1)
 			{
@@ -46,6 +47,7 @@ namespace Straterra
 				int amount = user->homeArmy[i];
 				if (amount > 0)
 				{
+					// If the unit of ID i is present we add it to the list
 					if (actualUnits > 0) oss << ",";
 					actualUnits++;
 					oss << "{\"unitId\":\"" << i << "\"," <<
@@ -60,6 +62,7 @@ namespace Straterra
 		}
 		void getScheduledEvents(long long token, std::string* out, int* code)
 		{
+			// Grab and verify user
 			User* user = getUserBySession(token);
 			if (user->userId == -1)
 			{
@@ -76,6 +79,8 @@ namespace Straterra
 				oss << "{\"secondsLeft\":\"" << user->activeEvents[i]->secondsLeft << "\"," <<
 					"\"type\":\"" << user->activeEvents[i]->type << "\"," <<
 					"\"running\":\"" << user->activeEvents[i]->running << "\"";
+				
+				// Add extras based on which type of event it is
 				switch (user->activeEvents[i]->type)
 				{
 				case UNITPRODUCTION:
@@ -103,7 +108,10 @@ namespace Straterra
 		}
 		void createMapBuilding(long long token, int buildingId, int position, std::string* out, int* code)
 		{
+			// Grab the current user by session token
 			User* user = getUserBySession(token);
+
+			// Verify that they are connected
 			if (user->userId == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
@@ -111,6 +119,7 @@ namespace Straterra
 				return;
 			}
 
+			// Check if something is already built here
 			if (Map::getTile(position)->building != 0)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
@@ -118,8 +127,12 @@ namespace Straterra
 				return;
 			}
 
+
+			// Grab definition
 			MapBuilding mapBuilding = getMapBuildingDefinition(buildingId);
 
+
+			// Check if user has enough resources
 			if (mapBuilding.foodCost > user->food ||
 				mapBuilding.woodCost > user->wood ||
 				mapBuilding.metalCost > user->metal ||
@@ -130,11 +143,14 @@ namespace Straterra
 				return;
 			}
 
+			// Pay
 			user->food -= mapBuilding.foodCost;
 			user->wood -= mapBuilding.woodCost;
 			user->metal -= mapBuilding.metalCost;
 			user->order -= mapBuilding.orderCost;
 
+			// Use new to prevent the object from being destructed
+			// We destroy it manually when the event completes
 			new ScheduledMapBuildingEvent{ mapBuilding.buildingTime, mapBuilding.id, position, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
@@ -142,7 +158,10 @@ namespace Straterra
 		}
 		void createUnits(long long token, int unitId, int amount, std::string* out, int* code)
 		{
+			// Grab the current user by session token
 			User* user = getUserBySession(token);
+
+			// Verify that they are connected
 			if (user->userId == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
@@ -150,13 +169,16 @@ namespace Straterra
 				return;
 			}
 
+			// Grab the definition for the desired unit
 			Unit unit = getUnitDefinition(unitId);
 
+			// Get total costs
 			int foodCost = amount * unit.foodCost;
 			int woodCost = amount * unit.woodCost;
 			int metalCost = amount * unit.metalCost;
 			int orderCost = amount * unit.orderCost;
 
+			// Check if the user has the resources to train the troops
 			if (foodCost > user->food ||
 				woodCost > user->wood ||
 				metalCost > user->metal ||
@@ -169,12 +191,14 @@ namespace Straterra
 
 			//std::cout << "UNITCREATION: unitTrainingTime: " << unit.trainingTime << " | amount: " << amount << std::endl;
 
+			// Pay
 			user->food -= foodCost;
 			user->wood -= woodCost;
 			user->metal -= metalCost;
 			user->order -= orderCost;
 
-
+			// Use new to prevent the object from being destructed
+			// We destroy it manually when the event completes
 			new ScheduledUnitProductionEvent{ unit.trainingTime * amount, unit.id, amount, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
@@ -184,7 +208,10 @@ namespace Straterra
 		}
 		void createTownBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code)
 		{
+			// Grab the current user by session token
 			User* user = getUserBySession(token);
+			
+			// Verify that they are connected
 			if (user->userId == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
@@ -192,15 +219,21 @@ namespace Straterra
 				return;
 			}
 
+			// Grab the definition for the desired building
 			TownBuilding townBuilding = getTownBuildingDefinition(buildingId);
 
-			if (user->cityBuildingSlots[buildingSlot] != 255)
+			int currentBuilding = user->cityBuildingSlots[buildingSlot];
+
+			// Check if there is already something built in this slot
+			// It can still go through if the ID is 1 lower (upgrading)
+			if (currentBuilding != 255 && currentBuilding != buildingId - 1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
 				*code = 4;
 				return;
 			}
 
+			// Check if the user has the resources to build this building
 			if (townBuilding.foodCost > user->food ||
 				townBuilding.woodCost > user->wood ||
 				townBuilding.metalCost > user->metal ||
@@ -211,11 +244,14 @@ namespace Straterra
 				return;
 			}
 
+			// Pay for the building
 			user->food -= townBuilding.foodCost;
 			user->wood -= townBuilding.woodCost;
 			user->metal -= townBuilding.metalCost;
 			user->order -= townBuilding.orderCost;
 
+			// Use new to prevent the object from being destructed
+			// We destroy it manually when the event completes
 			new ScheduledTownBuildingEvent{ townBuilding.buildingTime, townBuilding.id, buildingSlot, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
