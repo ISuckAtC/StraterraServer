@@ -170,7 +170,7 @@ namespace Straterra
 
 			// Use new to prevent the object from being destructed
 			// We destroy it manually when the event completes
-			new ScheduledMapBuildingEvent{ mapBuilding.buildingTime, mapBuilding.id, position, user->userId };
+			new ScheduledMapBuildingEvent{ mapBuilding.buildingTime / 5, mapBuilding.id, position, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
@@ -400,7 +400,7 @@ namespace Straterra
 				{
 					if (k > 0) oss << ",";
 					int position = user->mapBuildings[k];
-					oss << "{\"building\":\"" << Map::getTile(position)->building << "\","
+					oss << "{\"building\":\"" << std::to_string(Map::getTile(position)->building) << "\","
 						<< "\"position\":\"" << position << "\"}";
 				}
 				oss << "]}";
