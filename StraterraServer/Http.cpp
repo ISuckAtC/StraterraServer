@@ -143,7 +143,7 @@ namespace Straterra
 						method = target.substr(1);
 					}
 
-					std::cout << "Method: \"" << method << "\"" << std::endl;
+					
 
 					//for (int i = 0; i < optionCount; ++i)
 					//{
@@ -158,6 +158,7 @@ namespace Straterra
 						try
 						{
 							token = Straterra::Game::getTokenLong(options[0]);
+
 						}
 						catch (std::exception const& e)
 						{
@@ -165,40 +166,64 @@ namespace Straterra
 						}
 					}
 					if (method == "getResources")
+					{
 						UserMethods::getResources(token, std::stoi(options[1]), &out, &code);
-					
+					}
 					else if (method == "getSelfUser")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getSelfPlayer(token, &out, &code);
-					
+					}
 					else if (method == "createPlayer")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::createUser(options[0], options[1]);
-					
+					}
 					else if (method == "login")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::login(&out, &code, options[0]);
-					
+					}
 					else if (method == "getUsers")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getPlayers(token, &out, &code);
-					
+					}
 					else if (method == "getUser")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getUser(token, std::stoi(options[1]), &out, &code);
-					
+					}
 					else if (method == "createTownBuilding")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::createTownBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
-					
+					}
 					else if (method == "getScheduledEvents")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getScheduledEvents(token, &out, &code);
-					
+					}
 					else if (method == "createUnits")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::createUnits(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
-					
+					}
 					else if (method == "createMapBuilding")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::createMapBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
-					
+					}
 					else if (method == "getHomeUnits")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getHomeUnits(token, &out, &code);
-					
+					}
 					else
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						out = "unknown method";
+					}
 				}
 				catch (std::exception& e)
 				{
@@ -262,7 +287,7 @@ namespace Straterra
 							http_server(acceptor, socket);
 
 						}
-						std::cout << "EC set, exiting listener loop: " << ec.message() << std::endl;
+						else std::cout << "EC set, exiting listener loop: " << ec.message() << std::endl;
 					});
 			}
 			catch (std::exception const& e)
