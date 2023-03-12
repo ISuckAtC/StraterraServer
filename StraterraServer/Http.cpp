@@ -256,8 +256,6 @@ namespace Straterra
 				acceptor.async_accept(socket,
 					[&](beast::error_code ec)
 					{
-
-
 						if (!ec)
 						{
 							std::make_shared<http_connection>(std::move(socket))->start();
@@ -270,6 +268,7 @@ namespace Straterra
 			catch (std::exception const& e)
 			{
 				std::cout << "ERROR: " << e.what() << std::endl;
+				http_server(acceptor, socket);
 			}
 		}
 	}
