@@ -401,7 +401,7 @@ namespace Straterra
 					if (k > 0) oss << ",";
 					int position = user->mapBuildings[k];
 					oss << "{\"building\":\"" << Map::getTile(position)->building << "\","
-						<< "\"position\":\"" << position << "}";
+						<< "\"position\":\"" << position << "\"}";
 				}
 				oss << "]}";
 				if (i < getUserCount() - 1) oss << ",";
