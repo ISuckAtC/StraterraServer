@@ -17,6 +17,15 @@ namespace Straterra
 {
 	namespace EventHub
 	{
+		struct Report
+		{
+		public:
+			std::string title;
+			std::string content;
+			time_t timeCreated;
+			bool viewed;
+		};
+
 		boost::signals2::connection subcribeOnTick(const boost::signals2::slot<void(), boost::function<void()>>& f);
 		void unsubcribeOnTick(boost::signals2::connection* c);
 		void fireOnTick();

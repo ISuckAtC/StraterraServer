@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "EventHub.h"
 #include "Map.h"
+#include "Definition.h"
 
 namespace Straterra
 {
@@ -137,8 +138,76 @@ namespace Straterra
 		{
 			ScheduledEvent::Complete();
 			Map::Tile* tile = Map::getTile(position);
+			Player::User* user = Game::getUserById(owner);
+
+			Definition::MapBuilding mapBuilding = Definition::getMapBuildingDefinition(buildingId);
+			if (mapBuilding.type == Definition::FARM)
+			{
+				int foodProd = mapBuilding.baseProduction * tile->foodAmount;
+				user->foodGeneration += foodProd;
+			}
+			if (mapBuilding.type == Definition::WOOD)
+			{
+				int woodProd = mapBuilding.baseProduction * tile->woodAmount;
+				user->woodGeneration += woodProd;
+			}
+			if (mapBuilding.type == Definition::MINE)
+			{
+				int metalProd = mapBuilding.baseProduction * tile->metalAmount;
+				user->foodGeneration += metalProd;
+			}
 
 			tile->building = buildingId;
+		}
+		
+		ScheduledMoveArmyEvent::ScheduledMoveArmyEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
+		{
+			this->origin = origin;
+			this->destination = destination;
+			this->army = army;
+		}
+		void ScheduledMoveArmyEvent::Complete()
+		{
+			ScheduledEvent::Complete();
+
+			if (Map::getTile(destination)->building == 0)
+			{
+				if (Map::getTile(origin)->building == 1)
+				{
+					new ScheduledMoveArmyEvent(0, army, origin, destination, owner);
+					return;
+				}
+				return;
+			}
+
+			Definition::MapBuilding building = Definition::getMapBuildingDefinition(Map::getTile(destination)->building);
+
+			if (building.type == Definition::VILLAGE)
+			{
+				for (int i = 0; i < army.size(); ++i)
+				{
+					Player::User* armyOwner = Game::getUserById(Map::getTile(destination)->owner);
+					armyOwner->homeArmy[army[i].unitId] += army[i].count;
+				}
+				return;
+			}
+
+			//if (Grid._instance.tiles[destination].army != null && Grid._instance.tiles[destination].army.Count > 0)
+			//{
+			//	Debug.Log("Tried to move troops to a tile with troops on it");
+			//	return;
+			//}
+			//Grid._instance.tiles[destination].army = army;
+		}
+		ScheduledAttackEvent::ScheduledAttackEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
+		{
+			this->origin = origin;
+			this->destination = destination;
+			this->army = army;
+		}
+		void ScheduledAttackEvent::Complete()
+		{
+			// TODO
 		}
 	}
 }

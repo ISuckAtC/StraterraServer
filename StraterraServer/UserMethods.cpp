@@ -168,6 +168,10 @@ namespace Straterra
 			user->metal -= mapBuilding.metalCost;
 			user->order -= mapBuilding.orderCost;
 
+			// TODO
+			// Check if current building has any production value
+			// then remove it from the player (upgrading a farm for example)
+
 			// Use new to prevent the object from being destructed
 			// We destroy it manually when the event completes
 			new ScheduledMapBuildingEvent{ mapBuilding.buildingTime / 5, mapBuilding.id, position, user->userId };

@@ -15,6 +15,10 @@
 
 namespace Straterra
 {
+	namespace Game
+	{
+		class Group;
+	}
 	namespace ScheduledEvents
 	{
 		int* getTestP();
@@ -70,6 +74,26 @@ namespace Straterra
 			int buildingId;
 			int position;
 			ScheduledMapBuildingEvent(int secondsTotal, int buildingId, int posisition, int owner, bool runImmediately = true);
+			void Complete();
+		};
+
+		class ScheduledMoveArmyEvent : public ScheduledEvent
+		{
+		public:
+			int origin;
+			int destination;
+			std::vector<Game::Group> army;
+			ScheduledMoveArmyEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately = true);
+			void Complete();
+		};
+
+		class ScheduledAttackEvent : public ScheduledEvent
+		{
+		public:
+			int origin;
+			int destination;
+			std::vector<Game::Group> army;
+			ScheduledAttackEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately = true);
 			void Complete();
 		};
 	}
