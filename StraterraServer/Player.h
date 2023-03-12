@@ -19,6 +19,10 @@ namespace Straterra
 	{
 		class ScheduledEvent;
 	}
+	namespace Definition
+	{
+		struct MapBuilding;
+	}
 	namespace Player
 	{
 		class User
@@ -55,6 +59,7 @@ namespace Straterra
 			float orderMultiplier;
 			int restOrder;
 			std::vector<Straterra::ScheduledEvents::ScheduledEvent*> activeEvents;
+			std::vector<int> mapBuildings;
 			~User();
 			User();
 

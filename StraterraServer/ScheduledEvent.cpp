@@ -124,6 +124,13 @@ namespace Straterra
 		{
 			this->buildingId = buildingId;
 			this->position = position;
+			Map::Tile* tile = Map::getTile(position);
+			tile->building = 255;
+			tile->owner = owner;
+			Player::User* user = Game::getUserById(owner);
+
+			user->mapBuildings.push_back(position);
+
 			this->type = MAPBUILDING;
 		}
 		void ScheduledMapBuildingEvent::Complete()

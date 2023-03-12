@@ -219,6 +219,10 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getHomeUnits(token, &out, &code);
 					}
+					else if (method == "getMapTile")
+					{
+						UserMethods::getMapTile(token, std::stoi(options[1]), &out, &code);
+					}
 					else
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;

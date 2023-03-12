@@ -28,6 +28,25 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void getMapTile(long long token, int position, std::string* out, int* code)
+		{
+			// Grab and verify user
+			User* user = getUserBySession(token);
+			if (user->userId == -1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+				*code = 2;
+				return;
+			}
+
+			Map::Tile* tile = Map::getTile(position);
+			
+			std::ostringstream oss;
+			oss << "{\"building\":\"" << tile->building << "\"}";
+
+			*out = oss.str();
+			*code = 0;
+		}
 		void getHomeUnits(long long token, std::string* out, int* code)
 		{
 			// Grab and verify user
@@ -375,7 +394,16 @@ namespace Straterra
 				User* user = getUserAt(i);
 				oss << "{\"userId\":\"" << std::to_string(user->userId) << "\","
 					<< "\"name\":\"" << user->name << "\","
-					<< "\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"}";
+					<< "\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\","
+					<< "\"buildingPositions\":[";
+				for (int k = 0; k < user->mapBuildings.size(); ++k)
+				{
+					if (k > 0) oss << ",";
+					int position = user->mapBuildings[k];
+					oss << "{\"building\":\"" << Map::getTile(position)->building << "\","
+						<< "\"position\":\"" << position << "}";
+				}
+				oss << "]}";
 				if (i < getUserCount() - 1) oss << ",";
 			}
 			oss << "]}";
