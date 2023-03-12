@@ -396,6 +396,7 @@ namespace Straterra
 			{
 				*code = 3;
 				*out = "{\"error\":\"No user with that id\"}";
+				return;
 			}
 			std::ostringstream oss;
 			oss << "{" <<
