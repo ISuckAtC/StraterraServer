@@ -262,6 +262,10 @@ namespace Straterra
 				townBuilding.metalCost > user->metal ||
 				townBuilding.orderCost > user->order)
 			{
+				std::cout << townBuilding.foodCost << " | " <<
+					townBuilding.woodCost << " | " <<
+					townBuilding.metalCost << " | " <<
+					townBuilding.orderCost << " | " << std::endl;
 				*out = "{\"success\":\"false\",\"message\":\"Not enough resources\"}";
 				*code = 3;
 				return;
