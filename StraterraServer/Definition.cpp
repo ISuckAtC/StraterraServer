@@ -210,7 +210,7 @@ namespace Straterra
 
 		void DefineTownBuildings()
 		{
-            TownBuilding townhall1;
+            TownBuilding townhall1{};
             townhall1.id = 0;
             townhall1.type = TOWNHALL;
             townhall1.buildingTime = 5;
@@ -221,7 +221,7 @@ namespace Straterra
             townhall1.maxLevel = 2;
             townBuildingDefinitions[0] = townhall1;
 
-            TownBuilding townhall2;
+            TownBuilding townhall2{};
             townhall2.id = 1;
             townhall2.type = TOWNHALL;
             townhall2.buildingTime = 60;
@@ -232,7 +232,7 @@ namespace Straterra
             townhall2.maxLevel = 3;
             townBuildingDefinitions[1] = townhall2;
 
-            TownBuilding townhall3;
+            TownBuilding townhall3{};
             townhall3.id = 2;
             townhall3.type = TOWNHALL;
             townhall3.buildingTime = 240;
@@ -243,7 +243,7 @@ namespace Straterra
             townhall3.maxLevel = 3;
             townBuildingDefinitions[1] = townhall3;
 
-            TownBuilding barracks1;
+            TownBuilding barracks1{};
             barracks1.id = 3;
             barracks1.type = BARRACKS;
             barracks1.buildingTime = 30;
@@ -255,7 +255,7 @@ namespace Straterra
             barracks1.maxLevel = 2;
             townBuildingDefinitions[3] = barracks1;
 
-            TownBuilding barracks2;
+            TownBuilding barracks2{};
             barracks2.id = 4;
             barracks2.type = BARRACKS;
             barracks2.buildingTime = 100;
@@ -267,7 +267,7 @@ namespace Straterra
             barracks2.maxLevel = 3;
             townBuildingDefinitions[4] = barracks2;
 
-            TownBuilding barracks3;
+            TownBuilding barracks3{};
             barracks3.id = 5;
             barracks3.type = BARRACKS;
             barracks3.buildingTime = 300;
@@ -279,7 +279,7 @@ namespace Straterra
             barracks3.maxLevel = 3;
             townBuildingDefinitions[5] = barracks3;
 
-            TownBuilding smithy1;
+            TownBuilding smithy1{};
             smithy1.id = 6;
             smithy1.type = SMITHY;
             smithy1.buildingTime = 5;
@@ -290,7 +290,7 @@ namespace Straterra
             smithy1.maxLevel = 2;
             townBuildingDefinitions[6] = smithy1;
 
-            TownBuilding smithy2;
+            TownBuilding smithy2{};
             smithy2.id = 7;
             smithy2.type = SMITHY;
             smithy2.buildingTime = 60;
@@ -301,7 +301,7 @@ namespace Straterra
             smithy2.maxLevel = 3;
             townBuildingDefinitions[7] = smithy2;
 
-            TownBuilding smithy3;
+            TownBuilding smithy3{};
             smithy3.id = 8;
             smithy3.type = SMITHY;
             smithy3.buildingTime = 240;
@@ -312,7 +312,7 @@ namespace Straterra
             smithy3.maxLevel = 3;
             townBuildingDefinitions[8] = smithy3;
 
-            TownBuilding academy1;
+            TownBuilding academy1{};
             academy1.id = 9;
             academy1.type = ACADEMY;
             academy1.buildingTime = 5;
@@ -324,7 +324,7 @@ namespace Straterra
             academy1.maxLevel = 2;
             townBuildingDefinitions[9] = academy1;
 
-            TownBuilding academy2;
+            TownBuilding academy2{};
             academy2.id = 10;
             academy2.type = ACADEMY;
             academy2.buildingTime = 60;
@@ -336,7 +336,7 @@ namespace Straterra
             academy2.maxLevel = 3;
             townBuildingDefinitions[10] = academy2;
 
-            TownBuilding academy3;
+            TownBuilding academy3{};
             academy3.id = 11;
             academy3.type = ACADEMY;
             academy3.buildingTime = 240;
@@ -348,7 +348,7 @@ namespace Straterra
             academy3.maxLevel = 3;
             townBuildingDefinitions[11] = academy3;
 
-            TownBuilding temple1;
+            TownBuilding temple1{};
             temple1.id = 12;
             temple1.type = TEMPLE;
             temple1.buildingTime = 5;
@@ -359,7 +359,7 @@ namespace Straterra
             temple1.maxLevel = 2;
             townBuildingDefinitions[12] = temple1;
 
-            TownBuilding temple2;
+            TownBuilding temple2{};
             temple2.id = 13;
             temple2.type = TEMPLE;
             temple2.buildingTime = 60;
@@ -370,7 +370,7 @@ namespace Straterra
             temple2.maxLevel = 3;
             townBuildingDefinitions[13] = temple2;
 
-            TownBuilding temple3;
+            TownBuilding temple3{};
             temple3.id = 14;
             temple3.type = TEMPLE;
             temple3.buildingTime = 190;
@@ -381,7 +381,7 @@ namespace Straterra
             temple3.maxLevel = 3;
             townBuildingDefinitions[14] = temple3;
 
-            TownBuilding workshop1;
+            TownBuilding workshop1{};
             workshop1.id = 15;
             workshop1.type = WORKSHOP;
             workshop1.buildingTime = 5;
@@ -392,7 +392,7 @@ namespace Straterra
             workshop1.maxLevel = 2;
             townBuildingDefinitions[15] = workshop1;
 
-            TownBuilding workshop2;
+            TownBuilding workshop2{};
             workshop2.id = 16;
             workshop2.type = WORKSHOP;
             workshop2.buildingTime = 50;
@@ -403,7 +403,7 @@ namespace Straterra
             workshop2.maxLevel = 3;
             townBuildingDefinitions[16] = workshop2;
 
-            TownBuilding workshop3;
+            TownBuilding workshop3{};
             workshop3.id = 17;
             workshop3.type = WORKSHOP;
             workshop3.buildingTime = 250;
@@ -414,7 +414,7 @@ namespace Straterra
             workshop3.maxLevel = 3;
             townBuildingDefinitions[17] = workshop3;
 
-            TownBuilding warehouse1;
+            TownBuilding warehouse1{};
             warehouse1.id = 18;
             warehouse1.type = WAREHOUSE;
             warehouse1.buildingTime = 5;
@@ -425,7 +425,7 @@ namespace Straterra
             warehouse1.maxLevel = 2;
             townBuildingDefinitions[18] = warehouse1;
 
-            TownBuilding warehouse2;
+            TownBuilding warehouse2{};
             warehouse2.id = 19;
             warehouse2.type = WAREHOUSE;
             warehouse2.buildingTime = 55;
@@ -436,7 +436,7 @@ namespace Straterra
             warehouse2.maxLevel = 3;
             townBuildingDefinitions[19] = warehouse2;
 
-            TownBuilding warehouse3;
+            TownBuilding warehouse3{};
             warehouse3.id = 20;
             warehouse3.type = WAREHOUSE;
             warehouse3.buildingTime = 185;
@@ -447,7 +447,7 @@ namespace Straterra
             warehouse3.maxLevel = 3;
             townBuildingDefinitions[20] = warehouse3;
 
-            TownBuilding marketplace1;
+            TownBuilding marketplace1{};
             marketplace1.id = 24;
             marketplace1.type = MARKETPLACE;
             marketplace1.buildingTime = 5;
@@ -460,7 +460,7 @@ namespace Straterra
             marketplace1.maxLevel = 2;
             townBuildingDefinitions[24] = marketplace1;
 
-            TownBuilding marketplace2;
+            TownBuilding marketplace2{};
             marketplace2.id = 25;
             marketplace2.type = MARKETPLACE;
             marketplace2.buildingTime = 70;
@@ -473,7 +473,7 @@ namespace Straterra
             marketplace2.maxLevel = 3;
             townBuildingDefinitions[25] = marketplace2;
 
-            TownBuilding marketplace3;
+            TownBuilding marketplace3{};
             marketplace3.id = 26;
             marketplace3.type = MARKETPLACE;
             marketplace3.buildingTime = 130;
@@ -588,5 +588,19 @@ namespace Straterra
 			}
 			return 0;
 		}
-	}
+        TownBuilding::TownBuilding()
+        {
+            this->id = 0;
+            this->type = TOWNHALL;
+            this->buildingTime = 69;
+            this->name = "NAMEMISSING";
+            this->health = 0;
+            this->foodCost = 0;
+            this->woodCost = 0;
+            this->metalCost = 0;
+            this->orderCost = 0;
+            this->level = 0;
+            this->maxLevel = 0;
+        }
+}
 }

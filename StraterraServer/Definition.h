@@ -61,6 +61,7 @@ namespace Straterra
 
 		struct TownBuilding
 		{
+			TownBuilding();
 			int id;
 			TOWNBUILDINGTYPE type;
 			int buildingTime;
