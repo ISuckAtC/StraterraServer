@@ -247,6 +247,14 @@ int main(int argc, char** argv)
 		Straterra::Http::http_server(acceptor, socket);
 
 		ioc.run();
+
+		while (true)
+		{
+			std::cout << "ioc ran out of work?" << std::endl;
+			ioc.restart();
+			ioc.run();
+		}
+
 		return 0;
 	}
 	catch (std::exception const& e)

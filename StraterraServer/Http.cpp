@@ -270,6 +270,7 @@ namespace Straterra
 						if (!ec)
 						{
 							// close connection if deadline is passed
+							std::cout << "Connection timed out..." << std::endl;
 							self->socket_.close(ec);
 						}
 					}
