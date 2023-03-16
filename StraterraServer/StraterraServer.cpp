@@ -255,12 +255,14 @@ int main(int argc, char** argv)
 			ioc.run();
 		}
 
-		return 0;
+		//return 0;
 	}
 	catch (std::exception const& e)
 	{
 		std::cerr << e.what() << std::endl;
-		return 1;
+		//return 1;
 	}
+	std::cout << "End of program" << std::endl;
+	return 0;
 }
 
