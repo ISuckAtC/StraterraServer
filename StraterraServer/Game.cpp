@@ -206,6 +206,8 @@ namespace Straterra
 		}
 		void slowUpdate()
 		{
+			try
+			{
 			// slow update logic
 			std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
 			time_t now;
@@ -224,6 +226,12 @@ namespace Straterra
 					usersOnline--;
 					i--;
 				}
+			}
+			slowUpdate();
+			}
+			catch (std::exception const& e)
+			{
+				std::cerr << e.what() << std::endl;
 			}
 		}
 
