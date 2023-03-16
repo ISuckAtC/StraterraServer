@@ -324,12 +324,12 @@ namespace Straterra
 			for (int i = 0; i < getUserCount(); ++i)
 			{
 				Player::User* u = getUserAt(i);
-				std::cout << std::to_string((long)u) << " | ";
-				std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
+				//std::cout << std::to_string((long)u) << " | ";
+				//std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
 				try
 				{
-					std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
-					std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
+					//std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
+					//std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
 					if (u->login == loginInfo)
 					{
 						long long token = createSessionToken();
@@ -337,9 +337,9 @@ namespace Straterra
 						Session* s = new Session(u->userId, token);
 						addSession(s);
 
-						std::cout << "session token created: " << s->token << " (" << token << ")" << std::endl;
-						std::cout << "token string: " << getTokenString(token) << std::endl;
-						std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
+						//std::cout << "session token created: " << s->token << " (" << token << ")" << std::endl;
+						//std::cout << "token string: " << getTokenString(token) << std::endl;
+						//std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
 
 
 						std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
