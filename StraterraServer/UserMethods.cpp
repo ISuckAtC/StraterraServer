@@ -347,7 +347,7 @@ namespace Straterra
 						*out = "{\"success\":\"true\",\"message\":\"" + getTokenString(token) + "\"}";
 						return;
 					}
-					std::cout << "b" << std::endl;
+					//std::cout << "b" << std::endl;
 				}
 				catch (std::exception const& e)
 				{
