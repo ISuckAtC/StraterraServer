@@ -110,6 +110,7 @@ namespace Straterra
 		}
 		ScheduledTownBuildingEvent::ScheduledTownBuildingEvent(int secondsTotal, int buildingId, int buildingSlot, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
 		{
+			Game::getUserById(owner)->cityBuildingSlots[buildingSlot] = 254;
 			this->buildingId = buildingId;
 			this->buildingSlot = buildingSlot;
 			this->type = TOWNBUILDING;
