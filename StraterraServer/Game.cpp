@@ -209,8 +209,12 @@ namespace Straterra
 			// slow update logic
 			std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
 			time_t now;
+			tm timeNow;
 			time(&now);
-			std::cout << now << std::endl;
+			localtime_s(&timeNow, &now);
+			char timeChars[32];
+			std::strftime(timeChars, 32, "%a, %d.%m.%Y %H:%M:%S", &timeNow);
+			std::cout << timeChars << std::endl;
 			for (int i = 0; i < usersOnline; ++i)
 			{
 				if (sessions[i]->playerId == 1984) std::cout << "Diff: " << std::difftime(now, sessions[i]->lastSeen) << std::endl;
