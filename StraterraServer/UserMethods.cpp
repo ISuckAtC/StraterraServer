@@ -110,6 +110,7 @@ namespace Straterra
 			{
 				oss << "{\"secondsLeft\":\"" << user->activeEvents[i]->secondsLeft << "\"," <<
 					"\"type\":\"" << user->activeEvents[i]->type << "\"," <<
+					"\"owner\":\"" << user->activeEvents[i]->owner << "\"," <<
 					"\"running\":\"" << user->activeEvents[i]->running << "\"";
 				
 				// Add extras based on which type of event it is
@@ -127,6 +128,13 @@ namespace Straterra
 					ScheduledTownBuildingEvent* bEvent = (ScheduledTownBuildingEvent*)(user->activeEvents[i]);
 					oss << ",\"buildingId\":\"" << bEvent->buildingId << "\"," <<
 						"\"buildingSlot\":\"" << bEvent->buildingSlot << "\"";
+					break;
+				}
+				case MAPBUILDING:
+				{
+					ScheduledMapBuildingEvent* mEvent = (ScheduledMapBuildingEvent*)(user->activeEvents[i]);
+					oss << ",\"buildingId\":\"" << mEvent->buildingId << "\"," <<
+						"\"position\":\"" << mEvent->position << "\"";
 					break;
 				}
 				}
