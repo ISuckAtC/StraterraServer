@@ -25,7 +25,10 @@ namespace Straterra
 		}
 		User::User()
 		{
-			
+			this->foodMax = 4000;
+			this->woodMax = 4000;
+			this->metalMax = 2000;
+			this->order = 100;
 		}
 		int User::getFoodTickValue()
 		{
@@ -68,6 +71,10 @@ namespace Straterra
 			metal += getMetalTickValue();
 			order += getOrderTickValue();
 
+			if (food > foodMax) food = foodMax;
+			if (wood > woodMax) wood = woodMax;
+			if (metal > metalMax) metal = metalMax;
+			if (order > orderMax) order = orderMax;
 
 			//if (userId == 69) std::cout << std::to_string((long)this) << "|" << food << std::endl;
 			//std::cout << "Resources added for user " << userId << " totals are now: " <<

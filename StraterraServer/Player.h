@@ -50,6 +50,11 @@ namespace Straterra
 			int metal;
 			int order;
 
+			int foodMax;
+			int woodMax;
+			int metalMax;
+			int orderMax;
+
 			int foodGeneration;
 			float foodMultiplier;
 			int restFood;
