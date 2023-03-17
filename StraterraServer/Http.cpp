@@ -62,6 +62,7 @@ namespace Straterra
 			// underlying read operation from client
 			void read()
 			{
+				try{
 				// pointer to this object
 				auto self = shared_from_this();
 
@@ -76,10 +77,16 @@ namespace Straterra
 						boost::ignore_unused(bytes_recieved);
 						if (!ec) self->handle_request();
 					});
+				}
+				catch (std::exception const& e)
+				{
+					std::cout << "ERROR: " << e.what() << std::endl;
+				}
 			}
 
 			void handle_request()
 			{
+				try{
 				// match the version of the request
 				response_.version(request_.version());
 
@@ -103,6 +110,11 @@ namespace Straterra
 				}
 
 				write_response();
+				}
+				catch (std::exception const& e)
+				{
+					std::cout << "ERROR: " << e.what() << std::endl;
+				}
 			}
 
 			void create_response()
@@ -228,18 +240,21 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						out = "unknown method";
 					}
+					beast::ostream(response_.body()) << out;
 				}
 				catch (std::exception& e)
 				{
 					std::cout << e.what() << std::endl;
 					out = "error";
+					beast::ostream(response_.body()) << out;
 				}
-				beast::ostream(response_.body()) << out;
+				
 			}
 
 			// async send response
 			void write_response()
 			{
+				try{
 				// pointer to self
 				auto self = shared_from_this();
 
@@ -257,10 +272,16 @@ namespace Straterra
 						self->deadline_.cancel();
 					}
 				);
+				}
+				catch (std::exception const& e)
+				{
+					std::cout << "ERROR: " << e.what() << std::endl;
+				}
 			}
 
 			void check_deadline()
 			{
+				try{
 				auto self = shared_from_this();
 
 				// async_wait just waits equal to whats passed to the timer
@@ -275,6 +296,11 @@ namespace Straterra
 						}
 					}
 				);
+				}
+				catch (std::exception const& e)
+				{
+					std::cout << "ERROR: " << e.what() << std::endl;
+				}
 			}
 		};
 

@@ -30,6 +30,7 @@ namespace Straterra
 	{
 		void getMapTile(long long token, int position, std::string* out, int* code)
 		{
+			try{
 			// Grab and verify user
 			User* user = getUserBySession(token);
 			if (user->userId == -1)
@@ -46,9 +47,15 @@ namespace Straterra
 
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void getHomeUnits(long long token, std::string* out, int* code)
 		{
+			try{
 			// Grab and verify user
 			User* user = getUserBySession(token);
 			if (user->userId == -1)
@@ -78,9 +85,15 @@ namespace Straterra
 
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void getScheduledEvents(long long token, std::string* out, int* code)
 		{
+			try{
 			// Grab and verify user
 			User* user = getUserBySession(token);
 			if (user->userId == -1)
@@ -124,9 +137,15 @@ namespace Straterra
 
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void createMapBuilding(long long token, int buildingId, int position, std::string* out, int* code)
 		{
+			try{
 			// Grab the current user by session token
 			User* user = getUserBySession(token);
 
@@ -178,9 +197,15 @@ namespace Straterra
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void createUnits(long long token, int unitId, int amount, std::string* out, int* code)
 		{
+			try{
 			// Grab the current user by session token
 			User* user = getUserBySession(token);
 
@@ -228,9 +253,15 @@ namespace Straterra
 			*code = 3;
 
 			//std::cout << "methodDONEDONEDONE" << std::endl;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void createTownBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code)
 		{
+			try{
 			// Grab the current user by session token
 			User* user = getUserBySession(token);
 			
@@ -283,10 +314,16 @@ namespace Straterra
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 
 		void createUser(std::string name, std::string loginInfo)
 		{
+			try{
 			std::cout << "[createUser] name: \"" << name << "\" login: \"" << loginInfo << "\"" << std::endl;
 			Player::User* u = new Player::User();
 			u->allianceId = 0;
@@ -317,9 +354,15 @@ namespace Straterra
 			u->orderMultiplier = 1.;
 
 			addUser(u);
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void login(std::string* out, int* code, std::string loginInfo)
 		{
+			try{
 			std::cout << "Users total: " << getUserCount() << std::endl;
 			for (int i = 0; i < getUserCount(); ++i)
 			{
@@ -357,9 +400,15 @@ namespace Straterra
 
 			*code = 2;
 			*out = "{\"success\":\"false\",\"message\":\"No player with that login\"}";
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void getResources(long long token, int userId, std::string* out, int* code)
 		{
+			try{
 			int id = findUserBySession(token);
 			if (id == -1)
 			{
@@ -384,9 +433,15 @@ namespace Straterra
 				"}";
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void getPlayers(long long token, std::string* out, int* code)
 		{
+			try{
 			int id = findUserBySession(token);
 			if (id == -1)
 			{
@@ -417,9 +472,15 @@ namespace Straterra
 			oss << "]}";
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void getUser(long long token, int userId, std::string* out, int* code)
 		{
+			try{
 			int id = findUserBySession(token);
 			if (id == -1)
 			{
@@ -455,9 +516,15 @@ namespace Straterra
 
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void getSelfPlayer(long long token, std::string* out, int* code)
 		{
+			try{
 			//std::cout << "getSelfPlayer m" << std::endl;
 			int id = findUserBySession(token);
 			if (id == -1)
@@ -494,6 +561,11 @@ namespace Straterra
 				"}";
 			*out = oss.str();
 			*code = 0;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 	}
 }

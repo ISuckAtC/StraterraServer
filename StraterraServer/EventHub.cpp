@@ -30,8 +30,14 @@ namespace Straterra
 		}
 		void fireOnTick()
 		{
+			try{
 			//std::cout << "TESTP: " << *(ScheduledEvents::getTestP()) << std::endl;
 			onTick();
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 	}
 }

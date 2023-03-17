@@ -62,6 +62,7 @@ namespace Straterra
 
 		void User::addResources()
 		{
+			try{
 			food += getFoodTickValue();
 			wood += getWoodTickValue();
 			metal += getMetalTickValue();
@@ -75,6 +76,11 @@ namespace Straterra
 			//	std::to_string(metal) << " | " <<
 			//	std::to_string(order) << " | " <<
 			//	std::endl;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 
 		User::~User()
