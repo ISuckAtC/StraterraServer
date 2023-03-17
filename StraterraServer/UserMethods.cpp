@@ -564,9 +564,16 @@ namespace Straterra
 				"\"" << std::to_string(citySlots[4]) << "\"," <<
 				"\"" << std::to_string(citySlots[5]) << "\"," <<
 				"\"" << std::to_string(citySlots[6]) << "\"," <<
-				"\"" << std::to_string(citySlots[7]) << "\"" <<
-				"]" <<
-				"}";
+				"\"" << std::to_string(citySlots[7]) << "\"]," <<
+				"\"buildingPositions\":[";
+				for (int k = 0; k < user->mapBuildings.size(); ++k)
+				{
+					if (k > 0) oss << ",";
+					int position = user->mapBuildings[k];
+					oss << "{\"building\":\"" << std::to_string(Map::getTile(position)->building) << "\","
+						<< "\"position\":\"" << position << "\"}";
+				}
+			oss << "]}";
 			*out = oss.str();
 			*code = 0;
 			}
