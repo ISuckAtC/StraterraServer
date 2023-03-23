@@ -234,15 +234,18 @@ namespace Straterra
 					}
 					else if (method == "getMapTile")
 					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::getMapTile(token, std::stoi(options[1]), &out, &code);
 					}
 					else if (method == "index")
 					{
-						response_.set(http::field::content_type, "html");
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						response_.set(http::field::content_type, "text");
 						out = Game::indexDoc;
 					}
 					else if (method == "favicon.ico")
 					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
 						response_.set(http::field::content_type, "image/x-icon");
 						skip = true;
 						beast::ostream(response_.body()) << Game::favicon;
