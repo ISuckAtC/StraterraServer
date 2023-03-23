@@ -54,11 +54,8 @@ int main(int argc, char** argv)
 
 	faviconStream.seekg(0, std::ios::beg);
 
-	char bufferbuffer[32000];
+	faviconStream.read(Game::favicon, contLength);
 
-	faviconStream.read(bufferbuffer, contLength);
-
-	Game::favicon = bufferbuffer;
 	Game::faviconLength = contLength;
 
 	Straterra::Definition::DefineUnits();
