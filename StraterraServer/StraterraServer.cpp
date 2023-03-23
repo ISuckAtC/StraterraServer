@@ -42,6 +42,9 @@ int main(int argc, char** argv)
 	}
 	Game::indexDoc += "\0";
 
+	std::cout << "Html" << std::endl << std::endl;
+	std::cout << Game::indexDoc << std::endl;
+
 	Straterra::Definition::DefineUnits();
 	Straterra::Definition::DefineMapBuildings();
 	Straterra::Definition::DefineTownBuildings();
