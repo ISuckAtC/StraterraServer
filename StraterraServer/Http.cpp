@@ -238,7 +238,8 @@ namespace Straterra
 					else
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
-						out = "unknown method";
+						response_.set(http::field::content_type, "html");
+						out = Game::indexDoc;
 					}
 					beast::ostream(response_.body()) << out;
 				}

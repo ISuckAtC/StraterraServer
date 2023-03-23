@@ -23,6 +23,7 @@ namespace Straterra
 	}
 	namespace Game
 	{
+		static std::string indexDoc;
 		int getTickInterval();
 		int getTicksPerHour();
 

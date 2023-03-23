@@ -24,6 +24,7 @@ namespace Straterra
 	namespace Http
 	{
 		static int _code;
+		
 
 		class http_connection : public std::enable_shared_from_this<http_connection>
 		{

@@ -30,6 +30,18 @@ using namespace Straterra;
 
 int main(int argc, char** argv)
 {
+	std::ifstream indexDocStream{ "./index.html" };
+
+	Game::indexDoc = "";
+
+	std::string hLine;
+
+	while (std::getline(indexDocStream, hLine))
+	{
+		Game::indexDoc += hLine + "\n";
+	}
+	Game::indexDoc += "\0";
+
 	Straterra::Definition::DefineUnits();
 	Straterra::Definition::DefineMapBuildings();
 	Straterra::Definition::DefineTownBuildings();
