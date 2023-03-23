@@ -119,6 +119,7 @@ namespace Straterra
 
 			void create_response()
 			{
+				bool skip = false;
 				std::string out = "";
 				int code = 0;
 				try
@@ -235,13 +236,23 @@ namespace Straterra
 					{
 						UserMethods::getMapTile(token, std::stoi(options[1]), &out, &code);
 					}
-					else
+					else if (method == "index")
 					{
-						std::cout << "Method: \"" << method << "\"" << std::endl;
 						response_.set(http::field::content_type, "html");
 						out = Game::indexDoc;
 					}
-					beast::ostream(response_.body()) << out;
+					else if (method == "favicon.ico")
+					{
+						response_.set(http::field::content_type, "image/x-icon");
+						skip = true;
+						beast::ostream(response_.body()) << Game::favicon;
+					}
+					else
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						out = "invalid method";
+					}
+					if (!skip) beast::ostream(response_.body()) << out;
 				}
 				catch (std::exception& e)
 				{

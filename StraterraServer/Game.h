@@ -24,6 +24,8 @@ namespace Straterra
 	namespace Game
 	{
 		static std::string indexDoc;
+		static char* favicon;
+		static size_t faviconLength;
 		int getTickInterval();
 		int getTicksPerHour();
 

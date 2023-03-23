@@ -45,6 +45,22 @@ int main(int argc, char** argv)
 	std::cout << "Html" << std::endl << std::endl;
 	std::cout << Game::indexDoc << std::endl;
 
+
+	std::ifstream faviconStream{ "./favicon.ico" };
+
+	faviconStream.seekg(0, std::ios::end);
+
+	size_t contLength = faviconStream.tellg();
+
+	faviconStream.seekg(0, std::ios::beg);
+
+	char bufferbuffer[32000];
+
+	faviconStream.read(bufferbuffer, contLength);
+
+	Game::favicon = bufferbuffer;
+	Game::faviconLength = contLength;
+
 	Straterra::Definition::DefineUnits();
 	Straterra::Definition::DefineMapBuildings();
 	Straterra::Definition::DefineTownBuildings();
