@@ -240,6 +240,11 @@ namespace Straterra
 				metalCost > user->metal ||
 				orderCost > user->order)
 			{
+				std::cout <<
+					foodCost << " | " << user->food << std::endl <<
+					woodCost << " | " << user->wood << std::endl <<
+					metalCost << " | " << user->metal << std::endl <<
+					orderCost << " | " << user->order << std::endl;
 				*out = "{\"success\":\"false\",\"message\":\"Not enough resources\"}";
 				*code = 3;
 				return;
