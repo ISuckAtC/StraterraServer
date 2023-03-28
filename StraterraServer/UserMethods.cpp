@@ -150,6 +150,8 @@ namespace Straterra
 			}
 			oss << "]}";
 
+			std::cout << actualUnits << " unit groups returned" << std::endl;
+
 			*out = oss.str();
 			*code = 0;
 			}
