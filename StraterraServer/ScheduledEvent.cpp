@@ -214,7 +214,25 @@ namespace Straterra
 		}
 		void ScheduledAttackEvent::Complete()
 		{
-			// TODO
+			std::cout << "Commencing attack on position: " << destination << std::endl;
+
+			std::vector<Game::Group> unitsLeft;
+			std::string output;
+
+			bool attackWin = Game::Fight(&unitsLeft, &output, Map::getTile(destination)->army, army);
+
+			std::cout << (attackWin ? "Attacker Won" : "Defender Won") << " | " << unitsLeft.size() << " groups are left alive" << std::endl;
+
+			if (attackWin)
+			{
+				Map::getTile(destination)->army.clear();
+				new ScheduledMoveArmyEvent(20, unitsLeft, origin, destination, owner);
+			}
+			else
+			{
+				Map::getTile(destination)->army = unitsLeft;
+			}
+
 			delete this;
 		}
 	}

@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <boost/signals2/signal.hpp>
 #include <boost/bind/bind.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "Game.h"
 #include "EventHub.h"
@@ -28,6 +29,66 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void attackMapTile(long long token, int destination, std::string units, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				if (Map::getTile(destination)->building == 0)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Nothing to attack\"}";
+					*code = 2;
+					return;
+				}
+
+				std::vector<std::string> unitSplit;
+				boost::split(unitSplit, units, boost::is_any_of(";"));
+
+				if (unitSplit.size() <= 0)
+				{
+					std::cout << "tried to attack with no units" << std::endl;
+					*out = "{\"success\":\"false\",\"message\":\"Tried to attack with no units\"}";
+					*code = 2;
+					return;
+				}
+
+				std::vector<Group> army;
+
+				for (int i = 0; i < unitSplit.size(); ++i)
+				{
+					int colonIndex = unitSplit[i].find_first_of(':');
+					int unitId = std::stoi(unitSplit[i].substr(0, colonIndex));
+					int amount = std::stoi(unitSplit[i].substr(colonIndex + 1));
+
+					if (amount > user->homeArmy[unitId])
+					{
+						std::cout << "tried to attack with units they do not have" << std::endl;
+						*out = "{\"success\":\"false\",\"message\":\"Tried to attack with units they do not have\"}";
+						*code = 2;
+						return;
+					}
+
+					army.push_back(Group(amount, unitId));
+				}
+
+				new ScheduledAttackEvent(20, army, destination, user->cityLocation, user->userId);
+
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+				*code = 3;
+			}
+			catch (const std::exception& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
+		}
 		void getMapTile(long long token, int position, std::string* out, int* code)
 		{
 			try{

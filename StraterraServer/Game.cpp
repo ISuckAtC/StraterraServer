@@ -364,8 +364,20 @@ namespace Straterra
 
 
 
-		bool Fight(std::vector<Group>* unitsLeft, std::string* output, std::vector<Group*> defender, std::vector<Group*> attacker, bool verbose)
+		bool Fight(std::vector<Group>* unitsLeft, std::string* output, std::vector<Group> defender_, std::vector<Group> attacker_, bool verbose)
 		{
+			std::vector<Group*> attacker;
+			std::vector<Group*> defender;
+
+			for (int i = 0; i < attacker_.size(); ++i)
+			{
+				attacker.push_back(new Group(attacker_[i]));
+			}
+			for (int i = 0; i < defender_.size(); ++i)
+			{
+				defender.push_back(new Group(defender_[i]));
+			}
+
 			std::sort(defender.begin(), defender.end(),
 				[](const Group* a, const Group* b) -> bool
 				{
@@ -539,7 +551,7 @@ namespace Straterra
 									" (" + std::to_string(remains[0].count) + ")\n";
 							}
 						}
-						unitsLeft = &remains;
+						*unitsLeft = remains;
 						return group->right;
 					}
 					if (preferredTargets.size() > 0)

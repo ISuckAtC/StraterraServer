@@ -33,7 +33,7 @@ namespace Straterra
 			float metalAmount;
 			float chaosAmount;
 			float corruption;
-			std::vector<Game::Group*> army;
+			std::vector<Game::Group> army;
 		};
 
 		Tile* getTile(int position);
