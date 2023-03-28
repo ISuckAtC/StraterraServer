@@ -31,6 +31,7 @@ namespace Straterra
 	{
 		void attackMapTile(long long token, int destination, std::string units, std::string* out, int* code)
 		{
+			std::cout << destination << std::endl;
 			try
 			{
 				// Grab and verify user
