@@ -214,18 +214,46 @@ namespace Straterra
 		}
 		void ScheduledAttackEvent::Complete()
 		{
+			ScheduledEvent::Complete();
+
 			std::cout << "Commencing attack on position: " << destination << std::endl;
+
+			Map::Tile* targetTile = Map::getTile(destination);
+
+			Player::User* defendingPlayer = Game::getUserById(targetTile->owner);
+
+			std::vector<Game::Group> defender;
+
+			if (targetTile->building == 1)
+			{
+				for (int i = 0; i < 256; ++i)
+				{
+					if (defendingPlayer->homeArmy[i] > 0) defender.push_back(Game::Group(defendingPlayer->homeArmy[i], i));
+				}
+			}
+			else
+			{
+				defender = targetTile->army;
+			}
 
 			std::vector<Game::Group> unitsLeft;
 			std::string output;
 
-			bool attackWin = Game::Fight(&unitsLeft, &output, Map::getTile(destination)->army, army);
+
+			bool attackWin = Game::Fight(&unitsLeft, &output, defender, army);
 
 			std::cout << (attackWin ? "Attacker Won" : "Defender Won") << " | " << unitsLeft.size() << " groups are left alive" << std::endl;
 
 			if (attackWin)
 			{
-				Map::getTile(destination)->army.clear();
+				if (targetTile->building == 1)
+				{
+					for (int i = 0; i < 256; ++i) defendingPlayer->homeArmy[i] = 0;
+				}
+				else
+				{
+					targetTile->army.clear();
+				}
 				new ScheduledMoveArmyEvent(20, unitsLeft, origin, destination, owner);
 			}
 			else
