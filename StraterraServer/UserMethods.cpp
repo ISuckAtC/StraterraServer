@@ -79,6 +79,12 @@ namespace Straterra
 					army.push_back(Group(amount, unitId));
 				}
 
+				for (int i = 0; i < army.size(); ++i)
+				{
+					Group g = army[i];
+					user->homeArmy[g.unitId] -= g.count;
+				}
+
 				new ScheduledAttackEvent(20, army, destination, user->cityLocation, user->userId);
 
 				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
