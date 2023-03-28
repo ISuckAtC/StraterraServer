@@ -34,7 +34,7 @@ namespace Straterra
 
         void DefineMapBuildings()
         {
-            MapBuilding village1;
+            MapBuilding village1{};
             village1.type = VILLAGE;
             village1.buildingTime = 0;
             village1.foodCost = 0;
@@ -51,7 +51,7 @@ namespace Straterra
             mapBuildingDefinitions[1] = village1;
 
             // Farms
-            MapBuilding farm1;
+            MapBuilding farm1{};
             farm1.type = FARM;
             farm1.buildingTime = 100;
             farm1.foodCost = 0;
@@ -68,7 +68,7 @@ namespace Straterra
             mapBuildingDefinitions[10] = farm1;
 
 
-            MapBuilding farm2;
+            MapBuilding farm2{};
             farm2.type = FARM;
             farm2.buildingTime = 700;
             farm2.foodCost = 0;
@@ -85,7 +85,7 @@ namespace Straterra
             mapBuildingDefinitions[11] = farm2;
 
 
-            MapBuilding farm3;
+            MapBuilding farm3{};
             farm3.type = FARM;
             farm3.buildingTime = 1100;
             farm3.foodCost = 0;
@@ -104,7 +104,7 @@ namespace Straterra
 
 
             // Logging Camps
-            MapBuilding wood1;
+            MapBuilding wood1{};
             wood1.type = WOOD;
             wood1.buildingTime = 200;
             wood1.foodCost = 300;
@@ -121,7 +121,7 @@ namespace Straterra
             mapBuildingDefinitions[20] = wood1;
 
 
-            MapBuilding wood2;
+            MapBuilding wood2{};
             wood2.type = WOOD;
             wood2.buildingTime = 500;
             wood2.foodCost = 0;
@@ -138,7 +138,7 @@ namespace Straterra
             mapBuildingDefinitions[21] = wood2;
 
 
-            MapBuilding wood3;
+            MapBuilding wood3{};
             wood3.type = WOOD;
             wood3.buildingTime = 900;
             wood3.foodCost = 0;
@@ -157,7 +157,7 @@ namespace Straterra
 
 
             // Mines
-            MapBuilding mine1;
+            MapBuilding mine1{};
             mine1.type = MINE;
             mine1.buildingTime = 250;
             mine1.foodCost = 0;
@@ -174,7 +174,7 @@ namespace Straterra
             mapBuildingDefinitions[30] = mine1;
 
 
-            MapBuilding mine2;
+            MapBuilding mine2{};
             mine2.type = MINE;
             mine2.buildingTime = 250;
             mine2.foodCost = 0;
@@ -191,7 +191,7 @@ namespace Straterra
             mapBuildingDefinitions[31] = mine2;
 
 
-            MapBuilding mine3;
+            MapBuilding mine3{};
             mine3.type = MINE;
             mine3.buildingTime = 250;
             mine3.foodCost = 0;
@@ -489,7 +489,7 @@ namespace Straterra
 
 		void DefineUnits()
 		{
-			Unit archer;
+            Unit archer{};
 			archer.id = 0;
 			archer.trainingTime = 1;
 			archer.preference = INFANTRY;
@@ -510,7 +510,7 @@ namespace Straterra
 			archer.metalCost = 5;
 			unitDefinitions[0] = archer;
 
-			Unit cavalry;
+            Unit cavalry{};
 			cavalry.id = 1;
 			cavalry.trainingTime = 60;
 			cavalry.preference = MISSILE;
@@ -532,7 +532,7 @@ namespace Straterra
 
 			// cavalry.bonusDamage.Add(UnitType.INFANTRY, 2);
 
-			Unit swordsman;
+            Unit swordsman{};
 			swordsman.id = 2;
 			swordsman.trainingTime = 5;
 			swordsman.preference = INFANTRY;
@@ -552,7 +552,7 @@ namespace Straterra
 			swordsman.metalCost = 10;
 			unitDefinitions[2] = swordsman;
 
-			Unit spearman;
+            Unit spearman{};
 			spearman.id = 3;
 			spearman.trainingTime = 3;
 			spearman.preference = CAVALRY;

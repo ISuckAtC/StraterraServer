@@ -83,7 +83,7 @@ namespace Straterra
 			std::cout << "COMPLETE" << std::endl;
 			EventHub::unsubcribeOnTick(&subcription);
 			ownerEvents->erase(std::find(ownerEvents->begin(), ownerEvents->end(), this));
-			delete this;
+			//delete this;
 		}
 
 		ScheduledUnitProductionEvent::ScheduledUnitProductionEvent(int secondsTotal, int unitId, int amount, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
@@ -107,6 +107,7 @@ namespace Straterra
 			}
 			Game::getUserById(owner)->homeArmy[unitId] += amount;
 			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << std::to_string(Game::getUserById(owner)->homeArmy[unitId]) << ")" << std::endl;
+			delete this;
 		}
 		ScheduledTownBuildingEvent::ScheduledTownBuildingEvent(int secondsTotal, int buildingId, int buildingSlot, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
 		{
@@ -120,6 +121,7 @@ namespace Straterra
 			ScheduledEvent::Complete();
 			Player::User* user = Game::getUserById(owner);
 			user->cityBuildingSlots[buildingSlot] = buildingId;
+			delete this;
 		}
 
 		ScheduledMapBuildingEvent::ScheduledMapBuildingEvent(int secondsTotal, int buildingId, int position, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
@@ -159,6 +161,7 @@ namespace Straterra
 			}
 
 			tile->building = buildingId;
+			delete this;
 		}
 		
 		ScheduledMoveArmyEvent::ScheduledMoveArmyEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
@@ -178,6 +181,7 @@ namespace Straterra
 					new ScheduledMoveArmyEvent(0, army, origin, destination, owner);
 					return;
 				}
+				delete this;
 				return;
 			}
 
@@ -190,6 +194,7 @@ namespace Straterra
 					Player::User* armyOwner = Game::getUserById(Map::getTile(destination)->owner);
 					armyOwner->homeArmy[army[i].unitId] += army[i].count;
 				}
+				delete this;
 				return;
 			}
 
@@ -199,6 +204,7 @@ namespace Straterra
 			//	return;
 			//}
 			//Grid._instance.tiles[destination].army = army;
+			delete this;
 		}
 		ScheduledAttackEvent::ScheduledAttackEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
 		{
@@ -209,6 +215,7 @@ namespace Straterra
 		void ScheduledAttackEvent::Complete()
 		{
 			// TODO
+			delete this;
 		}
 	}
 }

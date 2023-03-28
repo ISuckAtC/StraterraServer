@@ -286,13 +286,28 @@ namespace Straterra
 
 			int currentBuilding = user->cityBuildingSlots[buildingSlot];
 
+			TownBuilding prevBuilding = getTownBuildingDefinition(currentBuilding);
+
 			// Check if there is already something built in this slot
 			// It can still go through if the ID is 1 lower (upgrading)
-			if (currentBuilding != 255 && currentBuilding != buildingId - 1)
+			if (currentBuilding != 255)
 			{
-				*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
-				*code = 4;
-				return;
+				if (currentBuilding == buildingId - 1)
+				{
+					// If the level of the next building isnt above, something is wrong
+					if (townBuilding.level <= prevBuilding.level)
+					{
+						*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
+						*code = 4;
+						return;
+					}
+				}
+				else
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
+					*code = 4;
+					return;
+				}
 			}
 
 			// Check if the user has the resources to build this building
