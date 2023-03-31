@@ -38,6 +38,8 @@ namespace Straterra
 			int color;
 			int allianceId;
 			int cityLocation;
+			int path;
+
 			BYTE cityBuildingSlots[8];
 			BYTE swordLevel;
 			BYTE archerLevel;

@@ -29,6 +29,43 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void choosePath(long long token, int choice, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				if (user->path != 0)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Path already chosen\"}";
+					*code = 2;
+					return;
+				}
+
+				if (choice > 4)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Path doesn't exist\"}";
+					*code = 2;
+					return;
+				}
+
+				user->path = choice;
+
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+				*code = 3;
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
 		void attackMapTile(long long token, int destination, std::string units, std::string* out, int* code)
 		{
 			std::cout << destination << std::endl;
@@ -553,10 +590,12 @@ namespace Straterra
 			for (int i = 0; i < getUserCount(); ++i)
 			{
 				User* user = getUserAt(i);
-				oss << "{\"userId\":\"" << std::to_string(user->userId) << "\","
-					<< "\"name\":\"" << user->name << "\","
-					<< "\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\","
-					<< "\"buildingPositions\":[";
+				oss << "{" << 
+					"\"userId\":\"" << std::to_string(user->userId) << "\"," << 
+					"\"name\":\"" << user->name << "\"," << 
+					"\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"," << 
+					"\"path\":\"" << std::to_string(user->path) << "\"," << 
+					"\"buildingPositions\":[";
 				for (int k = 0; k < user->mapBuildings.size(); ++k)
 				{
 					if (k > 0) oss << ",";
@@ -600,6 +639,7 @@ namespace Straterra
 				"\"color\":\"" << std::to_string(user->color) << "\"," <<
 				"\"allianceId\":\"" << std::to_string(user->allianceId) << "\"," <<
 				"\"cityLocation\":\"" << std::to_string(user->cityLocation) << "\"," <<
+				"\"path\":\"" << std::to_string(user->path) << "\","
 				"\"cityBuildingSlots\":" << "[" <<
 				"\"" << std::to_string(user->cityBuildingSlots[0]) << "\"," <<
 				"\"" << std::to_string(user->cityBuildingSlots[1]) << "\"," <<

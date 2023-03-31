@@ -17,6 +17,7 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void choosePath(long long token, int choice, std::string* out, int* code);
 		void attackMapTile(long long token, int position, std::string units, std::string* out, int* code);
 		void getMapTile(long long token, int position, std::string* out, int* code);
 		void getUser(long long token, int userId, std::string* out, int* code);

@@ -242,6 +242,11 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::attackMapTile(token, std::stoi(options[1]), options[2], &out, &code);
 					}
+					else if (method == "choosePath")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::choosePath(token, std::stoi(options[1]), &out, &code);
+					}
 					else if (method == "index")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
