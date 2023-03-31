@@ -685,6 +685,7 @@ namespace Straterra
 				"\"name\":\"" << userName << "\"," <<
 				"\"color\":\"" << std::to_string(color) << "\"," <<
 				"\"allianceId\":\"" << std::to_string(alliance) << "\"," <<
+				"\"path\":\"" << std::to_string(user->path) << "\"," << 
 				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"," <<
 				"\"cityBuildingSlots\":" << "[" <<
 				"\"" << std::to_string(citySlots[0]) << "\"," <<
