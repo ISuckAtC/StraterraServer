@@ -222,6 +222,8 @@ namespace Straterra
 
 			Player::User* defendingPlayer = Game::getUserById(targetTile->owner);
 
+			Player::User* attackingPlayer = Game::getUserById(owner);
+
 			std::vector<Game::Group> defender;
 
 			if (targetTile->building == 1)
@@ -249,6 +251,21 @@ namespace Straterra
 				if (targetTile->building == 1)
 				{
 					for (int i = 0; i < 256; ++i) defendingPlayer->homeArmy[i] = 0;
+
+					int stolenWood = defendingPlayer->wood / 2;
+					int stolenFood = defendingPlayer->food / 2;
+					int stolenMetal = defendingPlayer->metal / 2;
+					int stolenOrder = defendingPlayer->order / 2;
+
+					defendingPlayer->wood -= stolenWood;
+					defendingPlayer->food -= stolenFood;
+					defendingPlayer->metal -= stolenMetal;
+					defendingPlayer->order -= stolenOrder;
+
+					attackingPlayer->wood += stolenWood;
+					attackingPlayer->food += stolenFood;
+					attackingPlayer->metal += stolenMetal;
+					attackingPlayer->order += stolenOrder;
 				}
 				else
 				{
