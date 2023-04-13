@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <iomanip>
+#include <fstream>
 #include <boost/signals2/signal.hpp>
 #include <boost/bind/bind.hpp>
 
@@ -34,6 +35,7 @@ namespace Straterra
 		int timeOutSeconds;
 		std::thread updateThread;
 		std::thread slowUpdateThread;
+		std::thread autoSaveThread;
 
 		int tickCount = 0;
 
@@ -235,6 +237,66 @@ namespace Straterra
 			}
 		}
 
+		std::string saveSerialUser(User user)
+		{
+			std::ostringstream stream{};
+			stream <<
+				user.userId << ";" <<
+				user.login << ";" <<
+				user.name << ";" <<
+				user.cityLocation << ";" <<
+				user.color << ";" <<
+				user.allianceId << ";" <<
+				user.food << ";" <<
+				user.wood << ";" <<
+				user.metal << ";" <<
+				user.order << ";" <<
+				user.foodGeneration << ";" <<
+				user.woodGeneration << ";" <<
+				user.metalGeneration << ";" <<
+				user.orderGeneration << ";";
+
+			for (int i = 0; i < 8; ++i)
+			{
+				stream << user.cityBuildingSlots[i] << ";";
+			}
+
+			return stream.str();
+		}
+
+		void autoSave()
+		{
+			std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 1800));
+			std::vector<User> saveUsers;
+			int userCount = 0;
+
+			// Save current users to its own storage
+			for (int i = 0; i < users.size(); ++i)
+			{
+				saveUsers.push_back(*users[i]);
+				userCount++;
+			}
+
+			
+
+			std::ofstream saveFile {"players.txt"};
+			std::string line;
+
+			for (int i = 0; i < userCount; ++i)
+			{
+				saveFile << saveSerialUser(saveUsers[i]) << std::endl;
+			}
+			saveFile << "\0";
+
+			saveFile.close();
+
+			saveUsers.clear();
+
+			autoSave();
+		}
+
+		
+
 		void start(int _tickInterval, int _timeOutSeconds)
 		{
 			userCount = 0;
@@ -244,6 +306,7 @@ namespace Straterra
 			// start logic
 			updateThread = std::thread{ update };
 			slowUpdateThread = std::thread{ slowUpdate };
+			autoSaveThread = std::thread{ autoSave };
 			std::cout << "Game Started" << std::endl;
 		}
 		
