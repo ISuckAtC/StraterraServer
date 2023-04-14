@@ -90,6 +90,7 @@ namespace Straterra
 		struct Unit
 		{
 			int id;
+			std::string name;
 			int trainingTime;
 			int unitType;
 			int preference;
@@ -110,6 +111,11 @@ namespace Straterra
 			int woodCost;
 			int metalCost;
 			int orderCost;
+			int upgradeWoodCost;
+			int upgradeFoodCost;
+			int upgradeMetalCost;
+			int upgradeOrderCost;
+			int upgradeTime;
 
 			int GetBonusDamage(int targetType);
 		};
