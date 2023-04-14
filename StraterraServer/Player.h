@@ -47,6 +47,8 @@ namespace Straterra
 			BYTE spearmanLevel;
 			BYTE homeArmy[256];
 
+			bool unitUpgrading;
+
 			int food;
 			int wood;
 			int metal;

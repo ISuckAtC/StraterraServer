@@ -96,6 +96,14 @@ namespace Straterra
 			ScheduledAttackEvent(int secondsTotal, std::vector<Game::Group> army, int destination, int origin, int owner, bool runImmediately = true);
 			void Complete();
 		};
+
+		class ScheduledUnitUpgradeEvent : public ScheduledEvent
+		{
+		public:
+			int unitId;
+			ScheduledUnitUpgradeEvent(int secondsTotal, int unitId, int owner, bool runImmediately = true);
+			void Complete();
+		};
 	}
 }
 

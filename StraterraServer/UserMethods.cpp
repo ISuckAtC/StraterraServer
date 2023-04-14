@@ -32,7 +32,106 @@ namespace Straterra
 		
 		void upgradeUnit(long long token, int unitId, std::string* out, int* code)
 		{
+			try
+			{
+			// Grab and verify user
+			User* user = getUserBySession(token);
+			if (user->userId == -1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+				*code = 2;
+				return;
+			}
 
+			if (user->unitUpgrading)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Already upgrading a unit\"}";
+				*code = 2;
+				return;
+			}
+
+			int unitType = unitId % 10;
+
+			switch (unitType)
+			{
+				// Archer
+			case 0:
+			{
+				if (user->archerLevel != unitId - 1)
+				{
+					// Invalid upgrade
+					*out = "{\"success\":\"false\",\"message\":\"Upgrade invalid\"}";
+					*code = 2;
+					return;
+				}
+				break;
+			}
+			// Cavalry
+			case 1:
+			{
+				if (user->cavalryLevel != unitId - 1)
+				{
+					// Invalid upgrade
+					*out = "{\"success\":\"false\",\"message\":\"Upgrade invalid\"}";
+					*code = 2;
+					return;
+				}
+				break;
+			}
+			// Swordsman
+			case 2:
+			{
+				if (user->swordLevel != unitId - 1)
+				{
+					// Invalid upgrade
+					*out = "{\"success\":\"false\",\"message\":\"Upgrade invalid\"}";
+					*code = 2;
+					return;
+				}
+				break;
+			}
+			// Spearman
+			case 3:
+			{
+				if (user->spearmanLevel != unitId - 1)
+				{
+					// Invalid upgrade
+					*out = "{\"success\":\"false\",\"message\":\"Upgrade invalid\"}";
+					*code = 2;
+					return;
+				}
+				break;
+			}
+			}
+
+			Definition::Unit unit = Definition::getUnitDefinition(unitId);
+
+			// Check if user has enough resources
+			if (unit.upgradeFoodCost > user->food ||
+				unit.upgradeWoodCost > user->wood ||
+				unit.upgradeMetalCost > user->metal ||
+				unit.upgradeOrderCost > user->order)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Not enough resources\"}";
+				*code = 3;
+				return;
+			}
+
+			// Pay
+			user->food -= unit.upgradeFoodCost;
+			user->wood -= unit.upgradeWoodCost;
+			user->metal -= unit.upgradeMetalCost;
+			user->order -= unit.upgradeOrderCost;
+
+			user->unitUpgrading = true;
+			new ScheduledUnitUpgradeEvent(unit.upgradeTime, unit.id, user->userId);
+			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+			*code = 3;
+			}
+			catch (std::exception const& e)
+			{
+				std::cout << "ERROR: " << e.what() << std::endl;
+			}
 		}
 		void choosePath(long long token, int choice, std::string* out, int* code)
 		{

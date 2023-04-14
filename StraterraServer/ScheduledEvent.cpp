@@ -280,5 +280,46 @@ namespace Straterra
 
 			delete this;
 		}
+
+		ScheduledUnitUpgradeEvent::ScheduledUnitUpgradeEvent(int secondsTotal, int unitId, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
+		{
+			this->unitId = unitId;
+		}
+
+		void ScheduledUnitUpgradeEvent::Complete()
+		{
+			Player::User* user = Game::getUserById(owner);
+
+			int unitType = unitId % 10;
+			switch (unitType)
+			{
+				// Archer
+			case 0:
+			{
+				user->archerLevel = unitId;
+				break;
+			}
+			// Cavalry
+			case 1:
+			{
+				user->cavalryLevel = unitId;
+				break;
+			}
+			// Swordsman
+			case 2:
+			{
+				user->swordLevel = unitId;
+				break;
+			}
+			// Spearman
+			case 3:
+			{
+				user->spearmanLevel = unitId;
+				break;
+			}
+			}
+
+			user->unitUpgrading = false;
+		}
 	}
 }

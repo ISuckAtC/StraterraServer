@@ -29,6 +29,7 @@ namespace Straterra
 			this->woodMax = 4000;
 			this->metalMax = 2000;
 			this->order = 100;
+			this->unitUpgrading = false;
 		}
 		int User::getFoodTickValue()
 		{
