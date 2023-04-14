@@ -258,7 +258,7 @@ namespace Straterra
 
 			for (int i = 0; i < 8; ++i)
 			{
-				stream << std::to_string(user.cityBuildingSlots[i]) << ";";
+				stream << std::to_string((int)user.cityBuildingSlots[i]) << ";";
 			}
 
 			return stream.str();
