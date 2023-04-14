@@ -29,6 +29,11 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		
+		void upgradeUnit(long long token, int unitId, std::string* out, int* code)
+		{
+
+		}
 		void choosePath(long long token, int choice, std::string* out, int* code)
 		{
 			try

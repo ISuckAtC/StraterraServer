@@ -222,7 +222,7 @@ namespace Straterra
 			for (int i = 0; i < usersOnline; ++i)
 			{
 				if (sessions[i]->playerId == 1984) std::cout << "Diff: " << std::difftime(now, sessions[i]->lastSeen) << std::endl;
-				if (std::difftime(now, sessions[i]->lastSeen) * 1000 > timeOutSeconds)
+				if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
 				{
 					sessions.erase(sessions.begin() + i);
 					usersOnline--;

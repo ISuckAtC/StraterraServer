@@ -103,7 +103,7 @@ int main(int argc, char** argv)
 
 	Straterra::Map::loadMap(argv[3]);
 
-	Straterra::Game::start(std::stoi(argv[1]), 60000);
+	Straterra::Game::start(std::stoi(argv[1]), 900);
 
 	
 
