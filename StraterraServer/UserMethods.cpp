@@ -29,6 +29,136 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void viewNotification(long long token, int reportIndex, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				if (user->reports.size() <= reportIndex)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Invalid report index\"}";
+					*code = 2;
+					return;
+				}
+
+				user->reports[reportIndex]->viewed = true;
+
+				*code = 3;
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
+		void getNotifications(long long token, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				std::stringstream reports;
+
+				reports << "{\"reports\":[";
+
+				for (int i = 0; i < user->reports.size(); ++i)
+				{
+					if (i > 0) reports << ",";
+					reports <<
+						"{" <<
+						"\"title\":\"" << user->reports[i]->title << "\"," <<
+						"\"content\":\"" << user->reports[i]->content << "\"," <<
+						"\"time_created\":\"" << user->reports[i]->timeCreated << "\"," <<
+						"\"viewed\":\"" << user->reports[i]->viewed << "\"" <<
+						"}";
+				}
+
+				reports << "]}";
+
+				*code = 3;
+				*out = reports.str();
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
+		void getUpdate(long long token, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				int notificationCount = 0;
+
+				for (int i = 0; i < user->reports.size(); ++i)
+				{
+					if (!user->reports[i]->viewed) notificationCount++;
+				}
+
+				std::ostringstream oss;
+				oss << 
+					"{\"resources\":{" <<
+						"\"food\":\"" << std::to_string(user->food) << "\"," <<
+						"\"wood\":\"" << std::to_string(user->wood) << "\"," <<
+						"\"metal\":\"" << std::to_string(user->metal) << "\"," <<
+						"\"order\":\"" << std::to_string(user->order) << "\"" <<
+					"}" << 
+					",\"notifications\":\"" << notificationCount << "\"" <<
+					"}";
+				*out = oss.str();
+				*code = 0;
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
+		void setUserColor(long long token, int color, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				user->color = color;
+
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+				*code = 3;
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
 		
 		void upgradeUnit(long long token, int unitId, std::string* out, int* code)
 		{
@@ -791,6 +921,10 @@ namespace Straterra
 				"\"allianceId\":\"" << std::to_string(alliance) << "\"," <<
 				"\"path\":\"" << std::to_string(user->path) << "\"," << 
 				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"," <<
+				"\"archerLevel\":\"" << std::to_string(user->archerLevel) << "\"," <<
+				"\"swordLevel\":\"" << std::to_string(user->swordLevel) << "\"," <<
+				"\"cavalryLevel\":\"" << std::to_string(user->cavalryLevel) << "\"," <<
+				"\"spearmanLevel\":\"" << std::to_string(user->spearmanLevel) << "\"," <<
 				"\"cityBuildingSlots\":" << "[" <<
 				"\"" << std::to_string(citySlots[0]) << "\"," <<
 				"\"" << std::to_string(citySlots[1]) << "\"," <<

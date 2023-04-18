@@ -247,6 +247,25 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::choosePath(token, std::stoi(options[1]), &out, &code);
 					}
+					else if (method == "setUserColor")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::setUserColor(token, std::stoi(options[1]), &out, &code);
+					}
+					else if (method == "getUpdate")
+					{
+						UserMethods::getUpdate(token, &out, &code);
+					}
+					else if (method == "getNotifications")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::getNotifications(token, &out, &code);
+					}
+					else if (method == "viewNotification")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::viewNotification(token, std::stoi(options[1]), &out, &code);
+					}
 					else if (method == "upgradeUnit")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;

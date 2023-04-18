@@ -120,6 +120,10 @@ namespace Straterra
 		{
 			ScheduledEvent::Complete();
 			Player::User* user = Game::getUserById(owner);
+
+			EventHub::Report* report = EventHub::Report::CreateReport("Town Building Complete", "Add description here");
+			user->reports.push_back(report);
+
 			user->cityBuildingSlots[buildingSlot] = buildingId;
 			delete this;
 		}
@@ -161,6 +165,10 @@ namespace Straterra
 			}
 
 			tile->building = buildingId;
+
+			EventHub::Report* report = EventHub::Report::CreateReport("Map Building Complete", "Add description here");
+			user->reports.push_back(report);
+
 			delete this;
 		}
 		
@@ -173,6 +181,11 @@ namespace Straterra
 		void ScheduledMoveArmyEvent::Complete()
 		{
 			ScheduledEvent::Complete();
+
+			Player::User* armyOwner = Game::getUserById(Map::getTile(destination)->owner);
+
+			EventHub::Report* report = EventHub::Report::CreateReport("Army has arrived at " + std::to_string(destination), "Add description here");
+			armyOwner->reports.push_back(report);
 
 			if (Map::getTile(destination)->building == 0)
 			{
@@ -191,7 +204,7 @@ namespace Straterra
 			{
 				for (int i = 0; i < army.size(); ++i)
 				{
-					Player::User* armyOwner = Game::getUserById(Map::getTile(destination)->owner);
+					
 					armyOwner->homeArmy[army[i].unitId] += army[i].count;
 				}
 				delete this;
@@ -246,8 +259,28 @@ namespace Straterra
 
 			std::cout << (attackWin ? "Attacker Won" : "Defender Won") << " | " << unitsLeft.size() << " groups are left alive" << std::endl;
 
+			std::stringstream reportContent;
+			std::stringstream winnerContent;
+
+			reportContent << "Battle between " <<
+				attackingPlayer->name << " (" << attackingPlayer->userId << ")" <<
+				" and " <<
+				defendingPlayer->name << " (" << defendingPlayer->userId << ")" <<
+				std::endl <<
+				(attackWin ? attackingPlayer->name : defendingPlayer->name) <<
+				" won!" << std::endl << std::endl;
+
+			winnerContent << "The following troops survived:" << std::endl;
+
+			for (int i = 0; i < unitsLeft.size(); ++i)
+			{
+				winnerContent << unitsLeft[i].count << " of ID: " << unitsLeft[i].unitId << std::endl;
+			}
+
 			if (attackWin)
 			{
+				winnerContent << std::endl << "They will begin travelling home immediately" << std::endl << std::endl;
+
 				if (targetTile->building == 1)
 				{
 					for (int i = 0; i < 256; ++i) defendingPlayer->homeArmy[i] = 0;
@@ -256,6 +289,12 @@ namespace Straterra
 					int stolenFood = defendingPlayer->food / 2;
 					int stolenMetal = defendingPlayer->metal / 2;
 					int stolenOrder = defendingPlayer->order / 2;
+
+					reportContent << "The following resources were looted:" << std::endl <<
+						"Food: " << stolenFood << std::endl <<
+						"Wood: " << stolenWood << std::endl <<
+						"Metal: " << stolenMetal << std::endl <<
+						"Order: " << stolenOrder << std::endl << std::endl;
 
 					defendingPlayer->wood -= stolenWood;
 					defendingPlayer->food -= stolenFood;
@@ -271,6 +310,21 @@ namespace Straterra
 				{
 					targetTile->army.clear();
 				}
+
+				EventHub::Report* winReport = EventHub::Report::CreateReport(attackWin ? "You were victorious in your attack" : "You successfully defended your city!", reportContent.str() + winnerContent.str());
+				EventHub::Report* lossReport = EventHub::Report::CreateReport(attackWin ? "You were raided" : "Your attack was crushed", reportContent.str());
+
+				if (attackWin)
+				{
+					attackingPlayer->reports.push_back(winReport);
+					defendingPlayer->reports.push_back(lossReport);
+				}
+				else
+				{
+					attackingPlayer->reports.push_back(lossReport);
+					defendingPlayer->reports.push_back(winReport);
+				}
+
 				new ScheduledMoveArmyEvent(20, unitsLeft, origin, destination, owner);
 			}
 			else

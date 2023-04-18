@@ -17,6 +17,10 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void viewNotification(long long token, int reportIndex, std::string* out, int* code);
+		void getNotifications(long long token, std::string* out, int* code);
+		void getUpdate(long long token, std::string* out, int* code);
+		void setUserColor(long long token, int color, std::string* out, int* code);
 		void upgradeUnit(long long token, int unitId, std::string* out, int* code);
 		void choosePath(long long token, int choice, std::string* out, int* code);
 		void attackMapTile(long long token, int position, std::string units, std::string* out, int* code);

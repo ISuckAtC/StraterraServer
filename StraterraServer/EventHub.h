@@ -24,6 +24,8 @@ namespace Straterra
 			std::string content;
 			time_t timeCreated;
 			bool viewed;
+
+			static Report* CreateReport(std::string title, std::string content);
 		};
 
 		boost::signals2::connection subcribeOnTick(const boost::signals2::slot<void(), boost::function<void()>>& f);

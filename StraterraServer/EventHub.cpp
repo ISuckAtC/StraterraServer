@@ -12,12 +12,20 @@
 
 #include "Game.h"
 #include "ScheduledEvent.h"
+#include "EventHub.h"
 
 namespace Straterra
 {
 	namespace EventHub
 	{
-
+		Report* Report::CreateReport(std::string title, std::string content)
+		{
+			Report* report = new Report();
+			report->title = title;
+			report->content = content;
+			report->timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+			report->viewed = false;
+		}
 
 		boost::signals2::signal<void()> onTick;
 		boost::signals2::connection subcribeOnTick(const boost::signals2::slot<void(),boost::function<void()>> &f)
