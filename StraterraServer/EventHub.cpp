@@ -25,6 +25,8 @@ namespace Straterra
 			report->content = content;
 			report->timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 			report->viewed = false;
+
+			return report;
 		}
 
 		boost::signals2::signal<void()> onTick;
