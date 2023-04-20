@@ -231,6 +231,24 @@ int main(int argc, char** argv)
 				u->cityBuildingSlots[i] = std::stoi(line.substr(0, index));
 			}
 
+			// Unit levels
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->swordLevel = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->archerLevel = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->cavalryLevel = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->spearmanLevel = std::stoi(line.substr(0, index));
+
+
 			u->foodMultiplier = 1.;
 			u->woodMultiplier = 1.;
 			u->metalMultiplier = 1.;

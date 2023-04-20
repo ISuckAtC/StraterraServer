@@ -254,7 +254,11 @@ namespace Straterra
 				user.foodGeneration << ";" <<
 				user.woodGeneration << ";" <<
 				user.metalGeneration << ";" <<
-				user.orderGeneration << ";";
+				user.orderGeneration << ";" <<
+				user.swordLevel << ";" <<
+				user.archerLevel << ";" <<
+				user.cavalryLevel << ";" <<
+				user.spearmanLevel << ";";
 
 			for (int i = 0; i < 8; ++i)
 			{
