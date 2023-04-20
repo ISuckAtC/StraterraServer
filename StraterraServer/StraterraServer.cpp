@@ -234,15 +234,15 @@ int main(int argc, char** argv)
 			// Unit levels
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
-			u->swordLevel = std::stoi(line.substr(0, index));
-
-			line = line.substr(index + 1);
-			index = line.find_first_of(';');
 			u->archerLevel = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
 			u->cavalryLevel = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->swordLevel = std::stoi(line.substr(0, index));
 
 			line = line.substr(index + 1);
 			index = line.find_first_of(';');
