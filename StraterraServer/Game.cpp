@@ -254,16 +254,18 @@ namespace Straterra
 				user.foodGeneration << ";" <<
 				user.woodGeneration << ";" <<
 				user.metalGeneration << ";" <<
-				user.orderGeneration << ";" <<
-				user.swordLevel << ";" <<
-				user.archerLevel << ";" <<
-				user.cavalryLevel << ";" <<
-				user.spearmanLevel << ";";
+				user.orderGeneration << ";";
 
 			for (int i = 0; i < 8; ++i)
 			{
 				stream << std::to_string((int)user.cityBuildingSlots[i]) << ";";
 			}
+
+			stream << 
+				std::to_string(user.swordLevel) << ";" <<
+				std::to_string(user.archerLevel) << ";" <<
+				std::to_string(user.cavalryLevel) << ";" <<
+				std::to_string(user.spearmanLevel) << ";";
 
 			return stream.str();
 		}
