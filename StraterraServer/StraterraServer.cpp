@@ -252,10 +252,10 @@ int main(int argc, char** argv)
 			{
 				std::cout << "CHECKING USER 109" << std::endl;
 
-				std::cout << "ARCHERLEVEL: " << u->archerLevel << std::endl;
-				std::cout << "CAVALRYLEVEL: " << u->cavalryLevel << std::endl;
-				std::cout << "SWORDLEVEL: " << u->swordLevel << std::endl;
-				std::cout << "SPEARMANLEVEL: " << u->spearmanLevel << std::endl;
+				std::cout << "ARCHERLEVEL: " << std::to_string(u->archerLevel) << std::endl;
+				std::cout << "CAVALRYLEVEL: " << std::to_string(u->cavalryLevel) << std::endl;
+				std::cout << "SWORDLEVEL: " << std::to_string(u->swordLevel) << std::endl;
+				std::cout << "SPEARMANLEVEL: " << std::to_string(u->spearmanLevel) << std::endl;
 			}
 
 
