@@ -342,6 +342,8 @@ namespace Straterra
 
 		void ScheduledUnitUpgradeEvent::Complete()
 		{
+			ScheduledEvent::Complete();
+
 			Player::User* user = Game::getUserById(owner);
 
 			int unitType = unitId / 10;
@@ -374,6 +376,7 @@ namespace Straterra
 			}
 
 			user->unitUpgrading = false;
+
 		}
 	}
 }
