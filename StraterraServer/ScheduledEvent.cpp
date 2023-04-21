@@ -344,7 +344,7 @@ namespace Straterra
 		{
 			Player::User* user = Game::getUserById(owner);
 
-			int unitType = unitId % 10;
+			int unitType = unitId / 10;
 			switch (unitType)
 			{
 				// Archer
