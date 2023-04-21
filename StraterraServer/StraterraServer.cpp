@@ -248,6 +248,16 @@ int main(int argc, char** argv)
 			index = line.find_first_of(';');
 			u->spearmanLevel = std::stoi(line.substr(0, index));
 
+			if (u->userId == 109)
+			{
+				std::cout << "CHECKING USER 109" << std::endl;
+
+				std::cout << "ARCHERLEVEL: " << u->archerLevel << std::endl;
+				std::cout << "CAVALRYLEVEL: " << u->cavalryLevel << std::endl;
+				std::cout << "SWORDLEVEL: " << u->swordLevel << std::endl;
+				std::cout << "SPEARMANLEVEL: " << u->spearmanLevel << std::endl;
+			}
+
 
 			u->foodMultiplier = 1.;
 			u->woodMultiplier = 1.;
