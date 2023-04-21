@@ -262,9 +262,9 @@ namespace Straterra
 			}
 
 			stream << 
-				std::to_string(user.swordLevel) << ";" <<
 				std::to_string(user.archerLevel) << ";" <<
 				std::to_string(user.cavalryLevel) << ";" <<
+				std::to_string(user.swordLevel) << ";" <<
 				std::to_string(user.spearmanLevel) << ";";
 
 			return stream.str();
