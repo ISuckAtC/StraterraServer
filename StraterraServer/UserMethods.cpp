@@ -210,7 +210,7 @@ namespace Straterra
 				return;
 			}
 
-			int unitType = unitId % 10;
+			int unitType = unitId / 10;
 
 			switch (unitType)
 			{
