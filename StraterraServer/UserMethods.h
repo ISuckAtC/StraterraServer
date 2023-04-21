@@ -17,6 +17,7 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void removeNotification(long long token, int reportIndex, std::string* out, int* code);
 		void viewNotification(long long token, int reportIndex, std::string* out, int* code);
 		void getNotifications(long long token, std::string* out, int* code);
 		void getUpdate(long long token, std::string* out, int* code);

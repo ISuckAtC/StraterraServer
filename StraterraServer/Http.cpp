@@ -266,6 +266,11 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::viewNotification(token, std::stoi(options[1]), &out, &code);
 					}
+					else if (method == "removeNotification")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::removeNotification(token, std::stoi(options[1]), &out, &code);
+					}
 					else if (method == "upgradeUnit")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;

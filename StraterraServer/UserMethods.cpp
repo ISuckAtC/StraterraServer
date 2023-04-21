@@ -29,6 +29,36 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void removeNotification(long long token, int reportIndex, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				if (user->reports.size() <= reportIndex)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Invalid report index\"}";
+					*code = 2;
+					return;
+				}
+
+				user->reports.erase(user->reports.begin() + reportIndex);
+
+				*code = 3;
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
 		void viewNotification(long long token, int reportIndex, std::string* out, int* code)
 		{
 			try
