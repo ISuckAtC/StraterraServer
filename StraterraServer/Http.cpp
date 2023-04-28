@@ -276,6 +276,11 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::upgradeUnit(token, std::stoi(options[1]), &out, &code);
 					}
+					else if (method == "upgradeResourceCap")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::upgradeStorage(token, std::stoi(options[1]), &out, &code);
+					}
 					else if (method == "index")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
