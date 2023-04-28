@@ -1212,15 +1212,60 @@ namespace Straterra
             up0->prerequisite = -1;
             up0->upgradeTime = 10;
             up0->type = STORAGEUPGRADE;
-            up0->foodCost = 100;
-            up0->woodCost = 100;
-            up0->metalCost = 100;
+            up0->foodCost = 0;
+            up0->woodCost = 0;
+            up0->metalCost = 0;
+            up0->orderCost = 0;
+            up0->foodMax = 1024;
+            up0->metalMax = 1024;
+            up0->woodMax = 1024;
+            up0->orderMax = -1;
+            internalUpgradeDefinitions[0] = up0;
+
+            StorageUpgrade* up2 = new StorageUpgrade();
+            up2->id = 2;
+            up2->prerequisite = 0;
+            up0->upgradeTime = 60;
+            up0->type = STORAGEUPGRADE;
+            up0->foodCost = 1000;
+            up0->woodCost = 1000;
+            up0->metalCost = 1000;
             up0->orderCost = 0;
             up0->foodMax = 2048;
             up0->metalMax = -1;
             up0->woodMax = -1;
             up0->orderMax = -1;
-            internalUpgradeDefinitions[0] = up0;
+            internalUpgradeDefinitions[2] = up2;
+
+            StorageUpgrade* up12 = new StorageUpgrade();
+            up2->id = 12;
+            up2->prerequisite = 0;
+            up0->upgradeTime = 60;
+            up0->type = STORAGEUPGRADE;
+            up0->foodCost = 1000;
+            up0->woodCost = 1000;
+            up0->metalCost = 1000;
+            up0->orderCost = 0;
+            up0->foodMax = -1;
+            up0->metalMax = 2048;
+            up0->woodMax = -1;
+            up0->orderMax = -1;
+            internalUpgradeDefinitions[12] = up12;
+
+            StorageUpgrade* up22 = new StorageUpgrade();
+            up2->id = 22;
+            up2->prerequisite = 0;
+            up0->upgradeTime = 60;
+            up0->type = STORAGEUPGRADE;
+            up0->foodCost = 1000;
+            up0->woodCost = 1000;
+            up0->metalCost = 1000;
+            up0->orderCost = 0;
+            up0->foodMax = -1;
+            up0->metalMax = -1;
+            up0->woodMax = 2048;
+            up0->orderMax = -1;
+            internalUpgradeDefinitions[22] = up22;
         }
 }
 }
