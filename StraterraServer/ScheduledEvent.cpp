@@ -224,6 +224,19 @@ namespace Straterra
 			this->origin = origin;
 			this->destination = destination;
 			this->army = army;
+
+			Map::Tile* targetTile = Map::getTile(destination);
+
+			if (targetTile->building == 1)
+			{
+				Player::User* attacker = Game::getUserById(owner);
+				Player::User* defender = Game::getUserById(targetTile->owner);
+
+				EventHub::Report* defenceWarning = EventHub::Report::CreateReport("Incoming attack!", "You are being attacked by " + attacker->name + ", the attack will arrive in " + std::to_string(secondsTotal) + " seconds.");
+
+				defender->reports.push_back(defenceWarning);
+			}
+
 		}
 		void ScheduledAttackEvent::Complete()
 		{

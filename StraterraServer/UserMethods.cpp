@@ -29,6 +29,55 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void upgradeStorage(long long token, int upgradeIndex, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				StorageUpgrade upgrade = *(StorageUpgrade*)Definition::getInternalUpgradeDefinitions(upgradeIndex);
+
+
+				// Check if user has enough resources
+				if (upgrade.foodCost > user->food ||
+					upgrade.woodCost > user->wood ||
+					upgrade.metalCost > user->metal ||
+					upgrade.orderCost > user->order)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Not enough resources\"}";
+					*code = 3;
+					return;
+				}
+
+				// Pay
+				user->food -= upgrade.foodCost;
+				user->wood -= upgrade.woodCost;
+				user->metal -= upgrade.metalCost;
+				user->order -= upgrade.orderCost;
+
+
+				if (upgrade.foodMax > -1) user->foodMax = upgrade.foodMax;
+				if (upgrade.woodMax > -1) user->woodMax = upgrade.woodMax;
+				if (upgrade.metalMax > -1) user->metalMax = upgrade.metalMax;
+				if (upgrade.orderMax > -1) user->orderMax = upgrade.orderMax;
+
+				//TODO: make scheduledevent for it
+
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+				*code = 3;
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
 		void removeNotification(long long token, int reportIndex, std::string* out, int* code)
 		{
 			try

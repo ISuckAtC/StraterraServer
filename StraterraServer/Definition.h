@@ -16,6 +16,36 @@ namespace Straterra
 {
 	namespace Definition
 	{
+
+		enum UPGRADETYPE
+		{
+			STORAGEUPGRADE = 0,
+			SMITHYUPGRADE = 1
+		};
+		struct InternalUpgrade
+		{
+			int id;
+			UPGRADETYPE type;
+			int upgradeTime;
+			int prerequisite;
+			int foodCost;
+			int woodCost;
+			int metalCost;
+			int orderCost;
+		};
+
+		struct StorageUpgrade : InternalUpgrade
+		{
+			int foodMax;
+			int woodMax;
+			int metalMax;
+			int orderMax;
+		};
+
+		InternalUpgrade* getInternalUpgradeDefinitions(int id);
+
+		void DefineInternalUpgrades();
+
 		enum MAPBUILDINGTYPE
 		{
 			VILLAGE = 0,
