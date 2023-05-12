@@ -94,7 +94,7 @@ namespace Straterra
 			std::vector<Group> army;
 		};
 
-		bool Fight(std::vector<Group>* unitsLeft, std::string* output, std::vector<Group> defender, std::vector<Group> attacker, bool verbose = false);
+		bool Fight(std::vector<Group>* unitsLeft, std::vector<Group>* loserUnitsLeft, std::string* output, std::vector<Group> defender, std::vector<Group> attacker, bool city, bool verbose = false);
 	}
 }
 

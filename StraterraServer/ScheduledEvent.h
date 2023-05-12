@@ -27,7 +27,10 @@ namespace Straterra
 			GENERIC = 0,
 			UNITPRODUCTION = 1,
 			TOWNBUILDING = 2,
-			MAPBUILDING = 3
+			MAPBUILDING = 3,
+			MOVEARMY = 4,
+			ATTACK = 5,
+			UNITUPGRADE = 6
 		};
 		class ScheduledEvent
 		{

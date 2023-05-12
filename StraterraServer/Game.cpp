@@ -66,7 +66,7 @@ namespace Straterra
 		{
 			return 3600000 / getTickInterval();
 		}
-		
+
 		void addUser(User* user)
 		{
 
@@ -76,11 +76,11 @@ namespace Straterra
 			EventHub::subcribeOnTick(boost::bind(&User::addResources, user));
 			//std::cout << " | p:" << users[userCount]->name << std::endl;
 			//std::cout << "userCount p: " + std::to_string((long)&userCount) << std::endl;
-			
+
 			Map::Tile* homeTile = Map::getTile(user->cityLocation);
 			homeTile->building = 1;
 			homeTile->owner = user->userId;
-			
+
 			userCount++;
 
 			std::cout << "Added user " << std::to_string(user->userId) << std::endl;
@@ -93,7 +93,7 @@ namespace Straterra
 
 
 
-		
+
 
 		User* getUserById(int id)
 		{
@@ -177,7 +177,7 @@ namespace Straterra
 			}
 			//std::cout << std::endl << ss.str() << std::endl;
 			return ss.str();
-		}	
+		}
 
 		long long getTokenLong(std::string tokenBytes)
 		{
@@ -201,7 +201,8 @@ namespace Straterra
 				tickCount++;
 				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval));
 				update();
-			} catch (std::exception const& e)
+			}
+			catch (std::exception const& e)
 			{
 				std::cerr << e.what() << std::endl;
 			}
@@ -210,26 +211,26 @@ namespace Straterra
 		{
 			try
 			{
-			// slow update logic
-			std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
-			time_t now;
-			tm timeNow;
-			time(&now);
-			localtime_s(&timeNow, &now);
-			char timeChars[32];
-			std::strftime(timeChars, 32, "%a, %d.%m.%Y %H:%M:%S", &timeNow);
-			std::cout << timeChars << std::endl;
-			for (int i = 0; i < usersOnline; ++i)
-			{
-				if (sessions[i]->playerId == 1984) std::cout << "Diff: " << std::difftime(now, sessions[i]->lastSeen) << std::endl;
-				if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
+				// slow update logic
+				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
+				time_t now;
+				tm timeNow;
+				time(&now);
+				localtime_s(&timeNow, &now);
+				char timeChars[32];
+				std::strftime(timeChars, 32, "%a, %d.%m.%Y %H:%M:%S", &timeNow);
+				std::cout << timeChars << std::endl;
+				for (int i = 0; i < usersOnline; ++i)
 				{
-					sessions.erase(sessions.begin() + i);
-					usersOnline--;
-					i--;
+					if (sessions[i]->playerId == 1984) std::cout << "Diff: " << std::difftime(now, sessions[i]->lastSeen) << std::endl;
+					if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
+					{
+						sessions.erase(sessions.begin() + i);
+						usersOnline--;
+						i--;
+					}
 				}
-			}
-			slowUpdate();
+				slowUpdate();
 			}
 			catch (std::exception const& e)
 			{
@@ -283,9 +284,9 @@ namespace Straterra
 				userCount++;
 			}
 
-			
 
-			std::ofstream saveFile {"players.txt"};
+
+			std::ofstream saveFile{ "players.txt" };
 			std::string line;
 
 			for (int i = 0; i < userCount; ++i)
@@ -301,7 +302,7 @@ namespace Straterra
 			autoSave();
 		}
 
-		
+
 
 		void start(int _tickInterval, int _timeOutSeconds)
 		{
@@ -315,7 +316,7 @@ namespace Straterra
 			autoSaveThread = std::thread{ autoSave };
 			std::cout << "Game Started" << std::endl;
 		}
-		
+
 
 		int getUserCount()
 		{
@@ -338,7 +339,7 @@ namespace Straterra
 			int rest = damage % unit.health;
 			frontHealth -= rest;
 			if (frontHealth <= 0)
-			{	
+			{
 				deaths++;
 				frontHealth = unit.health + frontHealth;
 			}
@@ -365,7 +366,7 @@ namespace Straterra
 			return deaths;
 		}
 
-		
+
 
 		Session::Session(int playerId, long long token)
 		{
@@ -433,19 +434,40 @@ namespace Straterra
 
 
 
-		bool Fight(std::vector<Group>* unitsLeft, std::string* output, std::vector<Group> defender_, std::vector<Group> attacker_, bool verbose)
+		bool Fight(std::vector<Group>* unitsLeft, std::vector<Group>* loserUnitsLeft, std::string* output, std::vector<Group> defender_, std::vector<Group> attacker_, bool city, bool verbose)
 		{
 			std::vector<Group*> attacker;
 			std::vector<Group*> defender;
 
+			bool attackerRetreating = false;
+			bool defenderRetreating = false;
+
+			int attackerRetreatThreshold = 0;
+			int defenderRetreatThreshold = 0;
+
+			int attackerRetreatThresholdPlus = 0;
+			int defenderRetreatThresholdPlus = 0;
+
+			int attackerCount = 0;
+			int defenderCount = 0;
+
+
 			for (int i = 0; i < attacker_.size(); ++i)
 			{
+				attackerRetreatThreshold += attacker_[i].count;
 				attacker.push_back(new Group(attacker_[i]));
 			}
 			for (int i = 0; i < defender_.size(); ++i)
 			{
+				defenderRetreatThreshold += defender_[i].count;
 				defender.push_back(new Group(defender_[i]));
 			}
+
+			attackerRetreatThresholdPlus = attackerRetreatThreshold / 7;
+			defenderRetreatThresholdPlus = defenderRetreatThreshold / 7;
+
+			attackerRetreatThreshold /= 10;
+			defenderRetreatThreshold /= 10;
 
 			std::sort(defender.begin(), defender.end(),
 				[](const Group* a, const Group* b) -> bool
@@ -529,7 +551,7 @@ namespace Straterra
 			}
 
 			bool combat = true;
-			int turn = 0;
+			int turn = all.size();
 			int totalTurns = 0;
 
 
@@ -539,7 +561,25 @@ namespace Straterra
 				totalTurns++;
 				//Console.ReadLine();
 
-				if (turn == all.size()) turn = 0;
+				if (turn == all.size())
+				{
+					attackerCount = 0;
+					defenderCount = 0;
+					for (int i = 0; i < attacker.size(); ++i)
+					{
+						if (!attacker[i]->dead) attackerCount += attacker[i]->count;
+					}
+					for (int i = 0; i < defender.size(); ++i)
+					{
+						if (!defender[i]->dead) defenderCount += defender[i]->count;
+					}
+
+					attackerRetreating = attackerCount < attackerRetreatThreshold&& defenderCount > defenderRetreatThresholdPlus;
+					defenderRetreating = defenderCount < defenderRetreatThreshold&& attackerCount > attackerRetreatThresholdPlus && !city;
+
+
+					turn = 0;
+				}
 
 				Group* group = all[turn];
 				if (group->dead)
@@ -550,6 +590,7 @@ namespace Straterra
 				}
 
 				std::vector<Group*> enemyArmy = (group->right ? defender : attacker);
+
 
 
 				if (verbose)
@@ -569,9 +610,8 @@ namespace Straterra
 				//std::cout << group->target << std::endl;
 				//std::cout << 
 
-				if (group->target < 0 || enemyArmy[group->target]->dead)
+				if ((group->right ? attackerRetreating : defenderRetreating))
 				{
-					int index = -1;
 					std::vector<Group*> aliveTargets;
 					for (int i = 0; i < enemyArmy.size(); ++i)
 					{
@@ -586,18 +626,7 @@ namespace Straterra
 						{
 							return std::abs(group->position - a->position) > std::abs(group->position - b->position);
 						});
-					std::vector<Group*> preferredTargets;
-					for (int i = 0; i < aliveTargets.size(); ++i)
-					{
-						if (getUnitDefinition(aliveTargets[i]->unitId).unitType == getUnitDefinition(group->unitId).preference)
-						{
-							it = preferredTargets.begin();
-							preferredTargets.insert(it, aliveTargets[i]);
-						}
-					}
-					std::reverse(preferredTargets.begin(), preferredTargets.end());
-
-					//std::cout << "EnemyArmyCount: " << enemyArmy.size() << " | AliveTargetCount: " << aliveTargets.size() << std::endl;
+					std::reverse(aliveTargets.begin(), aliveTargets.end());
 
 					if (aliveTargets.size() == 0)
 					{
@@ -623,96 +652,201 @@ namespace Straterra
 						*unitsLeft = remains;
 						return group->right;
 					}
-					if (preferredTargets.size() > 0)
+					// 50 is abritrary
+					// TODO: Make the escape range based off of something
+					if (std::abs(group->position - aliveTargets[0]->position) >= 50)
 					{
-						for (int i = 0; i < enemyArmy.size(); ++i)
+						// Escape
+
+						if (verbose) std::cout << (group->right ? "Right escapes" : "Left escapes") << " in " << totalTurns << " turns!" << std::endl;
+
+						*output += "\n\nWinning Team: " + std::string(group->right ? "Left" : "Right") + "\nRemaining Units\n";
+
+						std::vector<Group*> winningTeam = (!group->right ? attacker : defender);
+						std::vector<Group> remains;
+						for (int i = 0; i < winningTeam.size(); ++i)
 						{
-							if (enemyArmy[i] == preferredTargets[0])
+							if (!winningTeam[i]->dead)
 							{
-								index = i;
-								break;
+								std::vector<Group>::iterator itnp = remains.begin();
+								remains.insert(itnp, *winningTeam[i]);
+								Unit unit = getUnitDefinition(winningTeam[i]->unitId);
+								*output += std::to_string(unit.id) +
+									" LV" + std::to_string(unit.level) +
+									" (" + std::to_string(remains[0].count) + ")\n";
 							}
 						}
-					}
-					else
-					{
-						for (int i = 0; i < enemyArmy.size(); ++i)
+
+						std::vector<Group*> losingTeam = (!group->right ? defender : attacker);
+						std::vector<Group> loserRemains;
+
+						for (int i = 0; i < losingTeam.size(); ++i)
 						{
-							if (enemyArmy[i] == aliveTargets[0])
+							if (!losingTeam[i]->dead)
 							{
-								index = i;
-								break;
+								std::vector<Group>::iterator itnp = loserRemains.begin();
+								loserRemains.insert(itnp, *losingTeam[i]);
+								Unit unit = getUnitDefinition(losingTeam[i]->unitId);
+								*output += std::to_string(unit.id) +
+									" LV" + std::to_string(unit.level) +
+									" (" + std::to_string(loserRemains[0].count) + ")\n";
 							}
 						}
+
+						*unitsLeft = remains;
+						*loserUnitsLeft = loserRemains;
+						return !group->right;
 					}
-
-					group->target = index;
-
-					if (verbose) std::cout << group->unitId << " chose target " << enemyArmy[group->target]->unitId << std::endl;
+					int moveSpeed = getUnitDefinition(group->unitId).speed;
+					group->position += (group->right ? moveSpeed : -moveSpeed);
 				}
-
-				Group* enemy = enemyArmy[group->target];
-
-				int distance = std::abs(enemy->position - group->position);
-
-				if (distance > getUnitDefinition(group->unitId).range)
+				else
 				{
-					int move = getUnitDefinition(group->unitId).speed;
-					if (move >= distance)
+					if (group->target < 0 || enemyArmy[group->target]->dead)
 					{
-						move = distance;
-						distance = 0;
-					}
-					int direction = 1;
-					if (group->position > enemy->position)
-					{
-						direction = -1;
-					}
-					if (getUnitDefinition(group->unitId).unitType == CAVALRY)
-					{
-						// Trample
-						for (int i = 0; i < move; ++i)
+						int index = -1;
+						std::vector<Group*> aliveTargets;
+						for (int i = 0; i < enemyArmy.size(); ++i)
 						{
-							std::vector<Group*> tramples;
-							for (int j = 0; j < enemyArmy.size(); ++j)
+							if (!enemyArmy[i]->dead)
 							{
-								if (enemyArmy[j]->position == (group->position + (j * direction)))
+								it = aliveTargets.begin();
+								aliveTargets.insert(it, enemyArmy[i]);
+							}
+						}
+						std::sort(aliveTargets.begin(), aliveTargets.end(),
+							[group](const Group* a, const Group* b) -> bool
+							{
+								return std::abs(group->position - a->position) > std::abs(group->position - b->position);
+							});
+						std::vector<Group*> preferredTargets;
+						for (int i = 0; i < aliveTargets.size(); ++i)
+						{
+							if (getUnitDefinition(aliveTargets[i]->unitId).unitType == getUnitDefinition(group->unitId).preference)
+							{
+								it = preferredTargets.begin();
+								preferredTargets.insert(it, aliveTargets[i]);
+							}
+						}
+						std::reverse(preferredTargets.begin(), preferredTargets.end());
+
+						//std::cout << "EnemyArmyCount: " << enemyArmy.size() << " | AliveTargetCount: " << aliveTargets.size() << std::endl;
+
+						if (aliveTargets.size() == 0)
+						{
+							// Winner
+							if (verbose) std::cout << (group->right ? "Right wins" : "Left wins") << " in " << totalTurns << " turns!" << std::endl;
+
+							*output += "\n\nWinning Team: " + std::string(group->right ? "Red" : "Green") + "\nRemaining Units\n";
+
+							std::vector<Group*> winningTeam = (group->right ? attacker : defender);
+							std::vector<Group> remains;
+							for (int i = 0; i < winningTeam.size(); ++i)
+							{
+								if (!winningTeam[i]->dead)
 								{
-									it = tramples.begin();
-									tramples.insert(it, enemyArmy[j]);
+									std::vector<Group>::iterator itnp = remains.begin();
+									remains.insert(itnp, *winningTeam[i]);
+									Unit unit = getUnitDefinition(winningTeam[i]->unitId);
+									*output += std::to_string(unit.id) +
+										" LV" + std::to_string(unit.level) +
+										" (" + std::to_string(remains[0].count) + ")\n";
 								}
 							}
-							for (int k = 0; k < tramples.size(); ++k)
+							*unitsLeft = remains;
+							return group->right;
+						}
+						if (preferredTargets.size() > 0)
+						{
+							for (int i = 0; i < enemyArmy.size(); ++i)
 							{
-								Group* trampleEnemy = tramples[k];
-								// Attack
-								int damage = group->GetDamage(distance, trampleEnemy) / 5;
-
-								if (verbose) std::cout << group->unitId << " tramples " << trampleEnemy->unitId << " for " << damage << " damage!" << std::endl;
-
-								int deaths = trampleEnemy->TakeDamage(damage, group, true, verbose, true);
-
-								if (verbose) std::cout << "Trample caused " << deaths << " deaths" << std::endl;
+								if (enemyArmy[i] == preferredTargets[0])
+								{
+									index = i;
+									break;
+								}
 							}
 						}
+						else
+						{
+							for (int i = 0; i < enemyArmy.size(); ++i)
+							{
+								if (enemyArmy[i] == aliveTargets[0])
+								{
+									index = i;
+									break;
+								}
+							}
+						}
+
+						group->target = index;
+
+						if (verbose) std::cout << group->unitId << " chose target " << enemyArmy[group->target]->unitId << std::endl;
 					}
 
+					Group* enemy = enemyArmy[group->target];
 
-					group->position += move * direction;
+					int distance = std::abs(enemy->position - group->position);
 
-					if (verbose) std::cout << group->unitId << " moves " << move << " units" << std::endl;
-				}
+					if (distance > getUnitDefinition(group->unitId).range)
+					{
+						int move = getUnitDefinition(group->unitId).speed;
+						if (move >= distance)
+						{
+							move = distance;
+							distance = 0;
+						}
+						int direction = 1;
+						if (group->position > enemy->position)
+						{
+							direction = -1;
+						}
+						if (getUnitDefinition(group->unitId).unitType == CAVALRY)
+						{
+							// Trample
+							for (int i = 0; i < move; ++i)
+							{
+								std::vector<Group*> tramples;
+								for (int j = 0; j < enemyArmy.size(); ++j)
+								{
+									if (enemyArmy[j]->position == (group->position + (j * direction)))
+									{
+										it = tramples.begin();
+										tramples.insert(it, enemyArmy[j]);
+									}
+								}
+								for (int k = 0; k < tramples.size(); ++k)
+								{
+									Group* trampleEnemy = tramples[k];
+									// Attack
+									int damage = group->GetDamage(distance, trampleEnemy) / 5;
 
-				if (distance <= getUnitDefinition(group->unitId).range)
-				{
-					// Attack
-					int damage = group->GetDamage(distance, enemy);
+									if (verbose) std::cout << group->unitId << " tramples " << trampleEnemy->unitId << " for " << damage << " damage!" << std::endl;
 
-					if (verbose) std::cout << group->unitId << " attacks " << enemy->unitId << " for " << damage << " damage!" << std::endl;
+									int deaths = trampleEnemy->TakeDamage(damage, group, true, verbose, true);
 
-					int deaths = enemy->TakeDamage(damage, group, distance == 0, true, verbose);
+									if (verbose) std::cout << "Trample caused " << deaths << " deaths" << std::endl;
+								}
+							}
+						}
 
-					if (verbose) std::cout << "Attack caused " << deaths << " deaths" << std::endl;
+
+						group->position += move * direction;
+
+						if (verbose) std::cout << group->unitId << " moves " << move << " units" << std::endl;
+					}
+
+					if (distance <= getUnitDefinition(group->unitId).range)
+					{
+						// Attack
+						int damage = group->GetDamage(distance, enemy);
+
+						if (verbose) std::cout << group->unitId << " attacks " << enemy->unitId << " for " << damage << " damage!" << std::endl;
+
+						int deaths = enemy->TakeDamage(damage, group, distance == 0, true, verbose);
+
+						if (verbose) std::cout << "Attack caused " << deaths << " deaths" << std::endl;
+					}
 				}
 
 				turn++;

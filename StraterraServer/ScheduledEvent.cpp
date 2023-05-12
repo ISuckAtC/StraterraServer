@@ -177,6 +177,7 @@ namespace Straterra
 			this->origin = origin;
 			this->destination = destination;
 			this->army = army;
+			this->type = MOVEARMY;
 		}
 		void ScheduledMoveArmyEvent::Complete()
 		{
@@ -224,6 +225,7 @@ namespace Straterra
 			this->origin = origin;
 			this->destination = destination;
 			this->army = army;
+			this->type = ATTACK;
 
 			Map::Tile* targetTile = Map::getTile(destination);
 
@@ -252,8 +254,11 @@ namespace Straterra
 
 			std::vector<Game::Group> defender;
 
-			if (targetTile->building == 1)
+			bool defenderCity = false;
+
+			if (targetTile->building == 1 && defendingPlayer->cityLocation == targetTile->id)
 			{
+				defenderCity = true;
 				for (int i = 0; i < 256; ++i)
 				{
 					if (defendingPlayer->homeArmy[i] > 0) defender.push_back(Game::Group(defendingPlayer->homeArmy[i], i));
@@ -265,15 +270,17 @@ namespace Straterra
 			}
 
 			std::vector<Game::Group> unitsLeft;
+			std::vector<Game::Group> loserUnitsLeft;
 			std::string output;
 
 
-			bool attackWin = Game::Fight(&unitsLeft, &output, defender, army);
+			bool attackWin = Game::Fight(&unitsLeft, &loserUnitsLeft, &output, defender, army, defenderCity);
 
 			std::cout << (attackWin ? "Attacker Won" : "Defender Won") << " | " << unitsLeft.size() << " groups are left alive" << std::endl;
 
 			std::stringstream reportContent;
 			std::stringstream winnerContent;
+			std::stringstream loserContent;
 
 			reportContent << "Battle between " <<
 				attackingPlayer->name << " (" << attackingPlayer->userId << ")" <<
@@ -290,14 +297,25 @@ namespace Straterra
 				winnerContent << unitsLeft[i].count << " of ID: " << unitsLeft[i].unitId << std::endl;
 			}
 
+			if (loserUnitsLeft.size() > 0)
+			{
+				loserContent << "The following troops survived:" << std::endl;
+
+				for (int i = 0; i < loserUnitsLeft.size(); ++i)
+				{
+					loserContent << loserUnitsLeft[i].count << " of ID: " << loserUnitsLeft[i].unitId << std::endl;
+				}
+
+				loserContent << std::endl << "They will begin travelling home immediately" << std::endl << std::endl;
+			}
+
 			if (attackWin)
 			{
 				winnerContent << std::endl << "They will begin travelling home immediately" << std::endl << std::endl;
 
-				if (targetTile->building == 1)
-				{
-					for (int i = 0; i < 256; ++i) defendingPlayer->homeArmy[i] = 0;
 
+				if (defenderCity)
+				{
 					int stolenWood = defendingPlayer->wood / 2;
 					int stolenFood = defendingPlayer->food / 2;
 					int stolenMetal = defendingPlayer->metal / 2;
@@ -319,30 +337,54 @@ namespace Straterra
 					attackingPlayer->metal += stolenMetal;
 					attackingPlayer->order += stolenOrder;
 				}
-				else
-				{
-					targetTile->army.clear();
-				}
-
-				EventHub::Report* winReport = EventHub::Report::CreateReport(attackWin ? "You were victorious in your attack" : "You successfully defended your city!", reportContent.str() + winnerContent.str());
-				EventHub::Report* lossReport = EventHub::Report::CreateReport(attackWin ? "You were raided" : "Your attack was crushed", reportContent.str());
-
-				if (attackWin)
-				{
-					attackingPlayer->reports.push_back(winReport);
-					defendingPlayer->reports.push_back(lossReport);
-				}
-				else
-				{
-					attackingPlayer->reports.push_back(lossReport);
-					defendingPlayer->reports.push_back(winReport);
-				}
-
-				new ScheduledMoveArmyEvent(20, unitsLeft, origin, destination, owner);
 			}
 			else
 			{
 				Map::getTile(destination)->army = unitsLeft;
+			}
+
+			EventHub::Report* winReport = EventHub::Report::CreateReport(attackWin ? "You were victorious in your attack" : "You successfully defended your city!", reportContent.str() + winnerContent.str());
+			EventHub::Report* lossReport = EventHub::Report::CreateReport(attackWin ? "You were raided" : "Your attack was crushed", reportContent.str() + loserContent.str());
+
+			if (attackWin)
+			{
+				attackingPlayer->reports.push_back(winReport);
+				defendingPlayer->reports.push_back(lossReport);
+			}
+			else
+			{
+				attackingPlayer->reports.push_back(lossReport);
+				defendingPlayer->reports.push_back(winReport);
+			}
+
+			if (attackWin)
+			{
+				new ScheduledMoveArmyEvent(20, unitsLeft, origin, destination, owner);
+
+				if (!defenderCity && loserUnitsLeft.size() > 0)
+				{
+					new ScheduledMoveArmyEvent(20, loserUnitsLeft, defendingPlayer->cityLocation, destination, defendingPlayer->userId);
+				}
+			}
+			else
+			{
+				if (defenderCity)
+				{
+					for (int i = 0; i < unitsLeft.size(); ++i)
+					{
+						defendingPlayer->homeArmy[unitsLeft[i].unitId] = unitsLeft[i].count;
+					}
+				}
+				else
+				{
+					targetTile->army = unitsLeft;
+				}
+
+				if (loserUnitsLeft.size() > 0)
+				{
+					new ScheduledMoveArmyEvent(20, loserUnitsLeft, attackingPlayer->cityLocation, destination, attackingPlayer->userId);
+
+				}
 			}
 
 			delete this;
@@ -351,6 +393,7 @@ namespace Straterra
 		ScheduledUnitUpgradeEvent::ScheduledUnitUpgradeEvent(int secondsTotal, int unitId, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
 		{
 			this->unitId = unitId;
+			this->type = UNITUPGRADE;
 		}
 
 		void ScheduledUnitUpgradeEvent::Complete()

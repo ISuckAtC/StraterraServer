@@ -557,6 +557,23 @@ namespace Straterra
 						"\"position\":\"" << mEvent->position << "\"";
 					break;
 				}
+				case MOVEARMY:
+				{
+					ScheduledMoveArmyEvent* maEvent = (ScheduledMoveArmyEvent*)(user->activeEvents[i]);
+					oss << ",\"destination\":\"" << maEvent->destination << "\"," <<
+						"\"origin\":\"" << maEvent->origin << "\"";
+				}
+				case ATTACK:
+				{
+					ScheduledAttackEvent* aEvent = (ScheduledAttackEvent*)(user->activeEvents[i]);
+					oss << ",\"destination\":\"" << aEvent->destination << "\"," <<
+						"\"origin\":\"" << aEvent->origin << "\"";
+				}
+				case UNITUPGRADE:
+				{
+					ScheduledUnitUpgradeEvent* uUpgradeEvent = (ScheduledUnitUpgradeEvent*)(user->activeEvents[i]);
+					oss << ",\"unitId\":\"" << uUpgradeEvent->unitId << "\"";
+				}
 				}
 				oss << "}";
 				if (i < user->activeEvents.size() - 1) oss << ",";
