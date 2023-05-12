@@ -248,6 +248,21 @@ int main(int argc, char** argv)
 			index = line.find_first_of(';');
 			u->spearmanLevel = std::stoi(line.substr(0, index));
 
+			// City Upgrade Cap
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->cityUpgradeCap = std::stoi(line.substr(0, index));
+
+			// Population and Population Cap
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->populationCap = std::stoi(line.substr(0, index));
+
+			line = line.substr(index + 1);
+			index = line.find_first_of(';');
+			u->population = std::stoi(line.substr(0, index));
+
+
 			if (u->userId == 109)
 			{
 				std::cout << "CHECKING USER 109" << std::endl;
