@@ -268,6 +268,11 @@ namespace Straterra
 				std::to_string(user.swordLevel) << ";" <<
 				std::to_string(user.spearmanLevel) << ";";
 
+			stream <<
+				std::to_string(user.cityUpgradeCap) << ";" <<
+				std::to_string(user.populationCap) << ";" <<
+				std::to_string(user.population) << ";";
+
 			return stream.str();
 		}
 

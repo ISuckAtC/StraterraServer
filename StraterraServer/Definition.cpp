@@ -261,7 +261,7 @@ namespace Straterra
             townhall3.woodCost = 600;
             townhall3.level = 3;
             townhall3.maxLevel = 3;
-            townBuildingDefinitions[1] = townhall3;
+            townBuildingDefinitions[2] = townhall3;
 
             TownBuilding barracks1{};
             barracks1.id = 3;
