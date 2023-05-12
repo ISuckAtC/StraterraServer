@@ -1046,7 +1046,7 @@ namespace Straterra
 				for (int k = 0; k < 8; ++k)
 				{
 					if (k > 0) oss << ",";
-					oss << "\"" << std::to_string(citySlots[0]) << "\"";
+					oss << "\"" << std::to_string(citySlots[k]) << "\"";
 				}
 				oss << "]," <<
 				"\"buildingPositions\":[";

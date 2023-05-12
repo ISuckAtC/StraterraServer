@@ -138,11 +138,6 @@ namespace Straterra
 			user->cityBuildingSlots[buildingSlot] = buildingId;
 
 
-			std::cout << "TOWNBUILDEVENTCOMPLETE: " <<
-				"buildingId: " << buildingId <<
-				"slotBuilding (after): " << std::to_string(user->cityBuildingSlots[buildingSlot]) <<
-				std::endl;
-
 			if (townBuilding.type == Definition::TOWNHALL)
 			{
 				user->cityUpgradeCap = townBuilding.level;
