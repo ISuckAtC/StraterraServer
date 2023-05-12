@@ -140,7 +140,7 @@ namespace Straterra
 
 			std::cout << "TOWNBUILDEVENTCOMPLETE: " <<
 				"buildingId: " << buildingId <<
-				"slotBuilding (after): " << user->cityBuildingSlots[buildingSlot] <<
+				"slotBuilding (after): " << std::to_string(user->cityBuildingSlots[buildingSlot]) <<
 				std::endl;
 
 			if (townBuilding.type == Definition::TOWNHALL)
