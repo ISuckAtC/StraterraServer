@@ -665,6 +665,14 @@ namespace Straterra
 			// Grab the definition for the desired unit
 			Unit unit = getUnitDefinition(unitId);
 
+			// Check if the user has the population room to train the troops
+			if (user->population + amount > user->populationCap)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Too much population\"}";
+				*code = 3;
+				return;
+			}
+
 			// Get total costs
 			int foodCost = amount * unit.foodCost;
 			int woodCost = amount * unit.woodCost;
@@ -695,9 +703,11 @@ namespace Straterra
 			user->metal -= metalCost;
 			user->order -= orderCost;
 
+			user->population += amount;
+
 			// Use new to prevent the object from being destructed
 			// We destroy it manually when the event completes
-			new ScheduledUnitProductionEvent{ unit.trainingTime * amount, unit.id, amount, user->userId };
+			new ScheduledUnitProductionEvent{ unit.trainingTime, unit.id, amount, user->userId };
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
@@ -750,6 +760,14 @@ namespace Straterra
 					*code = 4;
 					return;
 				}
+			}
+
+			// Check if the user has high enough TownHall level to build this building
+			if (townBuilding.type != Definition::TOWNHALL && townBuilding.level > user->cityUpgradeCap)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"Town Hall level not high enough\"}";
+				*code = 3;
+				return;
 			}
 
 			// Check if the user has the resources to build this building
@@ -1015,21 +1033,22 @@ namespace Straterra
 				"\"name\":\"" << userName << "\"," <<
 				"\"color\":\"" << std::to_string(color) << "\"," <<
 				"\"allianceId\":\"" << std::to_string(alliance) << "\"," <<
-				"\"path\":\"" << std::to_string(user->path) << "\"," << 
+				"\"path\":\"" << std::to_string(user->path) << "\"," <<
 				"\"cityLocation\":\"" << std::to_string(cityLocation) << "\"," <<
+				"\"cityUpgradeCap\":\"" << std::to_string(user->cityUpgradeCap) << "\"," <<
 				"\"archerLevel\":\"" << std::to_string(user->archerLevel) << "\"," <<
 				"\"swordLevel\":\"" << std::to_string(user->swordLevel) << "\"," <<
 				"\"cavalryLevel\":\"" << std::to_string(user->cavalryLevel) << "\"," <<
 				"\"spearmanLevel\":\"" << std::to_string(user->spearmanLevel) << "\"," <<
-				"\"cityBuildingSlots\":" << "[" <<
-				"\"" << std::to_string(citySlots[0]) << "\"," <<
-				"\"" << std::to_string(citySlots[1]) << "\"," <<
-				"\"" << std::to_string(citySlots[2]) << "\"," <<
-				"\"" << std::to_string(citySlots[3]) << "\"," <<
-				"\"" << std::to_string(citySlots[4]) << "\"," <<
-				"\"" << std::to_string(citySlots[5]) << "\"," <<
-				"\"" << std::to_string(citySlots[6]) << "\"," <<
-				"\"" << std::to_string(citySlots[7]) << "\"]," <<
+				"\"population\":\"" << std::to_string(user->population) << "\"," <<
+				"\"populationCap\":\"" << std::to_string(user->populationCap) << "\"," <<
+				"\"cityBuildingSlots\":[";
+				for (int k = 0; k < 8; ++k)
+				{
+					if (k > 0) oss << ",";
+					oss << "\"" << std::to_string(citySlots[0]) << "\"";
+				}
+				oss << "]," <<
 				"\"buildingPositions\":[";
 				for (int k = 0; k < user->mapBuildings.size(); ++k)
 				{

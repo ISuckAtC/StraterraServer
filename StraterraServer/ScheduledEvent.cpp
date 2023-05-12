@@ -96,18 +96,27 @@ namespace Straterra
 
 		void ScheduledUnitProductionEvent::Complete()
 		{
-			ScheduledEvent::Complete();
-			std::vector<ScheduledUnitProductionEvent*> prodEvents;
-			//std::copy_if(ownerEvents->begin(), ownerEvents->end(), prodEvents, [&](ScheduledEvent* e) {
-			//	return ((dynamic_cast<ScheduledUnitProductionEvent*>(e) != nullptr) && !e->running);
-			//	});
-			if (prodEvents.size() > 0)
+			Game::getUserById(owner)->homeArmy[unitId]++;
+			amount--;
+			if (amount == 0)
 			{
-				prodEvents[0]->Run();
+				ScheduledEvent::Complete();
+				std::vector<ScheduledUnitProductionEvent*> prodEvents;
+				//std::copy_if(ownerEvents->begin(), ownerEvents->end(), prodEvents, [&](ScheduledEvent* e) {
+				//	return ((dynamic_cast<ScheduledUnitProductionEvent*>(e) != nullptr) && !e->running);
+				//	});
+				if (prodEvents.size() > 0)
+				{
+					prodEvents[0]->Run();
+				}
+
+				//std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << std::to_string(Game::getUserById(owner)->homeArmy[unitId]) << ")" << std::endl;
+				delete this;
 			}
-			Game::getUserById(owner)->homeArmy[unitId] += amount;
-			std::cout << "Added " << amount << " " << unitId << " to army! (Total: " << std::to_string(Game::getUserById(owner)->homeArmy[unitId]) << ")" << std::endl;
-			delete this;
+			else
+			{
+				secondsLeft = secondsTotal;
+			}
 		}
 		ScheduledTownBuildingEvent::ScheduledTownBuildingEvent(int secondsTotal, int buildingId, int buildingSlot, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
 		{
@@ -118,6 +127,8 @@ namespace Straterra
 		}
 		void ScheduledTownBuildingEvent::Complete()
 		{
+			Definition::TownBuilding townBuilding = Definition::getTownBuildingDefinition(buildingId);
+
 			ScheduledEvent::Complete();
 			Player::User* user = Game::getUserById(owner);
 
@@ -125,6 +136,12 @@ namespace Straterra
 			user->reports.push_back(report);
 
 			user->cityBuildingSlots[buildingSlot] = buildingId;
+
+			if (townBuilding.type == Definition::TOWNHALL)
+			{
+				user->cityUpgradeCap = townBuilding.level;
+			}
+
 			delete this;
 		}
 
@@ -162,6 +179,12 @@ namespace Straterra
 			{
 				int metalProd = mapBuilding.baseProduction * tile->metalAmount;
 				user->foodGeneration += metalProd;
+			}
+			if (mapBuilding.type == Definition::HOUSE)
+			{
+				// maybe add something that increase or decrease this amount sometime
+				int populationIncrease = mapBuilding.baseProduction * 1;
+				user->populationCap += populationIncrease;
 			}
 
 			tile->building = buildingId;
@@ -273,6 +296,19 @@ namespace Straterra
 			std::vector<Game::Group> loserUnitsLeft;
 			std::string output;
 
+			int defenderPopulation = 0;
+			int attackerPopluation = 0;
+
+			for (int i = 0; i < defender.size(); ++i)
+			{
+				defenderPopulation += defender[i].count;
+			}
+
+			for (int i = 0; i < army.size(); ++i)
+			{
+				attackerPopluation += army[i].count;
+			}
+
 
 			bool attackWin = Game::Fight(&unitsLeft, &loserUnitsLeft, &output, defender, army, defenderCity);
 
@@ -346,16 +382,42 @@ namespace Straterra
 			EventHub::Report* winReport = EventHub::Report::CreateReport(attackWin ? "You were victorious in your attack" : "You successfully defended your city!", reportContent.str() + winnerContent.str());
 			EventHub::Report* lossReport = EventHub::Report::CreateReport(attackWin ? "You were raided" : "Your attack was crushed", reportContent.str() + loserContent.str());
 
+
+			int defenderPopulationLeft = 0;
+			int attackerPopulationLeft = 0;
+
+
+
 			if (attackWin)
 			{
+				for (int i = 0; i < unitsLeft.size(); ++i)
+				{
+					attackerPopulationLeft += unitsLeft[i].count;
+				}
+				for (int i = 0; i < loserUnitsLeft.size(); ++i)
+				{
+					defenderPopulationLeft += loserUnitsLeft[i].count;
+				}
 				attackingPlayer->reports.push_back(winReport);
 				defendingPlayer->reports.push_back(lossReport);
 			}
 			else
 			{
+				for (int i = 0; i < unitsLeft.size(); ++i)
+				{
+					defenderPopulationLeft += unitsLeft[i].count;
+				}
+				for (int i = 0; i < loserUnitsLeft.size(); ++i)
+				{
+					attackerPopulationLeft += loserUnitsLeft[i].count;
+				}
 				attackingPlayer->reports.push_back(lossReport);
 				defendingPlayer->reports.push_back(winReport);
 			}
+
+			attackingPlayer->population -= attackerPopluation - attackerPopulationLeft;
+			defendingPlayer->population -= defenderPopulation - defenderPopulationLeft;
+
 
 			if (attackWin)
 			{

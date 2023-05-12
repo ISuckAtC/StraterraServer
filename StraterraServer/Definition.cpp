@@ -211,6 +211,21 @@ namespace Straterra
             mine3.baseProduction = 0;
 
             mapBuildingDefinitions[32] = mine3;
+
+            MapBuilding house1{};
+            house1.type = HOUSE;
+            house1.buildingTime = 10;
+            house1.foodCost = 100;
+            house1.woodCost = 100;
+            house1.metalCost = 0;
+            house1.orderCost = 0;
+            house1.id = 100;
+            house1.level = 1;
+            house1.maxLevel = 1;
+            house1.name = "House";
+            house1.baseProduction = 10;
+
+            mapBuildingDefinitions[100] = house1;
         }
 
 		void DefineTownBuildings()

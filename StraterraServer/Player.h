@@ -40,6 +40,8 @@ namespace Straterra
 			int cityLocation;
 			int path;
 
+			BYTE cityUpgradeCap;
+
 			BYTE cityBuildingSlots[8];
 			BYTE swordLevel;
 			BYTE archerLevel;
@@ -71,6 +73,10 @@ namespace Straterra
 			int orderGeneration;
 			float orderMultiplier;
 			int restOrder;
+
+			int population;
+			int populationCap;
+
 			std::vector<Straterra::ScheduledEvents::ScheduledEvent*> activeEvents;
 			std::vector<EventHub::Report*> reports;
 			std::vector<int> mapBuildings;
