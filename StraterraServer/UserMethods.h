@@ -19,6 +19,7 @@ namespace Straterra
 	{
 		void upgradeStorage(long long token, int upgradeIndex, std::string* out, int* code);
 		void removeNotification(long long token, int reportIndex, std::string* out, int* code);
+		void removeAllNotifications(long long token, std::string* out, int* code);
 		void viewNotification(long long token, int reportIndex, std::string* out, int* code);
 		void getNotifications(long long token, std::string* out, int* code);
 		void getUpdate(long long token, std::string* out, int* code);
