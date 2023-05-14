@@ -25,9 +25,9 @@ namespace Straterra
 		}
 		User::User()
 		{
-			this->foodMax = 4000;
-			this->woodMax = 4000;
-			this->metalMax = 2000;
+			this->foodMax = 1024;
+			this->woodMax = 1024;
+			this->metalMax = 1024;
 			this->order = 100;
 			this->unitUpgrading = false;
 		}
