@@ -42,7 +42,7 @@ namespace Straterra
 			int orderMax;
 		};
 
-		InternalUpgrade* getInternalUpgradeDefinitions(int id);
+		InternalUpgrade* getInternalUpgradeDefinition(int id);
 
 		void DefineInternalUpgrades();
 

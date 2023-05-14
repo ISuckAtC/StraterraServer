@@ -42,7 +42,7 @@ namespace Straterra
 					return;
 				}
 
-				StorageUpgrade upgrade = *(StorageUpgrade*)Definition::getInternalUpgradeDefinitions(upgradeIndex);
+				StorageUpgrade upgrade = *(StorageUpgrade*)Definition::getInternalUpgradeDefinition(upgradeIndex);
 
 
 				// Check if user has enough resources

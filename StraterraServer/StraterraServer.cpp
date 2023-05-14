@@ -61,6 +61,7 @@ int main(int argc, char** argv)
 	Straterra::Definition::DefineUnits();
 	Straterra::Definition::DefineMapBuildings();
 	Straterra::Definition::DefineTownBuildings();
+	Straterra::Definition::DefineInternalUpgrades();
 	/*
 	std::vector<Group*> groupA;
 	std::vector<Group*> groupB;

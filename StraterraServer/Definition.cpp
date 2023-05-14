@@ -32,7 +32,7 @@ namespace Straterra
         {
             return mapBuildingDefinitions[id];
         }
-        InternalUpgrade* getInternalUpgradeDefinitions(int id)
+        InternalUpgrade* getInternalUpgradeDefinition(int id)
         {
             return internalUpgradeDefinitions[id];
         }
@@ -1240,46 +1240,46 @@ namespace Straterra
             StorageUpgrade* up2 = new StorageUpgrade();
             up2->id = 2;
             up2->prerequisite = 0;
-            up0->upgradeTime = 60;
-            up0->type = STORAGEUPGRADE;
-            up0->foodCost = 1000;
-            up0->woodCost = 1000;
-            up0->metalCost = 1000;
-            up0->orderCost = 0;
-            up0->foodMax = 2048;
-            up0->metalMax = -1;
-            up0->woodMax = -1;
-            up0->orderMax = -1;
+            up2->upgradeTime = 60;
+            up2->type = STORAGEUPGRADE;
+            up2->foodCost = 1000;
+            up2->woodCost = 1000;
+            up2->metalCost = 1000;
+            up2->orderCost = 0;
+            up2->foodMax = 2048;
+            up2->metalMax = -1;
+            up2->woodMax = -1;
+            up2->orderMax = -1;
             internalUpgradeDefinitions[2] = up2;
 
             StorageUpgrade* up12 = new StorageUpgrade();
-            up2->id = 12;
-            up2->prerequisite = 0;
-            up0->upgradeTime = 60;
-            up0->type = STORAGEUPGRADE;
-            up0->foodCost = 1000;
-            up0->woodCost = 1000;
-            up0->metalCost = 1000;
-            up0->orderCost = 0;
-            up0->foodMax = -1;
-            up0->metalMax = 2048;
-            up0->woodMax = -1;
-            up0->orderMax = -1;
+            up12->id = 12;
+            up12->prerequisite = 0;
+            up12->upgradeTime = 60;
+            up12->type = STORAGEUPGRADE;
+            up12->foodCost = 1000;
+            up12->woodCost = 1000;
+            up12->metalCost = 1000;
+            up12->orderCost = 0;
+            up12->foodMax = -1;
+            up12->metalMax = 2048;
+            up12->woodMax = -1;
+            up12->orderMax = -1;
             internalUpgradeDefinitions[12] = up12;
 
             StorageUpgrade* up22 = new StorageUpgrade();
-            up2->id = 22;
-            up2->prerequisite = 0;
-            up0->upgradeTime = 60;
-            up0->type = STORAGEUPGRADE;
-            up0->foodCost = 1000;
-            up0->woodCost = 1000;
-            up0->metalCost = 1000;
-            up0->orderCost = 0;
-            up0->foodMax = -1;
-            up0->metalMax = -1;
-            up0->woodMax = 2048;
-            up0->orderMax = -1;
+            up22->id = 22;
+            up22->prerequisite = 0;
+            up22->upgradeTime = 60;
+            up22->type = STORAGEUPGRADE;
+            up22->foodCost = 1000;
+            up22->woodCost = 1000;
+            up22->metalCost = 1000;
+            up22->orderCost = 0;
+            up22->foodMax = -1;
+            up22->metalMax = -1;
+            up22->woodMax = 2048;
+            up22->orderMax = -1;
             internalUpgradeDefinitions[22] = up22;
         }
 }
