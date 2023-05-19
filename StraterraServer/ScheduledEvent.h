@@ -30,7 +30,8 @@ namespace Straterra
 			MAPBUILDING = 3,
 			MOVEARMY = 4,
 			ATTACK = 5,
-			UNITUPGRADE = 6
+			UNITUPGRADE = 6,
+			INTERALUPGRADE = 7
 		};
 		class ScheduledEvent
 		{
@@ -105,6 +106,14 @@ namespace Straterra
 		public:
 			int unitId;
 			ScheduledUnitUpgradeEvent(int secondsTotal, int unitId, int owner, bool runImmediately = true);
+			void Complete();
+		};
+
+		class ScheduledInternalUpgradeEvent : public ScheduledEvent
+		{
+		public:
+			int upgradeId;
+			ScheduledInternalUpgradeEvent(int secondsTotal, int upgradeId, int owner, bool runImmediately = true);
 			void Complete();
 		};
 	}

@@ -70,6 +70,8 @@ namespace Straterra
 
 				//TODO: make scheduledevent for it
 
+				new ScheduledInternalUpgradeEvent(upgrade.upgradeTime, upgradeIndex, user->userId);
+
 				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 				*code = 3;
 			}

@@ -498,5 +498,41 @@ namespace Straterra
 			user->unitUpgrading = false;
 
 		}
-	}
+		ScheduledInternalUpgradeEvent::ScheduledInternalUpgradeEvent(int secondsTotal, int upgradeId, int owner, bool runImmediately) : ScheduledEvent(secondsTotal, owner, runImmediately)
+		{
+			this->upgradeId = upgradeId;
+			this->type = INTERALUPGRADE;
+		}
+		void ScheduledInternalUpgradeEvent::Complete()
+		{
+			Player::User* user = Game::getUserById(owner);
+			Definition::InternalUpgrade* upgrade = Definition::getInternalUpgradeDefinition(upgradeId);
+
+			switch (upgrade->type)
+			{
+			case Definition::STORAGEUPGRADE:
+			{
+				Definition::StorageUpgrade* storageUpgrade = (Definition::StorageUpgrade*)upgrade;
+				int food = storageUpgrade->foodMax;
+				int wood = storageUpgrade->woodMax;
+				int metal = storageUpgrade->metalMax;
+				int order = storageUpgrade->orderMax;
+				if (food > -1) user->foodMax = food;
+				if (wood > -1) user->woodMax = wood;
+				if (metal > -1) user->metalMax = metal;
+				if (order > -1) user->orderMax = order;
+				break;
+			}
+			case Definition::SMITHYUPGRADE:
+			{
+				break;
+			}
+			}
+
+			EventHub::Report* report = EventHub::Report::CreateReport("Upgrade (id: " + std::to_string(upgrade->id) + ") Complete", "Add description here");
+			user->reports.push_back(report);
+
+			delete this;
+		}
+}
 }
