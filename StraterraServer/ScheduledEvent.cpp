@@ -207,7 +207,7 @@ namespace Straterra
 		{
 			ScheduledEvent::Complete();
 
-			Player::User* armyOwner = Game::getUserById(Map::getTile(destination)->owner);
+			Player::User* armyOwner = Game::getUserById(owner);
 
 			EventHub::Report* report = EventHub::Report::CreateReport("Army has arrived at " + std::to_string(destination), "Add description here");
 			armyOwner->reports.push_back(report);
@@ -223,18 +223,19 @@ namespace Straterra
 				return;
 			}
 
-			Definition::MapBuilding building = Definition::getMapBuildingDefinition(Map::getTile(destination)->building);
-
-			if (building.type == Definition::VILLAGE)
+			if (Map::getTile(destination)->building == 1 && Map::getTile(destination)->owner == owner)
 			{
 				for (int i = 0; i < army.size(); ++i)
 				{
-					
 					armyOwner->homeArmy[army[i].unitId] += army[i].count;
+
+					
 				}
 				delete this;
 				return;
 			}
+
+			std::cout << "Something went wrong in scheduledevent" << std::endl;
 
 			//if (Grid._instance.tiles[destination].army != null && Grid._instance.tiles[destination].army.Count > 0)
 			//{

@@ -874,7 +874,7 @@ namespace Straterra
 			{
 				Player::User* u = getUserAt(i);
 				//std::cout << std::to_string((long)u) << " | ";
-				//std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
+				std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
 				try
 				{
 					//std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
