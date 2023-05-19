@@ -774,14 +774,14 @@ namespace Straterra
 					// If the level of the next building isnt above, something is wrong
 					if (townBuilding.level <= prevBuilding.level)
 					{
-						*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
+						*out = "{\"success\":\"false\",\"message\":\"Can't build here (level mismatch)\"}";
 						*code = 4;
 						return;
 					}
 				}
 				else
 				{
-					*out = "{\"success\":\"false\",\"message\":\"Can't build here\"}";
+					*out = "{\"success\":\"false\",\"message\":\"Can't build here (not empty plot)\"}";
 					*code = 4;
 					return;
 				}
