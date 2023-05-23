@@ -534,5 +534,5 @@ namespace Straterra
 
 			delete this;
 		}
-}
+	}
 }

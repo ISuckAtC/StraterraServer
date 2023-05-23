@@ -24,6 +24,9 @@ namespace Straterra
 			report->title = title;
 			report->content = content;
 			report->timeCreated = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+			std::cout << "Report created at " << report->timeCreated << std::endl;
+			std::cout << "to_string: " << std::to_string(report->timeCreated) << std::endl;
+			std::cout << "long cast: " << (long)report->timeCreated << std::endl;
 			report->viewed = false;
 
 			return report;
