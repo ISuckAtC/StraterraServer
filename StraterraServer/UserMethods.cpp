@@ -615,7 +615,26 @@ namespace Straterra
 			Map::Tile* tile = Map::getTile(position);
 			
 			std::ostringstream oss;
-			oss << "{\"building\":\"" << tile->building << "\"}";
+			oss << "{" <<
+				"\"travelCost\":\"" << std::to_string(tile->travelCost) << "\"," <<
+				"\"building\":\"" << std::to_string(tile->building) << "\"," <<
+				"\"owner\":\"" << std::to_string(tile->owner) << "\"," <<
+				"\"foodAmount\":\"" << std::to_string(tile->foodAmount) << "\"," <<
+				"\"woodAmount\":\"" << std::to_string(tile->woodAmount) << "\"," <<
+				"\"metalAmount\":\"" << std::to_string(tile->metalAmount) << "\"," <<
+				"\"corruptionProgress\":\"" << std::to_string(tile->corruption) << "\"," <<
+				"\"army\":[";
+
+			for (int i = 0; i < tile->army.size(); ++i)
+			{
+				if (i > 0) oss << ",";
+				oss << "{" <<
+					"\"unitId\":\"" << std::to_string(tile->army[i].unitId) << "\"," <<
+					"\"amount\":\"" << std::to_string(tile->army[i].count) << "\"" <<
+					"}";
+			}
+
+			oss << "]}";
 
 			*out = oss.str();
 			*code = 0;
@@ -917,12 +936,25 @@ namespace Straterra
 			}
 
 			// Check if the user has high enough TownHall level to build this building
-			if (townBuilding.type != Definition::TOWNHALL && townBuilding.level > user->cityUpgradeCap)
+			if (townBuilding.type != Definition::TOWNHALL)
 			{
-				*out = "{\"success\":\"false\",\"message\":\"Town Hall level not high enough\"}";
-				*code = 3;
-				return;
+				if (townBuilding.level > user->cityUpgradeCap)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Town Hall level not high enough\"}";
+					*code = 3;
+					return;
+				}
 			}
+			else
+			{
+				if (townBuilding.level == 1 && user->cityUpgradeCap > 0)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Cannot build town hall, you already have one\"}";
+					*code = 3;
+					return;
+				}
+			}
+			
 
 			// Check if the user has the resources to build this building
 			if (townBuilding.foodCost > user->food ||
