@@ -118,6 +118,15 @@ namespace Straterra
 			return users[index];
 		}
 
+		bool getUserOnline(int id)
+		{
+			for (int i = 0; i < sessions.size(); ++i)
+			{
+				if (sessions[i]->playerId == id) return true;
+			}
+			return false;
+		}
+
 		User* getUserBySession(long long token)
 		{
 			int id = -1;

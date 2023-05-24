@@ -212,30 +212,89 @@ namespace Straterra
 			EventHub::Report* report = EventHub::Report::CreateReport("Army has arrived at " + std::to_string(destination), "Add description here");
 			armyOwner->reports.push_back(report);
 
-			if (Map::getTile(destination)->building == 0)
+			Map::Tile* destinationTile = Map::getTile(destination);
+			Map::Tile* originTile = Map::getTile(origin);
+
+			if (destinationTile->building == 0)
 			{
-				if (Map::getTile(origin)->building == 1)
+				if (originTile->building == 1)
 				{
 					new ScheduledMoveArmyEvent(0, army, origin, destination, owner);
+					delete this;
 					return;
 				}
+				std::cout << "Something went wrong in scheduledevent" << std::endl;
 				delete this;
 				return;
 			}
 
-			if (Map::getTile(destination)->building == 1 && Map::getTile(destination)->owner == owner)
+			if (destinationTile->building == 1)
+			{
+				if (destinationTile->owner == owner)
+				{
+					for (int i = 0; i < army.size(); ++i)
+					{
+						armyOwner->homeArmy[army[i].unitId] += army[i].count;
+					}
+					delete this;
+					return;
+				}
+				else
+				{
+					std::cout << "Something went wrong in scheduledevent" << std::endl;
+					delete this;
+					return;
+				}
+			}
+
+			if (destinationTile->owner == owner)
 			{
 				for (int i = 0; i < army.size(); ++i)
 				{
-					armyOwner->homeArmy[army[i].unitId] += army[i].count;
-
-					
+					bool merged = false;
+					for (int k = 0; k < destinationTile->army.size(); ++k)
+					{
+						if (destinationTile->army[k].unitId == army[i].unitId)
+						{
+							merged = true;
+							destinationTile->army[k].count += army[i].count;
+						}
+					}
+					if (!merged)
+					{
+						destinationTile->army.push_back(Game::Group{ army[i].unitId, army[i].count });
+					}
 				}
 				delete this;
 				return;
 			}
+			else
+			{
+				if (destinationTile->army.size() > 0)
+				{
+					new ScheduledMoveArmyEvent(20, army, origin, destination, owner);
+					delete this;
+					return;
+				}
+				else
+				{
+					new ScheduledMoveArmyEvent(20, army, origin, destination, owner);
+					delete this;
+					return;
 
-			std::cout << "Something went wrong in scheduledevent" << std::endl;
+					// Maybe just take over the tile here but right now there
+					// is no way for a player to naturally take over a tile without
+					// building on it, so this would be unexpected to the player
+
+					/*
+					for (int i = 0; i < army.size(); ++i)
+					{
+						destinationTile->army.push_back(army[i]);
+					}
+					destinationTile->owner = owner;
+					*/
+				}
+			}
 
 			//if (Grid._instance.tiles[destination].army != null && Grid._instance.tiles[destination].army.Count > 0)
 			//{
@@ -254,16 +313,21 @@ namespace Straterra
 
 			Map::Tile* targetTile = Map::getTile(destination);
 
+			Player::User* attacker = Game::getUserById(owner);
+			Player::User* defender = Game::getUserById(targetTile->owner);
+
 			if (targetTile->building == 1)
 			{
-				Player::User* attacker = Game::getUserById(owner);
-				Player::User* defender = Game::getUserById(targetTile->owner);
 
-				EventHub::Report* defenceWarning = EventHub::Report::CreateReport("Incoming attack!", "You are being attacked by " + attacker->name + ", the attack will arrive in " + std::to_string(secondsTotal) + " seconds.");
+				EventHub::Report* defenceWarning = EventHub::Report::CreateReport("Incoming attack on your city!", "You are being attacked by " + attacker->name + ", the attack will arrive in " + std::to_string(secondsTotal) + " seconds.");
 
 				defender->reports.push_back(defenceWarning);
 			}
-
+			else
+			{
+				EventHub::Report* defenceWarning = EventHub::Report::CreateReport("Incoming attack on your land!", "You are being attacked by " + attacker->name + ", the attack will arrive in " + std::to_string(secondsTotal) + " seconds at position: [" + std::to_string(destination) + "]");
+				defender->reports.push_back(defenceWarning);
+			}
 		}
 		void ScheduledAttackEvent::Complete()
 		{
@@ -352,6 +416,7 @@ namespace Straterra
 				winnerContent << std::endl << "They will begin travelling home immediately" << std::endl << std::endl;
 
 
+
 				if (defenderCity)
 				{
 					int stolenWood = defendingPlayer->wood / 2;
@@ -375,10 +440,48 @@ namespace Straterra
 					attackingPlayer->metal += stolenMetal;
 					attackingPlayer->order += stolenOrder;
 				}
+				else
+				{
+					if (targetTile->building > 0)
+					{
+						Definition::MapBuilding building = Definition::getMapBuildingDefinition(targetTile->building);
+						switch (building.type)
+						{
+						case Definition::CASTLE:
+							break;
+						case Definition::FARM:
+						{
+							int foodProd = building.baseProduction * targetTile->foodAmount;
+							defendingPlayer->foodGeneration -= foodProd;
+							break;
+						}
+						case Definition::HOUSE:
+						{
+							int population = building.baseProduction;
+							defendingPlayer->populationCap -= population;
+							break;
+						}
+						case Definition::MINE:
+						{
+							int metalProd = building.baseProduction * targetTile->metalAmount;
+							defendingPlayer->metalGeneration -= metalProd;
+							break;
+						}
+						case Definition::WOOD:
+						{
+							int woodProd = building.baseProduction * targetTile->woodAmount;
+							defendingPlayer->woodGeneration -= woodProd;
+							break;
+						}
+						}
+						targetTile->building = 0;
+						targetTile->owner = -1;
+					}
+				}
 			}
 			else
 			{
-				Map::getTile(destination)->army = unitsLeft;
+				targetTile->army = unitsLeft;
 			}
 
 			EventHub::Report* winReport = EventHub::Report::CreateReport(attackWin ? "You were victorious in your attack" : "You successfully defended your city!", reportContent.str() + winnerContent.str());

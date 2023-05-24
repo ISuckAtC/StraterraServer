@@ -42,6 +42,7 @@ namespace Straterra
 
 		Straterra::Player::User* getUserAt(int index);
 		int getUserCount();
+		bool getUserOnline(int id);
 		int getUserOnlineCount();
 		int findUserBySession(long long token);
 		Straterra::Player::User* getUserById(int id);
@@ -78,20 +79,6 @@ namespace Straterra
 			int TakeDamage(int damage, Group* source, bool melee, bool counterable = true, bool verbose = true, bool trample = false);
 		private:
 
-		};
-
-		struct Tile
-		{
-			int location;
-			int travelCost;
-			BYTE tileType;
-			BYTE building;
-			int owner;
-			float foodAmount;
-			float woodAmount;
-			float metalAmount;
-			float chaosAmount;
-			std::vector<Group> army;
 		};
 
 		bool Fight(std::vector<Group>* unitsLeft, std::vector<Group>* loserUnitsLeft, std::string* output, std::vector<Group> defender, std::vector<Group> attacker, bool city, bool verbose = false);

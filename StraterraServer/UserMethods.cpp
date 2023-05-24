@@ -29,6 +29,127 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void stationArmy(long long token, int position, std::string units, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				Map::Tile* mapTile = Map::getTile(position);
+
+				if (mapTile->owner != user->userId)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Can't station army on a tile you do not own\"}";
+					*code = 2;
+					return;
+				}
+
+				if (mapTile->building == 1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Can't station army in cities\"}";
+					*code = 2;
+					return;
+				}
+
+				std::vector<std::string> unitSplit;
+				boost::split(unitSplit, units, boost::is_any_of(";"));
+
+				if (unitSplit.size() <= 0)
+				{
+					std::cout << "tried to attack with no units" << std::endl;
+					*out = "{\"success\":\"false\",\"message\":\"Tried to attack with no units\"}";
+					*code = 2;
+					return;
+				}
+
+				std::vector<Group> army;
+
+				for (int i = 0; i < unitSplit.size(); ++i)
+				{
+					int colonIndex = unitSplit[i].find_first_of(':');
+					int unitId = std::stoi(unitSplit[i].substr(0, colonIndex));
+					int amount = std::stoi(unitSplit[i].substr(colonIndex + 1));
+
+					if (amount > user->homeArmy[unitId])
+					{
+						std::cout << "tried to attack with units they do not have" << std::endl;
+						*out = "{\"success\":\"false\",\"message\":\"Tried to attack with units they do not have\"}";
+						*code = 2;
+						return;
+					}
+
+					army.push_back(Group(amount, unitId));
+				}
+
+				for (int i = 0; i < army.size(); ++i)
+				{
+					Group g = army[i];
+					user->homeArmy[g.unitId] -= g.count;
+				}
+
+				new ScheduledMoveArmyEvent(20, army, position, user->cityLocation, user->userId);
+
+				*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
+				*code = 3;
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
+		void recallArmy(long long token, int position, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				Map::Tile* mapTile = Map::getTile(position);
+
+				if (mapTile->owner != user->userId)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Can't recall from a tile you don't own\"}";
+					*code = 2;
+					return;
+				}
+
+				std::vector<Group> army;
+				for (int i = 0; i < mapTile->army.size(); ++i)
+				{
+					army.push_back(mapTile->army[i]);
+				}
+
+				if (army.size() == 0)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"No units to recall\"}";
+					*code = 2;
+					return;
+				}
+
+				new ScheduledMoveArmyEvent(20, army, user->cityLocation, position, user->userId);
+
+				*out = "{\"success\":\"false\",\"message\":\"No units to recall\"}";
+				*code = 2;
+				return;
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
 		void upgradeStorage(long long token, int upgradeIndex, std::string* out, int* code)
 		{
 			try
@@ -418,9 +539,17 @@ namespace Straterra
 					return;
 				}
 
-				if (Map::getTile(destination)->building == 0)
+				Map::Tile* mapTile = Map::getTile(destination);
+
+				if (mapTile->building == 0)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Nothing to attack\"}";
+					*code = 2;
+					return;
+				}
+				if (mapTile->owner == user->userId)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"You cannot attack your own tiles\"}";
 					*code = 2;
 					return;
 				}
@@ -871,6 +1000,7 @@ namespace Straterra
 		void login(std::string* out, int* code, std::string loginInfo)
 		{
 			try{
+
 			std::cout << "Users total: " << getUserCount() << std::endl;
 			for (int i = 0; i < getUserCount(); ++i)
 			{
@@ -883,6 +1013,13 @@ namespace Straterra
 					//std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
 					if (u->login == loginInfo)
 					{
+						if (getUserOnline(u->userId))
+						{
+							*code = 0;
+							*out = "{\"success\":\"false\",\"message\":\"This user is already logged in!\"}";
+							return;
+						}
+
 						long long token = createSessionToken();
 						std::cout << token << std::endl;
 						Session* s = new Session(u->userId, token);
