@@ -46,7 +46,6 @@ namespace Straterra
 			{
 				//std::cout << "Creating scheduled event" << std::endl;
 				Run();
-				this->running = true;
 			}
 			else
 			{

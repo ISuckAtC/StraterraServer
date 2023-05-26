@@ -904,6 +904,13 @@ namespace Straterra
 			// Grab the definition for the desired unit
 			Unit unit = getUnitDefinition(unitId);
 
+			if (amount < 1)
+			{
+				*out = "{\"success\":\"false\",\"message\":\"You must create at least one unit\"}";
+				*code = 3;
+				return;
+			}
+
 			// Check if the user has the population room to train the troops
 			if (user->population + amount > user->populationCap)
 			{
