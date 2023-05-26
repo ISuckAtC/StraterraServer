@@ -120,9 +120,7 @@ namespace Straterra
 				}
 			}
 			std::cout << "getUser: user not found (id: " << id << ")" << std::endl;
-			User p;
-			p.userId = -1;
-			return &p;
+			return (User*)0;
 		}
 
 		User* getUserAt(int index)
@@ -154,10 +152,7 @@ namespace Straterra
 					return getUserById(sessions[i]->playerId);
 				}
 			}
-			User nouser;
-			nouser.userId = -1;
-			User* nouserp = &nouser;
-			return nouserp;
+			return (User*)0;
 		}
 
 		int findUserBySession(long long token)

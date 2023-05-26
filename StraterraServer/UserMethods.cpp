@@ -35,7 +35,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -55,7 +55,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == - 1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -130,7 +130,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -176,7 +176,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -227,7 +227,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -250,7 +250,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -280,7 +280,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -310,7 +310,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -349,7 +349,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -387,7 +387,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -411,7 +411,7 @@ namespace Straterra
 			{
 			// Grab and verify user
 			User* user = getUserBySession(token);
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -514,7 +514,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -552,7 +552,7 @@ namespace Straterra
 			{
 				// Grab and verify user
 				User* user = getUserBySession(token);
-				if (user->userId == -1)
+				if ((long)user == -1)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 					*code = 2;
@@ -625,7 +625,7 @@ namespace Straterra
 			try{
 			// Grab and verify user
 			User* user = getUserBySession(token);
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -669,7 +669,7 @@ namespace Straterra
 			try{
 			// Grab and verify user
 			User* user = getUserBySession(token);
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -709,7 +709,7 @@ namespace Straterra
 			try{
 			// Grab and verify user
 			User* user = getUserBySession(token);
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -788,7 +788,7 @@ namespace Straterra
 			User* user = getUserBySession(token);
 
 			// Verify that they are connected
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -848,7 +848,7 @@ namespace Straterra
 			User* user = getUserBySession(token);
 
 			// Verify that they are connected
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -919,7 +919,7 @@ namespace Straterra
 			User* user = getUserBySession(token);
 			
 			// Verify that they are connected
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
 				*code = 2;
@@ -1115,7 +1115,7 @@ namespace Straterra
 			}
 			User* user = getUserById(userId);
 			//std::cout << "getResources VALUE: id: " << std::to_string((long)user) << "|" << std::to_string(user->userId) << "|" << std::to_string(user->food) << std::endl;
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*out = "{\"error\":\"No user with that id\"}";
 				*code = 2;
@@ -1188,7 +1188,7 @@ namespace Straterra
 				return;
 			}
 			User* user = getUserById(userId);
-			if (user->userId == -1)
+			if ((long)user == -1)
 			{
 				*code = 3;
 				*out = "{\"error\":\"No user with that id\"}";
