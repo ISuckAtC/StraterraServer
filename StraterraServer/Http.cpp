@@ -165,7 +165,7 @@ namespace Straterra
 
 					response_.set(http::field::content_type, "json");
 					
-					long long token = 0;
+					long long token = -1;
 					if (method != "login" && method != "createPlayer")
 					{
 						try
@@ -177,6 +177,12 @@ namespace Straterra
 						{
 							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << std::endl;
 						}
+					}
+					if (token == -1)
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						out = "invalid method";
+						if (!skip) beast::ostream(response_.body()) << out;
 					}
 					if (method == "getResources")
 					{
@@ -296,23 +302,10 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::stationArmy(token, std::stoi(options[1]), options[2], &out, &code);
 					}
-					else if (method == "index")
-					{
-						std::cout << "Method: \"" << method << "\"" << std::endl;
-						response_.set(http::field::content_type, "text");
-						out = Game::indexDoc;
-					}
 					else if (method == "logout")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::logout(token, &out, &code);
-					}
-					else if (method == "favicon.ico")
-					{
-						std::cout << "Method: \"" << method << "\"" << std::endl;
-						response_.set(http::field::content_type, "image/x-icon");
-						skip = true;
-						beast::ostream(response_.body()) << Game::favicon;
 					}
 					else
 					{

@@ -146,13 +146,7 @@ namespace Straterra
 					return;
 				}
 
-				std::vector<Group> army;
-				for (int i = 0; i < mapTile->army.size(); ++i)
-				{
-					army.push_back(mapTile->army[i]);
-				}
-
-				if (army.size() == 0)
+				if (mapTile->army.size() == 0)
 				{
 					*out = "{\"success\":\"false\",\"message\":\"No units to recall\"}";
 					*code = 2;
@@ -180,12 +174,12 @@ namespace Straterra
 
 					int tileAmount = 0;
 					int tileIndex = -1;
-					for (int k = 0; k < army.size(); ++k)
+					for (int k = 0; k < mapTile->army.size(); ++k)
 					{
-						if (army[k].unitId == unitId)
+						if (mapTile->army[k].unitId == unitId)
 						{
 							tileIndex = k;
-							tileAmount = army[k].count;
+							tileAmount = mapTile->army[k].count;
 						}
 					}
 
@@ -199,11 +193,11 @@ namespace Straterra
 
 					if (amount == tileAmount)
 					{
-						army.erase(army.begin() + tileIndex);
+						mapTile->army.erase(mapTile->army.begin() + tileIndex);
 					}
 					else
 					{
-						army[tileIndex].count -= amount;
+						mapTile->army[tileIndex].count -= amount;
 					}
 
 					parsedArmy.push_back(Group(amount, unitId));
