@@ -29,6 +29,26 @@ namespace Straterra
 {
 	namespace UserMethods
 	{
+		void logout(long long token, std::string* out, int* code)
+		{
+			try
+			{
+				// Grab and verify user
+				User* user = getUserBySession(token);
+				if (user->userId == -1)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Session invalid\"}";
+					*code = 2;
+					return;
+				}
+
+				removeSession(user->userId);
+			}
+			catch (const std::exception& e)
+			{
+
+			}
+		}
 		void stationArmy(long long token, int position, std::string units, std::string* out, int* code)
 		{
 			try

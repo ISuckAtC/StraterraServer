@@ -302,6 +302,11 @@ namespace Straterra
 						response_.set(http::field::content_type, "text");
 						out = Game::indexDoc;
 					}
+					else if (method == "logout")
+					{
+						std::cout << "Method: \"" << method << "\"" << std::endl;
+						UserMethods::logout(token, &out, &code);
+					}
 					else if (method == "favicon.ico")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;

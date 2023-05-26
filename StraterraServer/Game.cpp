@@ -39,6 +39,19 @@ namespace Straterra
 
 		int tickCount = 0;
 
+		void removeSession(int userId)
+		{
+			int index = -1;
+			for (int i = 0; i < sessions.size(); ++i)
+			{
+				if (sessions[i]->playerId == userId) index = i;
+			}
+			if (index > -1)
+			{
+				sessions.erase(sessions.begin() + index);
+			}
+		}
+
 		int createUserId()
 		{
 			int id;
