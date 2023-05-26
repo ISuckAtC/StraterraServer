@@ -83,8 +83,8 @@ namespace Straterra
 
 				if (unitSplit.size() <= 0)
 				{
-					std::cout << "tried to attack with no units" << std::endl;
-					*out = "{\"success\":\"false\",\"message\":\"Tried to attack with no units\"}";
+					std::cout << "tried to sation with no units" << std::endl;
+					*out = "{\"success\":\"false\",\"message\":\"Tried to station with no units\"}";
 					*code = 2;
 					return;
 				}
@@ -124,7 +124,7 @@ namespace Straterra
 
 			}
 		}
-		void recallArmy(long long token, int position, std::string* out, int* code)
+		void recallArmy(long long token, int position, std::string units, std::string* out, int* code)
 		{
 			try
 			{
@@ -159,7 +159,59 @@ namespace Straterra
 					return;
 				}
 
-				new ScheduledMoveArmyEvent(20, army, user->cityLocation, position, user->userId);
+				std::vector<std::string> unitSplit;
+				boost::split(unitSplit, units, boost::is_any_of(";"));
+
+				if (unitSplit.size() <= 0)
+				{
+					std::cout << "tried to recall with no units" << std::endl;
+					*out = "{\"success\":\"false\",\"message\":\"Tried to recall with no units\"}";
+					*code = 2;
+					return;
+				}
+
+				std::vector<Group> parsedArmy;
+
+				for (int i = 0; i < unitSplit.size(); ++i)
+				{
+					int colonIndex = unitSplit[i].find_first_of(':');
+					int unitId = std::stoi(unitSplit[i].substr(0, colonIndex));
+					int amount = std::stoi(unitSplit[i].substr(colonIndex + 1));
+
+					int tileAmount = 0;
+					int tileIndex = -1;
+					for (int k = 0; k < army.size(); ++k)
+					{
+						if (army[k].unitId == unitId)
+						{
+							tileIndex = k;
+							tileAmount = army[k].count;
+						}
+					}
+
+					if (amount > tileAmount)
+					{
+						std::cout << "tried to recall with units they do not have" << std::endl;
+						*out = "{\"success\":\"false\",\"message\":\"Tried to recall with units they do not have\"}";
+						*code = 2;
+						return;
+					}
+
+					if (amount == tileAmount)
+					{
+						army.erase(army.begin() + tileIndex);
+					}
+					else
+					{
+						army[tileIndex].count -= amount;
+					}
+
+					parsedArmy.push_back(Group(amount, unitId));
+				}
+
+				
+
+				new ScheduledMoveArmyEvent(20, parsedArmy, user->cityLocation, position, user->userId);
 
 				*out = "{\"success\":\"false\",\"message\":\"No units to recall\"}";
 				*code = 2;

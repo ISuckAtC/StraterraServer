@@ -19,7 +19,7 @@ namespace Straterra
 	{
 		void logout(long long token, std::string* out, int* code);
 		void stationArmy(long long token, int position, std::string units, std::string* out, int* code);
-		void recallArmy(long long token, int position, std::string* out, int* code);
+		void recallArmy(long long token, int position, std::string units, std::string* out, int* code);
 		void upgradeStorage(long long token, int upgradeIndex, std::string* out, int* code);
 		void removeNotification(long long token, int reportIndex, std::string* out, int* code);
 		void removeAllNotifications(long long token, std::string* out, int* code);

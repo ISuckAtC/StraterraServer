@@ -289,7 +289,7 @@ namespace Straterra
 					else if (method == "recallArmy")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
-						UserMethods::recallArmy(token, std::stoi(options[1]), &out, &code);
+						UserMethods::recallArmy(token, std::stoi(options[1]), options[2], &out, &code);
 					}
 					else if (method == "stationArmy")
 					{
