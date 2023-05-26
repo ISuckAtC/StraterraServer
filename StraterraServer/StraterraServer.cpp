@@ -78,7 +78,7 @@ int main(int argc, char** argv)
 
 	Straterra::Map::loadMap(debug ? "C:/Users/Student/Desktop/sjfs/MapInformation.txt" : argv[3]);
 
-	Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 900);
+	Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 10);
 
 	
 

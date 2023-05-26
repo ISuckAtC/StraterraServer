@@ -233,7 +233,7 @@ namespace Straterra
 				while (running)
 				{
 					// slow update logic
-					std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
+					std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 30));
 					time_t now;
 					tm timeNow;
 					time(&now);
