@@ -262,7 +262,7 @@ namespace Straterra
 					}
 					if (!merged)
 					{
-						destinationTile->army.push_back(Game::Group{ army[i].unitId, army[i].count });
+						destinationTile->army.push_back(Game::Group{ army[i].count, army[i].unitId });
 					}
 				}
 				delete this;
