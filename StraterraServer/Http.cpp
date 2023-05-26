@@ -175,7 +175,7 @@ namespace Straterra
 						}
 						catch (std::exception const& e)
 						{
-							std::cerr << e.what() << std::endl;
+							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << std::endl;
 						}
 					}
 					if (method == "getResources")
