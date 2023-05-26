@@ -26,6 +26,7 @@ namespace Straterra
 		static std::string indexDoc;
 		static char favicon[32000];
 		static size_t faviconLength;
+		static bool running = true;
 		int getTickInterval();
 		int getTicksPerHour();
 
@@ -39,7 +40,7 @@ namespace Straterra
 
 			std::string tokenBytes();
 		};
-
+		void removeSession(int userId);
 		Straterra::Player::User* getUserAt(int index);
 		int getUserCount();
 		bool getUserOnline(int id);

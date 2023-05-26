@@ -218,11 +218,13 @@ namespace Straterra
 		{
 			try
 			{
-				// update logic
-				EventHub::fireOnTick();
-				tickCount++;
-				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval));
-				update();
+				while (running)
+				{
+					// update logic
+					std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval));
+					EventHub::fireOnTick();
+					tickCount++;
+				}
 			}
 			catch (std::exception const& e)
 			{
@@ -233,26 +235,28 @@ namespace Straterra
 		{
 			try
 			{
-				// slow update logic
-				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
-				time_t now;
-				tm timeNow;
-				time(&now);
-				localtime_s(&timeNow, &now);
-				char timeChars[32];
-				std::strftime(timeChars, 32, "%a, %d.%m.%Y %H:%M:%S", &timeNow);
-				std::cout << timeChars << std::endl;
-				for (int i = 0; i < usersOnline; ++i)
+				while (running)
 				{
-					if (sessions[i]->playerId == 1984) std::cout << "Diff: " << std::difftime(now, sessions[i]->lastSeen) << std::endl;
-					if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
+					// slow update logic
+					std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 100));
+					time_t now;
+					tm timeNow;
+					time(&now);
+					localtime_s(&timeNow, &now);
+					char timeChars[32];
+					std::strftime(timeChars, 32, "%a, %d.%m.%Y %H:%M:%S", &timeNow);
+					std::cout << timeChars << std::endl;
+					for (int i = 0; i < usersOnline; ++i)
 					{
-						sessions.erase(sessions.begin() + i);
-						usersOnline--;
-						i--;
+						if (sessions[i]->playerId == 1984) std::cout << "Diff: " << std::difftime(now, sessions[i]->lastSeen) << std::endl;
+						if (std::difftime(now, sessions[i]->lastSeen) > timeOutSeconds)
+						{
+							sessions.erase(sessions.begin() + i);
+							usersOnline--;
+							i--;
+						}
 					}
 				}
-				slowUpdate();
 			}
 			catch (std::exception const& e)
 			{
@@ -300,33 +304,37 @@ namespace Straterra
 
 		void autoSave()
 		{
-			std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 1800));
 			std::vector<User> saveUsers;
-			int userCount = 0;
-
-			// Save current users to its own storage
-			for (int i = 0; i < users.size(); ++i)
+			int saveUserCount = 0;
+			while (running)
 			{
-				saveUsers.push_back(*users[i]);
-				userCount++;
+				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 1800));
+				saveUserCount = 0;
+
+				// Save current users to its own storage
+				for (int i = 0; i < users.size(); ++i)
+				{
+					saveUsers.push_back(*users[i]);
+					saveUserCount++;
+				}
+
+
+
+				std::ofstream saveFile{ "players.txt" };
+				std::string line;
+
+				for (int i = 0; i < saveUserCount; ++i)
+				{
+					saveFile << saveSerialUser(saveUsers[i]) << std::endl;
+				}
+				saveFile << "\0";
+
+				saveFile.close();
+
+				std::cout << "Autosaved" << std::endl;
+
+				saveUsers.clear();
 			}
-
-
-
-			std::ofstream saveFile{ "players.txt" };
-			std::string line;
-
-			for (int i = 0; i < userCount; ++i)
-			{
-				saveFile << saveSerialUser(saveUsers[i]) << std::endl;
-			}
-			saveFile << "\0";
-
-			saveFile.close();
-
-			saveUsers.clear();
-
-			autoSave();
 		}
 
 
