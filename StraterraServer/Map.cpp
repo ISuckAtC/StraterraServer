@@ -26,6 +26,8 @@ namespace Straterra
 			std::ifstream data{ path };
 			std::string line;
 
+			std::cout << "Loading map data from " << path << std::endl;
+
 			while (std::getline(data, line))
 			{
 				Tile* tile = new Tile();

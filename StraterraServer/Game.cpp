@@ -299,37 +299,45 @@ namespace Straterra
 
 		void autoSave()
 		{
-			std::vector<User> saveUsers;
-			int saveUserCount = 0;
-			while (running)
+			try
 			{
-				std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 1800));
-				saveUserCount = 0;
-
-				// Save current users to its own storage
-				for (int i = 0; i < users.size(); ++i)
+				std::vector<User> saveUsers;
+				int saveUserCount = 0;
+				while (running)
 				{
-					saveUsers.push_back(*users[i]);
-					saveUserCount++;
+					std::this_thread::sleep_until(std::chrono::steady_clock::now() + std::chrono::milliseconds(tickInterval * 1800));
+					saveUserCount = 0;
+
+					// Save current users to its own storage
+					for (int i = 0; i < users.size(); ++i)
+					{
+						saveUsers.push_back(*users[i]);
+						saveUserCount++;
+					}
+
+
+
+					std::ofstream saveFile{ "players.txt" };
+					std::string line;
+
+					for (int i = 0; i < saveUserCount; ++i)
+					{
+						saveFile << saveSerialUser(saveUsers[i]) << std::endl;
+					}
+					saveFile << "\0";
+
+					saveFile.close();
+
+					std::cout << "Autosaved" << std::endl;
+
+					saveUsers.clear();
 				}
-
-
-
-				std::ofstream saveFile{ "players.txt" };
-				std::string line;
-
-				for (int i = 0; i < saveUserCount; ++i)
-				{
-					saveFile << saveSerialUser(saveUsers[i]) << std::endl;
-				}
-				saveFile << "\0";
-
-				saveFile.close();
-
-				std::cout << "Autosaved" << std::endl;
-
-				saveUsers.clear();
 			}
+			catch (const std::exception& e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+			
 		}
 
 

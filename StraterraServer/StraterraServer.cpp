@@ -26,37 +26,11 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 using namespace Straterra;
 
+static bool debug = false;
 
 
 int main(int argc, char** argv)
 {
-	std::ifstream indexDocStream{ "./index.html" };
-
-	Game::indexDoc = "";
-
-	std::string hLine;
-
-	while (std::getline(indexDocStream, hLine))
-	{
-		Game::indexDoc += hLine + "\n";
-	}
-	Game::indexDoc += "\0";
-
-	std::cout << "Html" << std::endl << std::endl;
-	std::cout << Game::indexDoc << std::endl;
-
-
-	std::ifstream faviconStream{ "./favicon.ico" };
-
-	faviconStream.seekg(0, std::ios::end);
-
-	size_t contLength = faviconStream.tellg();
-
-	faviconStream.seekg(0, std::ios::beg);
-
-	faviconStream.read(Game::favicon, contLength);
-
-	Game::faviconLength = contLength;
 
 	Straterra::Definition::DefineUnits();
 	Straterra::Definition::DefineMapBuildings();
@@ -96,22 +70,22 @@ int main(int argc, char** argv)
 	}
 	std::cout << std::endl;
 	
-	if (argc != 4)
+	if (!debug && argc != 4)
 	{
 		std::cout << "Argument count invalid, excepted 4, is " << std::to_string(argc) << std::endl;
 		return 1;
 	}
 
-	Straterra::Map::loadMap(argv[3]);
+	Straterra::Map::loadMap(debug ? "C:/Users/Student/Desktop/sjfs/MapInformation.txt" : argv[3]);
 
-	Straterra::Game::start(std::stoi(argv[1]), 900);
+	Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 900);
 
 	
 
 	int lines = 0;
 	try
 	{
-		std::ifstream data{ argv[2] };
+		std::ifstream data{ debug ? "C:/Users/Student/Desktop/sjfs/players.txt" : argv[2]};
 		std::string line;
 
 		std::cout << std::endl << "Loading users: ";
@@ -319,6 +293,8 @@ int main(int argc, char** argv)
 		Straterra::Http::http_server(acceptor, socket);
 
 		ioc.run();
+
+		std::cout << "Finished startup, entering ioc watch" << std::endl;
 
 		while (true)
 		{

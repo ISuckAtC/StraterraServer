@@ -19,10 +19,6 @@ namespace Straterra
 {
 	namespace Player
 	{
-		User userFromFile()
-		{
-
-		}
 		User::User()
 		{
 			this->foodMax = 1024;
