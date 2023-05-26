@@ -176,13 +176,10 @@ namespace Straterra
 						catch (std::exception const& e)
 						{
 							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << std::endl;
+							out = "invalid token";
+							if (!skip) beast::ostream(response_.body()) << out;
+							return;
 						}
-					}
-					if (token == -1)
-					{
-						std::cout << "Method: \"" << method << "\"" << std::endl;
-						out = "invalid method";
-						if (!skip) beast::ostream(response_.body()) << out;
 					}
 					if (method == "getResources")
 					{
