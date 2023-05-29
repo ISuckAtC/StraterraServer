@@ -84,7 +84,7 @@ namespace Straterra
 			do
 			{
 				id = rand();
-			} while (getUserById(id)->userId != -1);
+			} while ((long)getUserById(id) != 0);
 			return id;
 		}
 		long long createSessionToken()
@@ -110,7 +110,7 @@ namespace Straterra
 		{
 
 			//std::cout << "user added: " << user->name;
-			users.insert(users.begin(), user);
+			users.push_back(user);
 
 			EventHub::subcribeOnTick(boost::bind(&User::addResources, user));
 			//std::cout << " | p:" << users[userCount]->name << std::endl;
