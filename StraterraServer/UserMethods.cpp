@@ -1063,7 +1063,7 @@ namespace Straterra
 			}
 		}
 
-		void createUser(std::string name, std::string loginInfo)
+		void createUser(std::string name, std::string loginInfo, int cityLocation, std::string* out, int* code)
 		{
 			try{
 			std::cout << "[createUser] name: \"" << name << "\" login: \"" << loginInfo << "\"" << std::endl;
@@ -1072,15 +1072,14 @@ namespace Straterra
 			u->name = name;
 			u->login = loginInfo;
 			u->color = 0;
-			u->cityLocation = 0;
-			u->cityBuildingSlots[0] = 0;
-			u->cityBuildingSlots[1] = 3;
+			u->cityLocation = cityLocation;
+			for (int i = 0; i < 8; ++i) u->cityBuildingSlots[i] = 255;
 			u->userId = Game::createUserId();
 
 			u->food = 1000;
 			u->wood = 1000;
 			u->metal = 500;
-			u->order = 50;
+			u->order = 0;
 
 			u->foodGeneration = 0;
 			u->woodGeneration = 0;

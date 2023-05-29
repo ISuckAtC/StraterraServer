@@ -29,6 +29,8 @@ namespace Straterra
 
 		static std::vector<User*> users;
 		static std::vector<Session*> sessions;
+		static std::vector<int> startLocations;
+		static int lastStartLocation = 0;
 		int userCount;
 		int usersOnline;
 		int tickInterval;
@@ -38,6 +40,16 @@ namespace Straterra
 		std::thread autoSaveThread;
 
 		int tickCount = 0;
+
+		void setLastStartIndex(int index)
+		{
+			lastStartLocation = index;
+		}
+
+		void addStartLocation(int position)
+		{
+			startLocations.push_back(position);
+		}
 
 		void removeSession(int userId)
 		{

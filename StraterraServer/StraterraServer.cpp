@@ -31,7 +31,6 @@ static bool debug = false;
 
 int main(int argc, char** argv)
 {
-
 	Straterra::Definition::DefineUnits();
 	Straterra::Definition::DefineMapBuildings();
 	Straterra::Definition::DefineTownBuildings();
@@ -70,14 +69,19 @@ int main(int argc, char** argv)
 	}
 	std::cout << std::endl;
 	
-	if (!debug && argc != 4)
+	if (!debug && argc != 6)
 	{
-		std::cout << "Argument count invalid, excepted 4, is " << std::to_string(argc) << std::endl;
+		std::cout << "Argument count invalid, excepted 6, is " << std::to_string(argc) << std::endl;
 		return 1;
 	}
 
 	Straterra::Map::loadMap(debug ? "C:/Users/Student/Desktop/sjfs/MapInformation.txt" : argv[3]);
 
+	Game::setLastStartIndex(std::stoi(argv[4]));
+	
+	
+
+	
 	Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 10);
 
 	

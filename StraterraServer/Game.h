@@ -54,6 +54,8 @@ namespace Straterra
 		void addUser(Player::User* user);
 		int createUserId();
 		long long createSessionToken();
+		void setLastStartIndex(int index);
+		void addStartLocation(int position);
 
 		void start(int _tickInterval, int _timeOutSeconds);
 		
