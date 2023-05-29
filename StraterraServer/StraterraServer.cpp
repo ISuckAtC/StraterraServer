@@ -75,24 +75,36 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	Straterra::Map::loadMap(debug ? "C:/Users/Student/Desktop/sjfs/MapInformation.txt" : argv[3]);
-
-	Game::setLastStartIndex(std::stoi(argv[4]));
-	
+	try
 	{
-		std::ifstream data{ debug ? "C:/Users/Student/Desktop/sjfs/players.txt" : argv[5] };
-		std::string line;
 
-		while (std::getline(data, line, ';'))
+		Straterra::Map::loadMap(debug ? "C:/Users/Student/Desktop/sjfs/MapInformation.txt" : argv[3]);
+
+
+		int lastStartIndex = std::stoi(argv[4]);
+		Game::setLastStartIndex(lastStartIndex);
+		std::cout << "Set last start index to " << lastStartIndex << std::endl;
+
 		{
-			Game::addStartLocation(std::stoi(line));
+			std::ifstream data{ argv[5] };
+			std::string line;
+
+			while (std::getline(data, line, ';'))
+			{
+				int startLocation = std::stoi(line);
+				Game::addStartLocation(startLocation);
+				std::cout << "Added startLocation: " << startLocation << std::endl;
+			}
 		}
+
+
+		Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 10);
+
 	}
-
-	
-	Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 10);
-
-	
+	catch (const std::exception& e)
+	{
+		std::wcout << e.what() << std::endl;
+	}
 
 	int lines = 0;
 	try
