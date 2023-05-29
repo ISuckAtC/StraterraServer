@@ -80,8 +80,11 @@ int main(int argc, char** argv)
 
 		Straterra::Map::loadMap(debug ? "C:/Users/Student/Desktop/sjfs/MapInformation.txt" : argv[3]);
 
+		std::ifstream lastStartIndexFile{ argv[4] };
+		std::stringstream ssLSI;
+		ssLSI << lastStartIndexFile.rdbuf();
 
-		int lastStartIndex = std::stoi(argv[4]);
+		int lastStartIndex = std::stoi(ssLSI.str());
 		Game::setLastStartIndex(lastStartIndex);
 		std::cout << "Set last start index to " << lastStartIndex << std::endl;
 
