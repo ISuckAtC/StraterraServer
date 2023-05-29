@@ -79,7 +79,15 @@ int main(int argc, char** argv)
 
 	Game::setLastStartIndex(std::stoi(argv[4]));
 	
-	
+	{
+		std::ifstream data{ debug ? "C:/Users/Student/Desktop/sjfs/players.txt" : argv[5] };
+		std::string line;
+
+		while (std::getline(data, line, ';'))
+		{
+			Game::addStartLocation(std::stoi(line));
+		}
+	}
 
 	
 	Straterra::Game::start(debug ? 1000 : std::stoi(argv[1]), 10);

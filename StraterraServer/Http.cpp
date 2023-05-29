@@ -193,7 +193,7 @@ namespace Straterra
 					else if (method == "createPlayer")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
-						UserMethods::createUser(options[0], options[1], std::stoi(options[2]), &out, &code);
+						UserMethods::createUser(options[0], options[1], options[2], &out, &code);
 					}
 					else if (method == "login")
 					{

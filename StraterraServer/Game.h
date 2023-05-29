@@ -56,6 +56,7 @@ namespace Straterra
 		long long createSessionToken();
 		void setLastStartIndex(int index);
 		void addStartLocation(int position);
+		int getNextStartLocation();
 
 		void start(int _tickInterval, int _timeOutSeconds);
 		

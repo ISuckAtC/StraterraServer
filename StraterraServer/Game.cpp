@@ -51,6 +51,20 @@ namespace Straterra
 			startLocations.push_back(position);
 		}
 
+		int getNextStartLocation()
+		{
+			return startLocations[lastStartLocation++];
+		}
+
+		void saveLastStartIndex()
+		{
+			std::ofstream saveFile{ "lastStartLocation.txt" };
+
+			saveFile << std::to_string(lastStartLocation) << "\0";
+
+			saveFile.close();
+		}
+
 		void removeSession(int userId)
 		{
 			int index = -1;
@@ -344,6 +358,7 @@ namespace Straterra
 
 					saveUsers.clear();
 				}
+				saveLastStartIndex();
 			}
 			catch (const std::exception& e)
 			{
