@@ -841,6 +841,8 @@ namespace Straterra
 				return;
 			}
 
+			std::cout << "checked user" << std::endl;
+
 			// Check if something is already built here
 			if (Map::getTile(position)->building != 0)
 			{
@@ -849,9 +851,13 @@ namespace Straterra
 				return;
 			}
 
+			std::cout << "checked tile" << std::endl;
+
 
 			// Grab definition
 			MapBuilding mapBuilding = getMapBuildingDefinition(buildingId);
+
+			std::cout << "checked building" << std::endl;
 
 
 			// Check if user has enough resources
