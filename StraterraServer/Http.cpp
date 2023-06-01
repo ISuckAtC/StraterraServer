@@ -175,7 +175,7 @@ namespace Straterra
 						}
 						catch (std::exception const& e)
 						{
-							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << std::endl;
+							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << " | token was: " << options[0] << std::endl;
 							out = "invalid token";
 							if (!skip) beast::ostream(response_.body()) << out;
 							return;

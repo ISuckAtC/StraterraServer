@@ -157,9 +157,12 @@ namespace Straterra
 			user->mapBuildings.push_back(position);
 
 			this->type = MAPBUILDING;
+
+			std::cout << "ScheduledMapBuildingEvent finished initializing" << std::endl;
 		}
 		void ScheduledMapBuildingEvent::Complete()
 		{
+			std::cout << "ScheduledMapBuildingEvent complete" << std::endl;
 			ScheduledEvent::Complete();
 			Map::Tile* tile = Map::getTile(position);
 			Player::User* user = Game::getUserById(owner);
