@@ -1239,9 +1239,9 @@ namespace Straterra
 
             StorageUpgrade* storage1 = new StorageUpgrade();
             storage1->foodMax = 4096;
-            storage1->woodMax = 0;
-            storage1->metalMax = 0;
-            storage1->orderMax = 0;
+            storage1->woodMax = -1;
+            storage1->metalMax = -1;
+            storage1->orderMax = -1;
             storage1->id = 1;
             storage1->type = STORAGEUPGRADE;
             storage1->upgradeTime = 60;
@@ -1254,9 +1254,9 @@ namespace Straterra
 
             StorageUpgrade* storage2 = new StorageUpgrade();
             storage2->foodMax = 16384;
-            storage2->woodMax = 0;
-            storage2->metalMax = 0;
-            storage2->orderMax = 0;
+            storage2->woodMax = -1;
+            storage2->metalMax = -1;
+            storage2->orderMax = -1;
             storage2->id = 2;
             storage2->type = STORAGEUPGRADE;
             storage2->upgradeTime = 120;
@@ -1269,9 +1269,9 @@ namespace Straterra
 
             StorageUpgrade* storage3 = new StorageUpgrade();
             storage3->foodMax = 65536;
-            storage3->woodMax = 0;
-            storage3->metalMax = 0;
-            storage3->orderMax = 0;
+            storage3->woodMax = -1;
+            storage3->metalMax = -1;
+            storage3->orderMax = -1;
             storage3->id = 3;
             storage3->type = STORAGEUPGRADE;
             storage3->upgradeTime = 240;
@@ -1283,10 +1283,10 @@ namespace Straterra
             internalUpgradeDefinitions[3] = storage3;
 
             StorageUpgrade* storage11 = new StorageUpgrade();
-            storage11->foodMax = 0;
+            storage11->foodMax = -1;
             storage11->woodMax = 4096;
-            storage11->metalMax = 0;
-            storage11->orderMax = 0;
+            storage11->metalMax = -1;
+            storage11->orderMax = -1;
             storage11->id = 11;
             storage11->type = STORAGEUPGRADE;
             storage11->upgradeTime = 60;
@@ -1298,10 +1298,10 @@ namespace Straterra
             internalUpgradeDefinitions[11] = storage11;
 
             StorageUpgrade* storage12 = new StorageUpgrade();
-            storage12->foodMax = 0;
+            storage12->foodMax = -1;
             storage12->woodMax = 16384;
-            storage12->metalMax = 0;
-            storage12->orderMax = 0;
+            storage12->metalMax = -1;
+            storage12->orderMax = -1;
             storage12->id = 12;
             storage12->type = STORAGEUPGRADE;
             storage12->upgradeTime = 120;
@@ -1313,10 +1313,10 @@ namespace Straterra
             internalUpgradeDefinitions[12] = storage12;
 
             StorageUpgrade* storage13 = new StorageUpgrade();
-            storage13->foodMax = 0;
+            storage13->foodMax = -1;
             storage13->woodMax = 65536;
-            storage13->metalMax = 0;
-            storage13->orderMax = 0;
+            storage13->metalMax = -1;
+            storage13->orderMax = -1;
             storage13->id = 13;
             storage13->type = STORAGEUPGRADE;
             storage13->upgradeTime = 240;
@@ -1328,10 +1328,10 @@ namespace Straterra
             internalUpgradeDefinitions[13] = storage13;
 
             StorageUpgrade* storage21 = new StorageUpgrade();
-            storage21->foodMax = 0;
-            storage21->woodMax = 0;
+            storage21->foodMax = -1;
+            storage21->woodMax = -1;
             storage21->metalMax = 4096;
-            storage21->orderMax = 0;
+            storage21->orderMax = -1;
             storage21->id = 21;
             storage21->type = STORAGEUPGRADE;
             storage21->upgradeTime = 60;
@@ -1343,10 +1343,10 @@ namespace Straterra
             internalUpgradeDefinitions[21] = storage21;
 
             StorageUpgrade* storage22 = new StorageUpgrade();
-            storage22->foodMax = 0;
-            storage22->woodMax = 0;
+            storage22->foodMax = -1;
+            storage22->woodMax = -1;
             storage22->metalMax = 16384;
-            storage22->orderMax = 0;
+            storage22->orderMax = -1;
             storage22->id = 22;
             storage22->type = STORAGEUPGRADE;
             storage22->upgradeTime = 120;
@@ -1356,6 +1356,8 @@ namespace Straterra
             storage22->metalCost = 1000;
             storage22->orderCost = 0;
             internalUpgradeDefinitions[22] = storage22;
+
+
 
 
         }
