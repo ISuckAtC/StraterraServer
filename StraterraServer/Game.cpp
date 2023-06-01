@@ -164,9 +164,32 @@ namespace Straterra
 			return false;
 		}
 
+		User* getUserByEmail(std::string email)
+		{
+			for (int i = 0; i < userCount; ++i)
+			{
+				if (users[i]->email == email)
+				{
+					return users[i];
+				}
+			}
+			return (User*)0;
+		}
+
+		User* getUserByName(std::string name) 
+		{
+			for (int i = 0; i < userCount; ++i)
+			{
+				if (users[i]->name == name)
+				{
+					return users[i];
+				}
+			}
+			return (User*)0;
+		}
+
 		User* getUserBySession(long long token)
 		{
-			int id = -1;
 			for (int i = 0; i < usersOnline; ++i)
 			{
 				if (sessions[i]->token == token)
@@ -174,7 +197,6 @@ namespace Straterra
 					time_t now;
 					time(&now);
 					sessions[i]->lastSeen = now;
-					id = sessions[i]->playerId;
 					return getUserById(sessions[i]->playerId);
 				}
 			}

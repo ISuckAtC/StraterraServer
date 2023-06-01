@@ -1066,10 +1066,32 @@ namespace Straterra
 		void createUser(std::string email, std::string name, std::string loginInfo, std::string* out, int* code)
 		{
 			try{
+				User* user = getUserByName(name);
+
+				// Check if username is taken
+				if ((long)user != 0)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Username taken\"}";
+					*code = 2;
+					return;
+				}
+
+				user = getUserByEmail(email);
+
+				// Check if email is taken
+				if ((long)user != 0)
+				{
+					*out = "{\"success\":\"false\",\"message\":\"Email already in use\"}";
+					*code = 2;
+					return;
+				}
+
+
 			std::cout << "[createUser] name: \"" << name << "\" login: \"" << loginInfo << "\"" << std::endl;
 			Player::User* u = new Player::User();
 			u->allianceId = 0;
 			u->name = name;
+			u->email = email;
 			u->login = loginInfo;
 			u->color = 0;
 			u->cityLocation = Game::getNextStartLocation();
@@ -1095,6 +1117,9 @@ namespace Straterra
 			u->orderMultiplier = 1.;
 
 			addUser(u);
+
+			*out = "{\"success\":\"true\",\"message\":\"All good here\"}";
+			*code = 2;
 			}
 			catch (std::exception const& e)
 			{
