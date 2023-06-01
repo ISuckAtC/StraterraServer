@@ -178,7 +178,7 @@ namespace Straterra
 			if (mapBuilding.type == Definition::MINE)
 			{
 				int metalProd = mapBuilding.baseProduction * tile->metalAmount;
-				user->foodGeneration += metalProd;
+				user->metalGeneration += metalProd;
 			}
 			if (mapBuilding.type == Definition::HOUSE)
 			{
