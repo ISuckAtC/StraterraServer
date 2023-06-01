@@ -1116,6 +1116,11 @@ namespace Straterra
 			u->metalMultiplier = 1.;
 			u->orderMultiplier = 1.;
 
+			u->swordLevel = 1;
+			u->archerLevel = 1;
+			u->spearmanLevel = 1;
+			u->cavalryLevel = 1;
+
 			addUser(u);
 
 			*out = "{\"success\":\"true\",\"message\":\"All good here\"}";
