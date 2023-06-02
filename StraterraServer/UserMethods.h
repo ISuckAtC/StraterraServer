@@ -35,7 +35,7 @@ namespace Straterra
 		void getResources(long long token, int userId, std::string* out, int* code);
 		void getPlayers(long long token, std::string* out, int* code);
 		void getSelfPlayer(long long token, std::string* out, int* code);
-		void login(std::string* out, int* code, std::string loginInfo);
+		void login(std::string username, std::string password, std::string* out, int* code);
 		//long long createSessionToken();
 		void createUser(std::string email, std::string name, std::string loginInfo, std::string* out, int* code);
 		void createTownBuilding(long long token, int buildingId, int buildingSlot, std::string* out, int* code);

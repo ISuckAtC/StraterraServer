@@ -202,7 +202,7 @@ namespace Straterra
 					else if (method == "login")
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
-						UserMethods::login(&out, &code, options[0]);
+						UserMethods::login(options[0], options[1], &out, &code);
 					}
 					else if (method == "getUsers")
 					{

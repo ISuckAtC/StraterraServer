@@ -1137,7 +1137,7 @@ namespace Straterra
 				std::cout << "ERROR: " << e.what() << std::endl;
 			}
 		}
-		void login(std::string* out, int* code, std::string loginInfo)
+		void login(std::string username, std::string password, std::string* out, int* code)
 		{
 			try{
 
@@ -1151,11 +1151,11 @@ namespace Straterra
 				{
 					//std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
 					//std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
-					if (u->login == loginInfo)
+					if (u->name == username && u->login == password)
 					{
 						if (getUserOnline(u->userId))
 						{
-							*code = 0;
+							*code = 1;
 							*out = "{\"success\":\"false\",\"message\":\"This user is already logged in!\"}";
 							return;
 						}
@@ -1173,6 +1173,12 @@ namespace Straterra
 						std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
 						*code = 0;
 						*out = "{\"success\":\"true\",\"message\":\"" + getTokenString(token) + "\"}";
+						return;
+					}
+					else
+					{
+						*code = 1;
+						*out = "{\"success\":\"false\",\"message\":\"Wrong username or password\"}";
 						return;
 					}
 					//std::cout << "b" << std::endl;
