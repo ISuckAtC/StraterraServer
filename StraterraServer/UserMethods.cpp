@@ -1139,58 +1139,52 @@ namespace Straterra
 		}
 		void login(std::string username, std::string password, std::string* out, int* code)
 		{
-			try{
+			try {
 
-			std::cout << "Users total: " << getUserCount() << std::endl;
-			for (int i = 0; i < getUserCount(); ++i)
-			{
-				Player::User* u = getUserAt(i);
-				//std::cout << std::to_string((long)u) << " | ";
-				std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
-				try
+				std::cout << "Users total: " << getUserCount() << std::endl;
+				for (int i = 0; i < getUserCount(); ++i)
 				{
-					//std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
-					//std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
-					if (u->name == username && u->login == password)
+					Player::User* u = getUserAt(i);
+					//std::cout << std::to_string((long)u) << " | ";
+					std::cout << "name: \"" << u->name << "\" | login: \"" << u->login << "\"" << std::endl;
+					try
 					{
-						if (getUserOnline(u->userId))
+						//std::cout << "user login: " << u->login << " | provided: " << loginInfo << std::endl;
+						//std::cout << "==: " << (u->login == loginInfo) << " | compare: " << (loginInfo.compare(u->login)) << std::endl;
+						if (u->name == username && u->login == password)
 						{
-							*code = 1;
-							*out = "{\"success\":\"false\",\"message\":\"This user is already logged in!\"}";
+							if (getUserOnline(u->userId))
+							{
+								*code = 1;
+								*out = "{\"success\":\"false\",\"message\":\"This user is already logged in!\"}";
+								return;
+							}
+
+							long long token = createSessionToken();
+							std::cout << token << std::endl;
+							Session* s = new Session(u->userId, token);
+							addSession(s);
+
+							//std::cout << "session token created: " << s->token << " (" << token << ")" << std::endl;
+							//std::cout << "token string: " << getTokenString(token) << std::endl;
+							//std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
+
+
+							std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
+							*code = 0;
+							*out = "{\"success\":\"true\",\"message\":\"" + getTokenString(token) + "\"}";
 							return;
 						}
-
-						long long token = createSessionToken();
-						std::cout << token << std::endl;
-						Session* s = new Session(u->userId, token);
-						addSession(s);
-
-						//std::cout << "session token created: " << s->token << " (" << token << ")" << std::endl;
-						//std::cout << "token string: " << getTokenString(token) << std::endl;
-						//std::cout << "token string to long again: " << getTokenLong(getTokenString(token)) << std::endl;
-
-
-						std::cout << "Users online (including you): " << getUserOnlineCount() << std::endl;
-						*code = 0;
-						*out = "{\"success\":\"true\",\"message\":\"" + getTokenString(token) + "\"}";
-						return;
+						//std::cout << "b" << std::endl;
 					}
-					else
+					catch (std::exception const& e)
 					{
-						*code = 1;
-						*out = "{\"success\":\"false\",\"message\":\"Wrong username or password\"}";
-						return;
+						std::cerr << "ERROR: " << e.what() << std::endl;
 					}
-					//std::cout << "b" << std::endl;
 				}
-				catch (std::exception const& e)
-				{
-					std::cerr << "ERROR: " << e.what() << std::endl;
-				}
-			}
-
-			*code = 2;
-			*out = "{\"success\":\"false\",\"message\":\"No player with that login\"}";
+				*code = 1;
+				*out = "{\"success\":\"false\",\"message\":\"Wrong username or password\"}";
+				return;
 			}
 			catch (std::exception const& e)
 			{
