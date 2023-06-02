@@ -379,11 +379,13 @@ namespace Straterra
 
 					saveFile.close();
 
+					saveLastStartIndex();
+
 					std::cout << "Autosaved" << std::endl;
 
 					saveUsers.clear();
 				}
-				saveLastStartIndex();
+				
 			}
 			catch (const std::exception& e)
 			{
