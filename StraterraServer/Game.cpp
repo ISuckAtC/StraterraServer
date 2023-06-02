@@ -53,7 +53,10 @@ namespace Straterra
 
 		int getNextStartLocation()
 		{
-			return startLocations[lastStartLocation++];
+			int location = startLocations[lastStartLocation];
+			std::cout << "Gave new player village position: " << location << " (index: " << lastStartLocation << ")" << std::endl;
+			lastStartLocation++;
+			return location;
 		}
 
 		void saveLastStartIndex()
