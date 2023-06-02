@@ -170,12 +170,16 @@ namespace Straterra
 					{
 						try
 						{
+							if (options[0] == "")
+							{
+
+							}
 							token = Straterra::Game::getTokenLong(options[0]);
 
 						}
 						catch (std::exception const& e)
 						{
-							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << " | token was: " << options[0] << std::endl;
+							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << " | " << target << " | token was: " << options[0] << std::endl;
 							out = "invalid token";
 							if (!skip) beast::ostream(response_.body()) << out;
 							return;
