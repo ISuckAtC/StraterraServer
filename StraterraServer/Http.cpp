@@ -86,6 +86,7 @@ namespace Straterra
 
 			void handle_request()
 			{
+				bool debug = false;
 				try{
 				// match the version of the request
 				response_.version(request_.version());
@@ -105,11 +106,11 @@ namespace Straterra
 					response_.set(http::field::server, "S_beast");
 
 
-					create_response();
+					debug = create_response();
 					break;
 				}
 
-				write_response();
+				write_response(debug);
 				}
 				catch (std::exception const& e)
 				{
@@ -117,7 +118,7 @@ namespace Straterra
 				}
 			}
 
-			void create_response()
+			bool create_response()
 			{
 				bool skip = false;
 				std::string out = "";
@@ -182,7 +183,7 @@ namespace Straterra
 							std::cerr << "Method error: \"" << method << "\" -> " << e.what() << " | " << target << " | token was: " << options[0] << std::endl;
 							out = "invalid token";
 							if (!skip) beast::ostream(response_.body()) << out;
-							return;
+							return false;
 						}
 					}
 					if (method == "getResources")
@@ -320,8 +321,10 @@ namespace Straterra
 						if (method == "createMapBuilding")
 						{
 							std::cout << "after writing to response stream" << std::endl;
+							return true;
 						}
 					}
+					return false;
 				}
 				catch (std::exception& e)
 				{
@@ -329,11 +332,11 @@ namespace Straterra
 					out = "error";
 					beast::ostream(response_.body()) << out;
 				}
-				
+				return false;
 			}
 
 			// async send response
-			void write_response()
+			void write_response(bool debug)
 			{
 				try{
 				// pointer to self
@@ -341,6 +344,8 @@ namespace Straterra
 
 				// set the amount of bytes being sent
 				response_.content_length(response_.body().size());
+
+				if (debug) std::cout << "writing to client" << std::endl;
 
 				// write response to client
 				http::async_write(
@@ -353,6 +358,8 @@ namespace Straterra
 						self->deadline_.cancel();
 					}
 				);
+
+				if (debug) std::cout << "after write" << std::endl;
 				}
 				catch (std::exception const& e)
 				{
