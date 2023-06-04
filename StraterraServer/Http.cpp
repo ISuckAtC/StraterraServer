@@ -351,8 +351,9 @@ namespace Straterra
 				http::async_write(
 					socket_,
 					response_,
-					[self](beast::error_code ec, std::size_t bytes_sent)
+					[self, debug](beast::error_code ec, std::size_t bytes_sent)
 					{
+						if (debug) std::cout << ec.message() << std::endl;
 						// shut the socket down after use and cancel deadline
 						self->socket_.shutdown(tcp::socket::shutdown_send, ec);
 						self->deadline_.cancel();
