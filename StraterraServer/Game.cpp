@@ -139,6 +139,7 @@ namespace Straterra
 
 		User* getUserById(int id)
 		{
+			std::cout << "gI";
 			int index = -1;
 			for (int i = 0; i < userCount; ++i)
 			{
@@ -208,6 +209,7 @@ namespace Straterra
 
 		int findUserBySession(long long token)
 		{
+			std::cout << "fS";
 			int id = -1;
 			//std::cout << "usersOnline: " << std::to_string(usersOnline) << std::endl;
 			//std::cout << token << std::endl;
