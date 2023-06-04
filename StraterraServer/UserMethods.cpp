@@ -885,6 +885,8 @@ namespace Straterra
 			// We destroy it manually when the event completes
 			new ScheduledMapBuildingEvent{ mapBuilding.buildingTime / 5, mapBuilding.id, position, user->userId };
 
+			std::cout << "After creating mapbuild event" << std::endl;
+
 			*out = "{\"success\":\"true\",\"message\":\"All good here!\"}";
 			*code = 3;
 			}

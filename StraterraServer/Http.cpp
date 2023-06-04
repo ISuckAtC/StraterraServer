@@ -233,6 +233,7 @@ namespace Straterra
 					{
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						UserMethods::createMapBuilding(token, std::stoi(options[1]), std::stoi(options[2]), &out, &code);
+						std::cout << "Giving back to http.cpp" << std::endl;
 					}
 					else if (method == "getHomeUnits")
 					{
@@ -313,7 +314,14 @@ namespace Straterra
 						std::cout << "Method: \"" << method << "\"" << std::endl;
 						out = "invalid method";
 					}
-					if (!skip) beast::ostream(response_.body()) << out;
+					if (!skip)
+					{
+						beast::ostream(response_.body()) << out;
+						if (method == "createMapBuilding")
+						{
+							std::cout << "after writing to response stream" << std::endl;
+						}
+					}
 				}
 				catch (std::exception& e)
 				{
