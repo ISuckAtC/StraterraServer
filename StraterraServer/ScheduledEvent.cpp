@@ -162,38 +162,47 @@ namespace Straterra
 		}
 		void ScheduledMapBuildingEvent::Complete()
 		{
-			std::cout << "ScheduledMapBuildingEvent complete" << std::endl;
-			ScheduledEvent::Complete();
-			Map::Tile* tile = Map::getTile(position);
-			Player::User* user = Game::getUserById(owner);
+			
+			try
+			{
+				std::cout << "ScheduledMapBuildingEvent complete" << std::endl;
+				std::cout << "Tileposition: " << position << " Owner: " << owner << " Building: " << buildingId << std::endl;
+				ScheduledEvent::Complete();
+				Map::Tile* tile = Map::getTile(position);
+				Player::User* user = Game::getUserById(owner);
 
-			Definition::MapBuilding mapBuilding = Definition::getMapBuildingDefinition(buildingId);
-			if (mapBuilding.type == Definition::FARM)
-			{
-				int foodProd = mapBuilding.baseProduction * tile->foodAmount;
-				user->foodGeneration += foodProd;
-			}
-			if (mapBuilding.type == Definition::WOOD)
-			{
-				int woodProd = mapBuilding.baseProduction * tile->woodAmount;
-				user->woodGeneration += woodProd;
-			}
-			if (mapBuilding.type == Definition::MINE)
-			{
-				int metalProd = mapBuilding.baseProduction * tile->metalAmount;
-				user->metalGeneration += metalProd;
-			}
-			if (mapBuilding.type == Definition::HOUSE)
-			{
-				// maybe add something that increase or decrease this amount sometime
-				int populationIncrease = mapBuilding.baseProduction * 1;
-				user->populationCap += populationIncrease;
-			}
+				Definition::MapBuilding mapBuilding = Definition::getMapBuildingDefinition(buildingId);
+				if (mapBuilding.type == Definition::FARM)
+				{
+					int foodProd = mapBuilding.baseProduction * tile->foodAmount;
+					user->foodGeneration += foodProd;
+				}
+				if (mapBuilding.type == Definition::WOOD)
+				{
+					int woodProd = mapBuilding.baseProduction * tile->woodAmount;
+					user->woodGeneration += woodProd;
+				}
+				if (mapBuilding.type == Definition::MINE)
+				{
+					int metalProd = mapBuilding.baseProduction * tile->metalAmount;
+					user->metalGeneration += metalProd;
+				}
+				if (mapBuilding.type == Definition::HOUSE)
+				{
+					// maybe add something that increase or decrease this amount sometime
+					int populationIncrease = mapBuilding.baseProduction * 1;
+					user->populationCap += populationIncrease;
+				}
 
-			tile->building = buildingId;
+				tile->building = buildingId;
 
-			EventHub::Report* report = EventHub::Report::CreateReport("Map Building Complete", "Add description here");
-			user->reports.push_back(report);
+				EventHub::Report* report = EventHub::Report::CreateReport("Map Building Complete", "Add description here");
+				user->reports.push_back(report);
+			}
+			catch (const std::exception& e)
+			{
+				std::cout << e.what() << std::endl;
+			}
 
 			delete this;
 		}
