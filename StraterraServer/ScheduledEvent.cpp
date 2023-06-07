@@ -64,6 +64,7 @@ namespace Straterra
 		{
 			running = true;
 			subcription = EventHub::subcribeOnTick(boost::bind(&ScheduledEvent::Tick, this));
+			if (type == MAPBUILDING) std::cout << "Mapbuidlingevent subscribed" << std::endl;
 		}
 
 		void ScheduledEvent::Tick()
@@ -71,6 +72,7 @@ namespace Straterra
 			if (type == MAPBUILDING)
 			{
 				//std::cout << std::to_string((long)this) << " had Tick called (ticks left: " << this->secondsLeft << ")" << std::endl;
+				std::cout << "Mapbuilding tick" << std::endl;
 				std::cout << "data on tick: " << this->owner << " | " << this->secondsTotal << " | " << this->secondsLeft << " | " << this->type << std::endl;
 			}
 			if (secondsLeft-- == 0) Complete();

@@ -395,26 +395,32 @@ namespace Straterra
 
 		void http_server(tcp::acceptor& acceptor, tcp::socket& socket)
 		{
-			try
+			bool accepted = true;
+			while (true)
 			{
-				//std::cout << "Waiting for connection..." << std::endl;
-				acceptor.async_accept(socket,
-					[&](beast::error_code ec)
-					{
-						if (!ec)
+				while (!accepted);
+				try
+				{
+					accepted = false;
+					//std::cout << "Waiting for connection..." << std::endl;
+					acceptor.async_accept(socket,
+						[&](beast::error_code ec)
 						{
-							std::cout << "+";
-							std::make_shared<http_connection>(std::move(socket))->start();
-							http_server(acceptor, socket);
-
-						}
-						else std::cout << "EC set, exiting listener loop: " << ec.message() << std::endl;
-					});
-			}
-			catch (std::exception const& e)
-			{
-				std::cout << "ERROR: " << e.what() << std::endl;
-				http_server(acceptor, socket);
+							if (!ec)
+							{
+								std::cout << "+";
+								std::make_shared<http_connection>(std::move(socket))->start();
+								//http_server(acceptor, socket);
+								accepted = true;
+							}
+							else std::cout << "EC set, exiting listener loop: " << ec.message() << std::endl;
+						});
+				}
+				catch (std::exception const& e)
+				{
+					std::cout << "ERROR: " << e.what() << std::endl;
+					http_server(acceptor, socket);
+				}
 			}
 		}
 	}
