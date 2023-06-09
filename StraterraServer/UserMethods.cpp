@@ -1124,10 +1124,10 @@ namespace Straterra
 			u->metalMultiplier = 1.;
 			u->orderMultiplier = 1.;
 
-			u->swordLevel = 1;
-			u->archerLevel = 1;
-			u->spearmanLevel = 1;
-			u->cavalryLevel = 1;
+			u->swordLevel = 20;
+			u->archerLevel = 0;
+			u->spearmanLevel = 30;
+			u->cavalryLevel = 10;
 
 			addUser(u);
 
